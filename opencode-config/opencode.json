@@ -1,0 +1,155 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "oh-my-opencode@latest"
+  ],
+  "provider": {
+    "anthropic": {
+      "options": {
+        "baseURL": "https://api.jiekou.ai/anthropic",
+        "apiKey": "{env:JIEKOU_API_KEY}"
+      }
+    },
+    "openai": {
+      "options": {
+        "baseURL": "https://api.jiekou.ai/openai/v1",
+        "apiKey": "{env:JIEKOU_API_KEY}"
+      }
+    },
+    "jiekou": {
+      "name": "JieKou API - Unified Gateway",
+      "api": "https://api.jiekou.ai/openai/v1",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://api.jiekou.ai/openai/v1",
+        "apiKey": "{env:JIEKOU_API_KEY}"
+      },
+      "models": {
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6",
+          "id": "claude-opus-4-6",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          },
+          "variants": {
+            "max": {
+              "thinkingConfig": {
+                "thinkingBudget": 32768
+              }
+            }
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5",
+          "id": "claude-sonnet-4-5",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          }
+        },
+        "claude-sonnet-4-5-20250929": {
+          "name": "Claude Sonnet 4.5 (20250929)",
+          "id": "claude-sonnet-4-5-20250929",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5",
+          "id": "claude-haiku-4-5",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          }
+        },
+        "gpt-5.2": {
+          "name": "GPT-5.2",
+          "id": "gpt-5.2",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          },
+          "variants": {
+            "high": {
+              "reasoningEffort": "high"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            }
+          }
+        },
+        "gpt-5.2-codex": {
+          "name": "GPT-5.2 Codex",
+          "id": "gpt-5.2-codex",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          },
+          "variants": {
+            "xhigh": {
+              "reasoningEffort": "xhigh"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            }
+          }
+        },
+        "gpt-5-mini": {
+          "name": "GPT-5 Mini",
+          "id": "gpt-5-mini",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gemini-3-pro-preview": {
+          "name": "Gemini 3 Pro Preview",
+          "id": "gemini-3-pro-preview",
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          },
+          "variants": {
+            "max": {
+              "thinkingLevel": "high"
+            }
+          }
+        },
+        "gemini-3-flash-preview": {
+          "name": "Gemini 3 Flash Preview",
+          "id": "gemini-3-flash-preview",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          }
+        }
+      }
+    }
+  }
+}
