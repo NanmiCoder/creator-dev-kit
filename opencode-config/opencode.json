@@ -46,18 +46,6 @@
         },
         "claude-sonnet-4-5": {
           "name": "Claude Sonnet 4.5",
-          "id": "claude-sonnet-4-5",
-          "limit": {
-            "context": 200000,
-            "output": 64000
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
-          }
-        },
-        "claude-sonnet-4-5-20250929": {
-          "name": "Claude Sonnet 4.5 (20250929)",
           "id": "claude-sonnet-4-5-20250929",
           "limit": {
             "context": 200000,
@@ -70,7 +58,7 @@
         },
         "claude-haiku-4-5": {
           "name": "Claude Haiku 4.5",
-          "id": "claude-haiku-4-5",
+          "id": "claude-haiku-4-5-20251001",
           "limit": {
             "context": 200000,
             "output": 64000
