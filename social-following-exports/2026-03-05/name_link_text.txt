@@ -1,0 +1,95 @@
+GitHub（全部）
+- claude: https://github.com/claude
+- peakji: https://github.com/peakji
+- yyx990803: https://github.com/yyx990803
+- palcu: https://github.com/palcu
+- lilianweng: https://github.com/lilianweng
+- defnngj: https://github.com/defnngj
+- orvice: https://github.com/orvice
+- tqchen: https://github.com/tqchen
+- rasbt: https://github.com/rasbt
+- moonlight-stream: https://github.com/moonlight-stream
+- panjf2000: https://github.com/panjf2000
+- Trinkle23897: https://github.com/Trinkle23897
+- Germey: https://github.com/Germey
+- tw93: https://github.com/tw93
+- davidhong1: https://github.com/davidhong1
+- gaogaotiantian: https://github.com/gaogaotiantian
+- zhuohan123: https://github.com/zhuohan123
+- uber-go: https://github.com/uber-go
+- abersheeran: https://github.com/abersheeran
+- JustinLin610: https://github.com/JustinLin610
+- kaixindelele: https://github.com/kaixindelele
+- alexalbertt: https://github.com/alexalbertt
+- SlongLiu: https://github.com/SlongLiu
+- xingyaoww: https://github.com/xingyaoww
+- Johnserf-Seed: https://github.com/Johnserf-Seed
+- fzf404: https://github.com/fzf404
+- lixi5338619: https://github.com/lixi5338619
+- Cherylliu11: https://github.com/Cherylliu11
+- JoeanAmier: https://github.com/JoeanAmier
+- xiaoxuxiansheng: https://github.com/xiaoxuxiansheng
+- algorithmzuo: https://github.com/algorithmzuo
+- anthropics: https://github.com/anthropics
+- modelscope: https://github.com/modelscope
+- HKUDS: https://github.com/HKUDS
+- langchain-ai: https://github.com/langchain-ai
+- xai-org: https://github.com/xai-org
+- all-in-aigc: https://github.com/all-in-aigc
+- deepseek-ai: https://github.com/deepseek-ai
+- google-gemini: https://github.com/google-gemini
+- MediaCrawlerPro: https://github.com/MediaCrawlerPro
+- browser-use: https://github.com/browser-use
+
+X（AI方向筛选）
+- OpenAI: https://x.com/OpenAI
+- Sam Altman: https://x.com/sama
+- Google AI: https://x.com/GoogleAI
+- Andrej Karpathy: https://x.com/karpathy
+- Andrew Ng: https://x.com/AndrewYNg
+- Anthropic: https://x.com/AnthropicAI
+- DeepSeek: https://x.com/deepseek_ai
+- Claude: https://x.com/claudeai
+- Hugging Face: https://x.com/huggingface
+- Geoffrey Hinton: https://x.com/geoffreyhinton
+- Alex Finn: https://x.com/AlexFinn
+- OpenClaw🦞: https://x.com/openclaw
+- Peter Steinberger 🦞: https://x.com/steipete
+- Boris Cherny: https://x.com/bcherny
+- Logan Kilpatrick: https://x.com/OfficialLoganK
+- Manus: https://x.com/ManusAI
+- LangChain: https://x.com/LangChain
+- Replit ⠕: https://x.com/Replit
+- Lilian Weng: https://x.com/lilianweng
+- Qwen: https://x.com/Alibaba_Qwen
+- Alex Albert: https://x.com/alexalbert__
+- Thariq: https://x.com/trq212
+- MiniMax (official): https://x.com/MiniMax_AI
+- gauche: https://x.com/gaucheai
+- Haider.: https://x.com/slow_developer
+- cat: https://x.com/_catwu
+- Z.ai: https://x.com/Zai_org
+- Sharon Riley: https://x.com/Just_sharon7
+- Chris: https://x.com/chatgpt21
+- Gael Breton: https://x.com/GaelBreton
+- Melisa♡: https://x.com/xmliisu
+- Yichao 'Peak' Ji: https://x.com/peakji
+- Allen T.: https://x.com/Mr_AllenT
+- Yaseen Khan Gul: https://x.com/YaseenK7212
+- Tianqi Chen: https://x.com/tqchenml
+- Panda: https://x.com/Jiaxi_Cui
+- Jeddi: https://x.com/antinertia
+- Nano Banana Labs: https://x.com/NanoBanana_labs
+- MeshyAI: https://x.com/MeshyAI
+- Zara: https://x.com/ZaraIrahh
+- ΛRMIN | AI: https://x.com/Arminn_Ai
+- Silas Alberti: https://x.com/silasalberti
+- Jerlin: https://x.com/eviljer
+- 𝗦𝗮𝗻𝗶𝗮: https://x.com/saniaspeaks_
+- Zhuohan Li: https://x.com/zhuohan123
+- ANKIT PATEL 🇮🇳 | AI: https://x.com/Ankit_patel211
+- K: https://x.com/ChillaiKalan__
+- Zaylee: https://x.com/zayleeai
+- Ji Lin: https://x.com/jilin_14
+- Mehdi Sharifi: https://x.com/_MehdiSharifi_
+- Yaroslav H.: https://x.com/yaroslavhorbach
