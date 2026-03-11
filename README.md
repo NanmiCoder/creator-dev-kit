@@ -9,3 +9,8 @@ OpenCode + Oh-My-OpenCode 多 Agent 协作配置方案，通过 JieKou.AI 中转
 - [opencode.json](./opencode-config/opencode.json) - OpenCode 全局配置
 - [oh-my-opencode.json](./opencode-config/oh-my-opencode.json) - Oh-My-OpenCode Agent 配置
 - [Oh-My-OpenCode多Agent协作机制.md](./opencode-config/Oh-My-OpenCode多Agent协作机制.md) - 多 Agent 协作原理与实战
+
+### [claude-agent-teams-tutorial/](./claude-agent-teams-tutorial/)
+Claude Agent Teams 互动教程演示网站，基于 React + TypeScript + Tailwind CSS 构建，包含架构解析、使用场景、实战演练等交互式课程内容。
+
+- `npm install && npm run dev` 即可本地运行
