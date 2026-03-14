@@ -14,3 +14,8 @@ OpenCode + Oh-My-OpenCode 多 Agent 协作配置方案，通过 JieKou.AI 中转
 Claude Agent Teams 互动教程演示网站，基于 React + TypeScript + Tailwind CSS 构建，包含架构解析、使用场景、实战演练等交互式课程内容。
 
 - `npm install && npm run dev` 即可本地运行
+
+### [ipad-rescue-presentation/](./ipad-rescue-presentation/)
+「吃灰两年的 iPad 被一只龙虾救活了」视频配套演示网站，展示 OpenClaw 龙虾 + WPS for Pad 的内容创作工作流。7 页互动幻灯片，React + Framer Motion + Tailwind CSS。
+
+- `npm install && npm run dev` 即可本地运行
