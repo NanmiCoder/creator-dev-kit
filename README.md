@@ -19,3 +19,8 @@ Claude Agent Teams 互动教程演示网站，基于 React + TypeScript + Tailwi
 「吃灰两年的 iPad 被一只龙虾救活了」视频配套演示网站，展示 OpenClaw 龙虾 + WPS for Pad 的内容创作工作流。7 页互动幻灯片，React + Framer Motion + Tailwind CSS。
 
 - `npm install && npm run dev` 即可本地运行
+
+### [openclaw-lobster-presentation/](./openclaw-lobster-presentation/)
+「OpenClaw 龙虾玩法」视频配套演示幻灯片，讲解养龙虾的三个层次（L1能用 → L2有用 → L3离不开）、四个量化指标，以及 3 个 Bot + 十几个 Skill 的实战展示。React + Framer Motion + Tailwind CSS。
+
+- `npm install && npm run dev` 即可本地运行

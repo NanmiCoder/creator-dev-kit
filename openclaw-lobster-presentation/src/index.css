@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+  --primary-100: #d4201c;
+  --primary-200: #e85c59;
+  --primary-300: #ffe0df;
+  --accent-100: #1a1a1a;
+  --accent-200: #4a4a4a;
+  --text-100: #1a1a1a;
+  --text-200: #666666;
+  --bg-100: #fbfbfb;
+  --bg-200: #f1f1f1;
+  --bg-300: #e0e0e0;
+}
+
+body {
+  overflow: hidden;
+  background-color: var(--bg-100);
+  color: var(--text-100);
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+}
+
+.glow-bg {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
