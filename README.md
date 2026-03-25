@@ -20,6 +20,19 @@ Claude Agent Teams 互动教程演示网站，基于 React + TypeScript + Tailwi
 
 - `npm install && npm run dev` 即可本地运行
 
+### [ai-vibe-working-slides/](./ai-vibe-working-slides/)
+「AI 效率工具推荐」视频配套演示幻灯片，讲解 Vibe Working 工作方式——随时随地麦克风 + AI 语音输入法 + 各种 AI 工具的高效组合。10 页互动幻灯片，React + Framer Motion + Tailwind CSS。
+
+- `npm install && npm run dev` 即可本地运行
+
+### [prompts/](./prompts/)
+视频中使用的 AI 生成提示词存档，方便复用和参考。
+
+- [interactive-slides-generation.md](./prompts/interactive-slides-generation.md) - 交互式演示网站生成提示词（技术栈、设计规范、配色方案、文案模板）
+
+### [social-following-exports/](./social-following-exports/)
+社交平台关注列表导出与 AI 方向筛选数据，包含 X 和 GitHub 的 following 全量数据及 AI 领域过滤结果。
+
 ### [openclaw-lobster-presentation/](./openclaw-lobster-presentation/)
 「OpenClaw 龙虾玩法」视频配套演示幻灯片，讲解养龙虾的三个层次（L1能用 → L2有用 → L3离不开）、四个量化指标，以及 3 个 Bot + 十几个 Skill 的实战展示。React + Framer Motion + Tailwind CSS。
 
