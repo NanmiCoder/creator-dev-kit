@@ -1,0 +1,41 @@
+.sk-scene { position:absolute; inset:0; overflow:hidden; color:var(--text); font-family:var(--font-display-cn); }
+.sk-label { position:absolute; top:72px; left:112px; font-family:var(--font-mono); font-size:15px; letter-spacing:.18em; color:var(--text-mute); }
+.sk-brief { display:grid; grid-template-columns:1fr 280px 1fr; align-items:center; padding:150px 112px 90px; }
+.sk-cli,.sk-web { height:560px; border:1px solid var(--rule); padding:54px; display:flex; flex-direction:column; justify-content:center; opacity:0; }
+.sk-cli { animation:sk-left 700ms 120ms var(--ease-quart) forwards; }
+.sk-web { border-top:4px solid var(--accent); background:var(--surface-2); animation:sk-right 780ms 1.6s var(--ease-quart) forwards; }
+.sk-cli span,.sk-web span,.sk-test span,.sk-build span,.sk-final span { font-family:var(--font-mono); font-size:14px; letter-spacing:.16em; color:var(--text-mute); }
+.sk-cli strong,.sk-web strong { font-family:var(--font-display-en); font-size:150px; line-height:.9; letter-spacing:-.06em; }
+.sk-cli i,.sk-web i { margin-top:22px; font-size:38px; font-style:normal; color:var(--text-2); }
+.sk-arrow { display:flex; flex-direction:column; align-items:center; gap:20px; font-family:var(--font-mono); color:var(--accent); }
+.sk-arrow b { width:180px; height:3px; background:var(--accent); transform:scaleX(0); animation:sk-grow 900ms 920ms var(--ease-quart) forwards; }
+.sk-boot { display:grid; grid-template-columns:1.3fr .7fr; gap:80px; align-items:center; padding:150px 150px 90px; }
+.sk-terminal { height:600px; border:1px solid var(--rule); background:var(--surface-2); padding:54px; display:flex; flex-direction:column; gap:34px; animation:sk-rise 650ms var(--ease-quart) both; }
+.sk-terminal span { font-family:var(--font-mono); font-size:28px; color:var(--text-2); }
+.sk-terminal i { height:14px; background:var(--rule); transform-origin:left; animation:sk-grow 500ms var(--ease-quart) both; }
+.sk-terminal i:nth-of-type(1){width:82%;animation-delay:180ms}.sk-terminal i:nth-of-type(2){width:62%;animation-delay:420ms}.sk-terminal i:nth-of-type(3){width:74%;animation-delay:650ms}
+.sk-terminal strong { margin-top:auto; font-family:var(--font-display-en); font-size:100px; color:var(--accent); opacity:0; animation:sk-pop 450ms 900ms var(--ease-overshoot) forwards; }
+.sk-boot-ring { width:430px; height:430px; border:3px solid var(--accent); border-radius:50%; display:flex; flex-direction:column; justify-content:center; align-items:center; transform:scale(.3); opacity:0; animation:sk-pop 650ms 500ms var(--ease-overshoot) forwards; }
+.sk-boot-ring span { font-family:var(--hero-num-font); font-size:170px; line-height:.9; }.sk-boot-ring small{font-size:30px;color:var(--text-2)}
+.sk-toolkit { display:grid; place-items:center; }
+.sk-skill-core { width:310px; height:310px; border-radius:50%; background:var(--accent); color:var(--surface); display:grid; place-items:center; font-family:var(--font-display-en); font-size:68px; font-weight:900; z-index:3; animation:sk-pop 600ms var(--ease-overshoot) both; }
+.sk-orbit { position:absolute; width:1100px; height:650px; border:1px solid var(--rule); border-radius:50%; transform:rotate(-8deg); }
+.sk-skill { position:absolute; width:310px; height:155px; border:1px solid var(--rule); background:var(--surface-2); padding:26px; display:flex; flex-direction:column; opacity:0; }
+.sk-skill span{font-family:var(--font-mono);font-size:13px;color:var(--accent)}.sk-skill strong{margin-top:auto;font-family:var(--font-display-en);font-size:29px;line-height:1.05}
+.sk-skill-1{left:190px;top:220px;animation:sk-left 600ms 500ms var(--ease-quart) forwards}.sk-skill-2{right:190px;top:220px;animation:sk-right 600ms 850ms var(--ease-quart) forwards}.sk-skill-3{left:240px;bottom:160px;animation:sk-left 600ms 1.2s var(--ease-quart) forwards}.sk-skill-4{right:240px;bottom:160px;animation:sk-right 600ms 1.55s var(--ease-quart) forwards}
+.sk-flow { display:grid; grid-template-columns:400px 1fr 400px; align-items:center; gap:56px; padding:150px 112px 170px; }
+.sk-flow-node { height:330px; border:1px solid var(--rule); padding:46px; display:flex; flex-direction:column; justify-content:center; animation:sk-left 600ms var(--ease-quart) both; }.sk-flow-agent{border-top:4px solid var(--accent);animation-name:sk-right}
+.sk-flow-node span{font-family:var(--font-mono);color:var(--text-mute);letter-spacing:.15em}.sk-flow-node strong{font-size:90px}
+.sk-flow-track { height:4px; background:var(--rule); position:relative; }.sk-flow-track i{position:absolute;top:-10px;width:24px;height:24px;background:var(--accent);animation:sk-packet 1.5s var(--ease-soft) infinite}.sk-flow-track i:nth-child(2){animation-delay:500ms}.sk-flow-track i:nth-child(3){animation-delay:1s}
+.sk-flow-panel { position:absolute; left:650px; right:650px; bottom:110px; height:110px; border:1px solid var(--rule); display:flex;align-items:center;justify-content:center;gap:24px;opacity:0;animation:sk-rise 400ms 900ms var(--ease-quart) forwards}.sk-flow-panel small{font-family:var(--font-mono);color:var(--text-mute)}.sk-flow-panel b{color:var(--accent)}.sk-flow-panel strong{font-family:var(--font-display-en);font-size:28px}
+.sk-proof { display:grid; grid-template-columns:1.2fr .85fr .85fr; gap:28px; align-items:center; padding:150px 112px 100px; }
+.sk-test,.sk-build,.sk-final { height:510px; border:1px solid var(--rule); padding:42px; display:flex; flex-direction:column; justify-content:space-between; opacity:0; transform:translateY(100px); animation:sk-rise 650ms var(--ease-quart) forwards; }
+.sk-test{animation-delay:350ms}.sk-build{animation-delay:1.8s}.sk-final{animation-delay:3.4s;border-top:4px solid var(--accent);background:var(--accent-soft)}
+.sk-test strong,.sk-final strong{font-size:150px;line-height:.9}.sk-build strong{font-family:var(--font-display-en);font-size:86px}.sk-test i,.sk-build i,.sk-final i{font-family:var(--font-mono);font-size:24px;font-style:normal;color:var(--accent)}
+.sk-proof-line{position:absolute;left:112px;right:112px;bottom:72px;height:3px;background:var(--rule)}.sk-proof-line b{display:block;height:100%;background:var(--accent);animation:sk-grow 700ms 4.05s var(--ease-quart) both}
+@keyframes sk-left{from{opacity:0;transform:translateX(-90px)}to{opacity:1;transform:translateX(0)}}
+@keyframes sk-right{from{opacity:0;transform:translateX(90px)}to{opacity:1;transform:translateX(0)}}
+@keyframes sk-rise{to{opacity:1;transform:translateY(0)}}
+@keyframes sk-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes sk-pop{to{opacity:1;transform:scale(1)}}
+@keyframes sk-packet{from{left:0;opacity:0}20%{opacity:1}to{left:calc(100% - 24px);opacity:0}}

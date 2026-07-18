@@ -1,0 +1,646 @@
+/* ─────────────────────────────────────────────────────────────────────
+ * Chapter 05 · harness — 5 屏独立设计
+ * midnight-press 主题 · 暖色 espresso 暗底 + 火热橙 accent
+ * 每句话一屏,跨步即切;字号固定 px;动画用 transform + opacity
+ * 单一 CSS 类前缀 `.ha-` 物理隔离,不动 base.css / tokens.css
+ * ───────────────────────────────────────────────────────────────────── */
+
+.ha-scene {
+  position: absolute;
+  inset: 0;
+  padding: var(--stage-pad-y) var(--stage-pad-x);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  color: var(--text);
+  animation: ha-fade-in 700ms var(--ease-quart) both;
+}
+
+/* ─── 共用 chrome ─── */
+.ha-masthead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  width: 100%;
+}
+.ha-brand {
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--text);
+}
+.ha-issue {
+  margin-left: auto;
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ha-rule {
+  margin: var(--space-4) 0 0;
+}
+.ha-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ha-em {
+  color: var(--accent);
+}
+.ha-foot {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+  padding-top: var(--space-5);
+}
+
+/* × / ✓ 通用 NOT / BUT 标记 */
+.ha-not-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: var(--bw-1) solid var(--text-faint);
+  color: var(--text-faint);
+  font-size: 14px;
+  font-style: normal;
+  margin-right: var(--space-3);
+  line-height: 1;
+}
+.ha-not-mark-good {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 0 — 从 vibe coding 走向 harness coding
+ * ════════════════════════════════════════════════════════════════ */
+.ha-shift {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+  align-items: center;
+}
+.ha-h1-shift {
+  font-size: 168px;
+  line-height: 1.02;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-7);
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+.ha-shift-from,
+.ha-shift-to {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+.ha-shift-arrow {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: 132px;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0 28px var(--accent-glow);
+}
+.ha-shift-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 var(--space-7);
+}
+.ha-shift-bar-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--accent) 50%,
+    transparent 100%
+  );
+  opacity: 0.7;
+}
+.ha-shift-bar-tag {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+  text-shadow: 0 0 14px var(--accent-glow);
+}
+.ha-shift-sub {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.2;
+  color: var(--text-2);
+  text-align: center;
+  letter-spacing: var(--track-snug);
+  font-family: var(--font-display-cn);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 1 — 核心定义:harness = 给 AI 装轨道
+ * ════════════════════════════════════════════════════════════════ */
+.ha-define {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+  align-items: center;
+}
+.ha-define-eq {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-9);
+  justify-content: center;
+}
+.ha-define-lhs,
+.ha-define-rhs {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+.ha-define-lhs-word {
+  font-size: 200px;
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: var(--track-tight);
+  text-shadow: 0 0 32px var(--accent-glow);
+}
+.ha-define-rhs-zh {
+  font-size: 168px;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: var(--track-tight);
+}
+.ha-define-op {
+  font-size: 160px;
+  line-height: 1;
+  color: var(--text-mute);
+}
+.ha-define-rails {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+.ha-rail {
+  flex: 1;
+  height: 4px;
+  background: var(--rule);
+  border-radius: var(--r-pill);
+  position: relative;
+  overflow: hidden;
+}
+.ha-rail::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--accent) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: ha-rail-slide 2400ms var(--ease-soft) infinite;
+}
+.ha-rail-spoke {
+  flex: 0 0 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+.ha-rail-spoke::before {
+  display: none;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 2 — 三不是 ①:先写清业务流程 / 性能 / 兜底 / 边界
+ * ════════════════════════════════════════════════════════════════ */
+.ha-not {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.ha-not-board {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-7);
+  width: 100%;
+}
+.ha-not-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-7);
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+}
+.ha-not-col-bad {
+  border-style: dashed;
+  border-color: var(--text-faint);
+  background: transparent;
+}
+.ha-not-col-good {
+  border-color: var(--accent);
+  background: var(--surface-2);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+}
+.ha-not-col-lbl {
+  font-size: 13px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+}
+.ha-not-col-lbl-good {
+  color: var(--accent);
+}
+.ha-not-bad-line,
+.ha-not-good-line {
+  margin: 0;
+  font-size: 52px;
+  line-height: 1.15;
+  letter-spacing: var(--track-snug);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.ha-not-bad-line {
+  color: var(--text-mute);
+}
+.ha-not-good-line {
+  color: var(--text);
+}
+.ha-not-bad-em {
+  color: var(--text-2);
+}
+.ha-not-bad-tag {
+  margin-top: auto;
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding: 6px 12px;
+  border: var(--bw-1) dashed var(--text-faint);
+  border-radius: var(--r-pill);
+  align-self: flex-start;
+}
+.ha-not-arrow {
+  align-self: center;
+  font-size: 96px;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0 24px var(--accent-glow);
+}
+.ha-not-spec {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+.ha-not-spec-item {
+  display: grid;
+  grid-template-columns: 36px auto 1fr;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 14px 18px;
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-sm);
+  background: var(--surface-3);
+}
+.ha-not-spec-num {
+  font-size: 14px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  border-right: var(--bw-1) solid var(--rule);
+  padding-right: var(--space-3);
+}
+.ha-not-spec-lbl {
+  font-size: 22px;
+  color: var(--text);
+  letter-spacing: var(--track-snug);
+}
+.ha-not-spec-en {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+  text-align: right;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 3 — 三不是 ②:分支 / worktree / sandbox / 预览环境
+ * ════════════════════════════════════════════════════════════════ */
+.ha-iso {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.ha-iso-board {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.7fr) minmax(820px, 1.3fr);
+  gap: var(--space-7);
+  align-items: stretch;
+}
+.ha-iso-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-7);
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+}
+.ha-iso-side-bad {
+  border-style: dashed;
+  border-color: var(--text-faint);
+  background: transparent;
+}
+.ha-iso-side-good {
+  border-color: var(--accent);
+  background: var(--surface-2);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+}
+.ha-iso-side-lbl {
+  font-size: 13px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+}
+.ha-iso-side-lbl-good {
+  color: var(--accent);
+}
+.ha-iso-bad-line {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.15;
+  letter-spacing: var(--track-snug);
+  color: var(--text-mute);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.ha-iso-bad-lock {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px 16px;
+  border: var(--bw-1) dashed var(--text-faint);
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  align-self: flex-start;
+}
+.ha-iso-lock-mark {
+  font-size: 14px;
+  color: var(--text-faint);
+  font-style: normal;
+}
+.ha-iso-funnel {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.ha-iso-node {
+  flex: 1;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 22px;
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-sm);
+  background: var(--surface-3);
+  position: relative;
+  animation: ha-iso-node-in 700ms var(--ease-quart) both;
+}
+.ha-iso-node-1 { animation-delay: 200ms; }
+.ha-iso-node-2 { animation-delay: 600ms; }
+.ha-iso-node-3 { animation-delay: 1000ms; }
+.ha-iso-node-4 { animation-delay: 1400ms; }
+.ha-iso-node-tier {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.ha-iso-node-name {
+  font-size: 38px;
+  line-height: 1.1;
+  color: var(--text);
+  letter-spacing: var(--track-tight);
+}
+.ha-iso-node-en {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ha-iso-arrow {
+  align-self: center;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0 18px var(--accent-glow);
+  flex: 0 0 auto;
+  padding: 0 var(--space-2);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 4 — 三不是 ③:测试 / diff review / 灰度 / 回滚
+ * ════════════════════════════════════════════════════════════════ */
+.ha-gates {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.ha-gates-board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+.ha-gates-bad,
+.ha-gates-good {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-7);
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+}
+.ha-gates-bad {
+  border-style: dashed;
+  border-color: var(--text-faint);
+  background: transparent;
+  align-items: flex-start;
+}
+.ha-gates-good {
+  border-color: var(--accent);
+  background: var(--surface-2);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+}
+.ha-gates-bad-line {
+  margin: 0;
+  font-size: 64px;
+  line-height: 1.1;
+  letter-spacing: var(--track-snug);
+  color: var(--text-mute);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.ha-gates-bad-tag {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding: 6px 12px;
+  border: var(--bw-1) dashed var(--text-faint);
+  border-radius: var(--r-pill);
+}
+.ha-gates-good-line {
+  margin: 0;
+  font-size: 52px;
+  line-height: 1.15;
+  letter-spacing: var(--track-snug);
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.ha-gates-chain {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+  flex-wrap: nowrap;
+}
+.ha-gate {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 24px;
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-sm);
+  background: var(--surface-3);
+  position: relative;
+  animation: ha-gate-in 700ms var(--ease-quart) both;
+}
+.ha-gate:nth-child(1) { animation-delay: 200ms; }
+.ha-gate:nth-child(3) { animation-delay: 600ms; }
+.ha-gate:nth-child(5) { animation-delay: 1000ms; }
+.ha-gate:nth-child(7) { animation-delay: 1400ms; }
+.ha-gate-last {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+.ha-gate-num {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.ha-gate-zh {
+  font-size: 40px;
+  line-height: 1.1;
+  color: var(--text);
+  letter-spacing: var(--track-tight);
+}
+.ha-gate-en {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ha-gate-last .ha-gate-en {
+  color: var(--text);
+}
+.ha-gate-sep {
+  align-self: center;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0 16px var(--accent-glow);
+  flex: 0 0 auto;
+  padding: 0 var(--space-2);
+  animation: ha-fade-in 700ms var(--ease-quart) both;
+}
+.ha-gate-sep:nth-of-type(2) { animation-delay: 400ms; }
+.ha-gate-sep:nth-of-type(4) { animation-delay: 800ms; }
+.ha-gate-sep:nth-of-type(6) { animation-delay: 1200ms; }
+
+/* ════════════════════════════════════════════════════════════════
+ *  keyframes(只用 transform / opacity)
+ * ════════════════════════════════════════════════════════════════ */
+@keyframes ha-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ha-rail-slide {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes ha-iso-node-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ha-gate-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

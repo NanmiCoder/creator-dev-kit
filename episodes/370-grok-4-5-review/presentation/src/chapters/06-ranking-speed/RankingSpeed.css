@@ -1,0 +1,148 @@
+.rs-scene { position: absolute; inset: 0; overflow: hidden; color: var(--text); font-family: var(--font-display-cn); }
+.rs-kicker { position: absolute; top: 72px; left: 112px; z-index: 20; font-family: var(--font-mono); font-size: 15px; font-weight: 600; letter-spacing: 0.18em; color: var(--text-mute); }
+.rs-model-mark { display: flex; align-items: center; gap: 18px; }
+.rs-model-mark img { width: 66px; height: 66px; object-fit: contain; filter: brightness(0) invert(1); }
+.rs-model-mark.is-wide img { width: 92px; height: 48px; }
+.rs-model-mark.is-zhipu img { filter: none; }
+.rs-model-mark span { font-family: var(--font-display-en); font-size: 28px; font-weight: 800; }
+
+/* Step 0 — scope snaps around the only two projects being ranked */
+.rs-scope { display: grid; place-items: center; }
+.rs-scope-bracket { position: absolute; width: 1160px; height: 620px; }
+.rs-scope-bracket i { position: absolute; top: 0; bottom: 0; width: 210px; border-top: 4px solid var(--accent); border-bottom: 4px solid var(--accent); transform: scaleX(0); animation: rs-bracket 700ms 220ms var(--ease-quart) forwards; }
+.rs-scope-bracket i:first-child { left: 0; border-left: 4px solid var(--accent); transform-origin: left; }
+.rs-scope-bracket i:last-child { right: 0; border-right: 4px solid var(--accent); transform-origin: right; }
+.rs-scope-main { display: flex; align-items: flex-end; gap: 44px; }
+.rs-scope-main > strong { font-size: 390px; line-height: 0.78; color: var(--accent); opacity: 0; animation: rs-number-slam 620ms 580ms var(--ease-overshoot) forwards; }
+.rs-scope-main > div { padding-bottom: 24px; display: flex; flex-direction: column; gap: 18px; opacity: 0; animation: rs-up 520ms 1s var(--ease-quart) forwards; }
+.rs-scope-main span { font-family: var(--font-display-en); font-size: 74px; font-weight: 900; letter-spacing: -0.05em; }
+.rs-scope-main em { font-size: 42px; font-style: normal; color: var(--text-2); }
+.rs-scope-cross { position: absolute; right: 180px; bottom: 110px; display: flex; align-items: center; gap: 22px; font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.16em; color: var(--text-mute); opacity: 0; animation: rs-up 480ms 2.2s var(--ease-quart) forwards; }
+.rs-scope-cross i, .rs-scope-cross b { position: absolute; right: -46px; width: 36px; height: 3px; background: var(--text-mute); }
+.rs-scope-cross i { transform: rotate(45deg); }
+.rs-scope-cross b { transform: rotate(-45deg); }
+
+/* Steps 1–4 — each spoken rank inserts one official row */
+.rs-board-scene { padding: 142px 112px 82px; display: grid; grid-template-columns: 260px 1fr; gap: 56px; align-items: center; }
+.rs-board-title { display: flex; flex-direction: column; align-items: flex-start; }
+.rs-board-title span { font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.18em; color: var(--text-mute); }
+.rs-board-title strong { margin-top: 14px; font-family: var(--hero-num-font); font-size: 154px; line-height: 0.9; color: var(--accent); }
+.rs-board { display: flex; flex-direction: column; justify-content: center; gap: 18px; min-height: 770px; }
+.rs-row { height: 165px; display: grid; grid-template-columns: 78px 132px 238px 1fr 126px; align-items: center; gap: 22px; padding: 0 34px; border-bottom: 1px solid var(--rule); background: var(--surface-2); animation: rs-row-land 420ms var(--ease-overshoot) both; }
+.rs-row.is-grok { border-bottom: 4px solid var(--accent); background: var(--accent-soft); }
+.rs-rank { font-family: var(--font-mono); font-size: 20px; color: var(--text-mute); }
+.rs-logo-box { width: 72px; height: 72px; display: grid; place-items: center; border: 1px solid var(--rule); }
+.rs-logo-box img { max-width: 58px; max-height: 58px; filter: brightness(0) invert(1); }
+.rs-logo-box.is-wide { width: 122px; }
+.rs-logo-box.is-wide img { width: 112px; max-width: 112px; height: 54px; max-height: 54px; }
+.rs-row.is-zhipu .rs-logo-box img { filter: none; }
+.rs-row > strong { font-family: var(--font-display-en); font-size: 34px; }
+.rs-score-track { height: 8px; background: var(--surface-3); overflow: hidden; }
+.rs-score-track i { display: block; height: 100%; background: var(--text-faint); transform: scaleX(0); transform-origin: left; animation: rs-bar-grow 460ms 100ms var(--ease-quart) forwards; }
+.rs-row.is-grok .rs-score-track i { background: var(--accent); }
+.rs-row > em { font-size: 54px; font-style: normal; text-align: right; }
+.rs-board-scope { position: absolute; right: 112px; bottom: 48px; font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.18em; color: var(--text-mute); }
+
+/* Step 5 — Grok enters the band without collapsing the remaining gap */
+.rs-tier { padding: 150px 112px 90px; }
+.rs-tier-band { position: absolute; left: 112px; right: 112px; top: 290px; height: 430px; border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); background: var(--accent-soft); transform: scaleX(0); transform-origin: left; animation: rs-band-open 700ms 120ms var(--ease-quart) forwards; }
+.rs-tier-band span { position: absolute; left: 26px; top: 24px; font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.18em; color: var(--accent); }
+.rs-tier-band i { position: absolute; right: 84px; top: -44px; width: 2px; height: 516px; background: var(--accent); opacity: 0.5; }
+.rs-tier-line { position: absolute; left: 190px; right: 190px; top: 580px; height: 3px; background: var(--rule); }
+.rs-tier-model { position: absolute; top: 430px; width: 370px; display: flex; flex-direction: column; gap: 22px; opacity: 0; transform: translateY(100px); animation: rs-tier-rise 580ms var(--ease-quart) forwards; }
+.rs-tier-model > strong { font-family: var(--hero-num-font); font-size: 98px; line-height: 0.9; }
+.rs-tier-opus { left: 190px; animation-delay: 600ms; }
+.rs-tier-gpt { left: 730px; animation-delay: 900ms; }
+.rs-tier-grok { right: 126px; animation-delay: 1.45s; }
+.rs-tier-grok > strong { color: var(--accent); }
+.rs-tier-grok b { position: absolute; right: 20px; top: -88px; width: 6px; height: 340px; background: var(--accent); transform: scaleY(0); transform-origin: bottom; animation: rs-gap-marker 600ms 2.15s var(--ease-quart) forwards; }
+.rs-not-equal { position: absolute; left: 560px; right: 560px; bottom: 98px; display: flex; align-items: center; justify-content: center; gap: 30px; font-size: 40px; opacity: 0; animation: rs-up 500ms 3.2s var(--ease-quart) forwards; }
+.rs-not-equal i { font-family: var(--font-display-en); font-size: 76px; font-style: normal; color: var(--accent); }
+.rs-not-equal strong { color: var(--text-mute); }
+
+/* Step 6 — magnifier reveals the auth column, not Skills */
+.rs-gap { padding: 148px 112px 94px; display: grid; grid-template-columns: 1fr 470px; gap: 70px; align-items: center; }
+.rs-gap-table { position: relative; height: 650px; display: grid; grid-template-rows: 110px repeat(3, 1fr); border: 1px solid var(--rule); background: var(--surface-2); }
+.rs-gap-head, .rs-gap-row { display: grid; grid-template-columns: 1fr 210px 210px; align-items: center; padding: 0 40px; border-bottom: 1px solid var(--rule); }
+.rs-gap-head { font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.15em; color: var(--text-mute); }
+.rs-gap-head strong, .rs-gap-row strong { text-align: center; }
+.rs-gap-row { font-family: var(--font-display-en); opacity: 0; animation: rs-row-land 520ms calc(120ms + var(--gap-row) * 300ms) var(--ease-quart) forwards; }
+.rs-gap-row span { font-size: 32px; font-weight: 800; }
+.rs-gap-row strong { font-family: var(--hero-num-font); font-size: 56px; }
+.rs-gap-row.is-grok { background: var(--accent-soft); border-bottom: 3px solid var(--accent); }
+.rs-gap-row.is-grok strong:nth-child(2) { color: var(--accent); }
+.rs-lens { position: absolute; right: 212px; top: 100px; width: 250px; height: 520px; border: 5px solid var(--accent); opacity: 0; animation: rs-lens-drop 660ms 1.45s var(--ease-overshoot) forwards; }
+.rs-lens i { position: absolute; right: -94px; bottom: -80px; width: 126px; height: 10px; background: var(--accent); transform: rotate(48deg); transform-origin: left; }
+.rs-lens b { position: absolute; left: 30px; right: 30px; bottom: 24px; height: 4px; background: var(--accent); }
+.rs-gap-causes { height: 480px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; font-family: var(--font-display-en); font-size: 42px; font-weight: 900; opacity: 0; animation: rs-up 520ms 2.2s var(--ease-quart) forwards; }
+.rs-gap-causes i { width: 250px; height: 3px; background: var(--accent); }
+
+/* Step 7 — a two-dimensional factual map: score against delivery time */
+.rs-coordinate { padding: 142px 112px 92px; }
+.rs-axis-y { position: absolute; left: 190px; top: 190px; bottom: 170px; width: 120px; display: flex; flex-direction: column; justify-content: space-between; font-family: var(--font-mono); font-size: 16px; color: var(--text-mute); }
+.rs-axis-y i { position: absolute; right: 0; top: 0; bottom: 0; width: 3px; background: var(--text-faint); transform: scaleY(0); transform-origin: top; animation: rs-axis-y 650ms 100ms var(--ease-quart) forwards; }
+.rs-axis-x { position: absolute; left: 310px; right: 150px; bottom: 112px; height: 80px; display: flex; justify-content: space-between; align-items: end; font-family: var(--font-mono); font-size: 16px; color: var(--text-mute); }
+.rs-axis-x i { position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--text-faint); transform: scaleX(0); transform-origin: left; animation: rs-axis-x 650ms 460ms var(--ease-quart) forwards; }
+.rs-grid-lines { position: absolute; left: 310px; right: 150px; top: 190px; bottom: 190px; display: grid; grid-template-rows: repeat(4, 1fr); }
+.rs-grid-lines i { border-bottom: 1px dashed var(--rule); }
+.rs-dot { position: absolute; width: 230px; height: 170px; padding: 22px; border: 2px solid var(--rule); background: var(--surface-2); display: grid; grid-template-columns: 54px 1fr; align-items: center; opacity: 0; }
+.rs-dot img { width: 48px; height: 48px; object-fit: contain; filter: brightness(0) invert(1); }
+.rs-dot strong { font-family: var(--hero-num-font); font-size: 68px; text-align: right; }
+.rs-dot span { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 18px; text-align: right; color: var(--text-mute); }
+.rs-dot-glm { left: 690px; bottom: 190px; animation: rs-dot-glm 700ms 850ms var(--ease-quart) forwards; }
+.rs-dot-glm img { filter: none; }
+.rs-dot-grok { right: 280px; top: 250px; border-color: var(--accent); animation: rs-dot-grok 700ms 1.6s var(--ease-overshoot) forwards; }
+.rs-dot-grok strong { color: var(--accent); }
+.rs-speed-vector { position: absolute; left: 900px; top: 430px; width: 430px; height: 190px; transform: rotate(-24deg); }
+.rs-speed-vector i { position: absolute; left: 0; right: 0; top: 90px; height: 5px; background: var(--accent); transform: scaleX(0); transform-origin: left; animation: rs-axis-x 850ms 2.35s var(--ease-quart) forwards; }
+.rs-speed-vector b { position: absolute; right: 0; top: 72px; width: 38px; height: 38px; border-top: 6px solid var(--accent); border-right: 6px solid var(--accent); transform: rotate(45deg) scale(0); animation: rs-arrow 400ms 2.95s var(--ease-overshoot) forwards; }
+
+/* Step 8 — same project becomes two physical timer lanes */
+.rs-race { padding: 150px 112px 92px; display: grid; grid-template-rows: 1fr 1fr; gap: 34px; align-content: center; }
+.rs-clock { position: relative; height: 330px; display: grid; grid-template-columns: 290px 1fr 100px; align-items: center; gap: 36px; padding: 38px 62px; border: 1px solid var(--rule); background: var(--surface-2); overflow: hidden; }
+.rs-clock > strong { font-size: 168px; text-align: right; line-height: 0.9; }
+.rs-clock > span { font-family: var(--font-mono); font-size: 25px; letter-spacing: 0.16em; color: var(--text-mute); }
+.rs-clock-glm { opacity: 0; animation: rs-race-in 520ms 100ms var(--ease-quart) forwards; }
+.rs-clock-grok { border-color: var(--accent); opacity: 0; animation: rs-race-in 520ms 900ms var(--ease-quart) forwards; }
+.rs-clock-grok > strong { color: var(--accent); }
+.rs-lap { position: absolute; left: 390px; right: 60px; bottom: 44px; height: 7px; background: var(--surface-3); }
+.rs-lap i { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+.rs-clock-glm .rs-lap i { width: 100%; animation: rs-bar-grow 1.5s 380ms var(--ease-soft) forwards; }
+.rs-clock-grok .rs-lap i { width: 24%; animation: rs-bar-grow 700ms 1.4s var(--ease-quart) forwards; }
+.rs-finish-line { position: absolute; right: 108px; top: 150px; bottom: 92px; width: 58px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(6, 1fr); opacity: 0; animation: rs-up 500ms 2.1s var(--ease-quart) forwards; }
+.rs-finish-line i:nth-child(4n + 1), .rs-finish-line i:nth-child(4n + 4) { background: var(--text-2); }
+.rs-finish-line i:nth-child(4n + 2), .rs-finish-line i:nth-child(4n + 3) { background: var(--surface); }
+
+/* Step 9 — the 40-minute rail collapses into a three-minute hero and multiplier */
+.rs-multiplier { padding: 152px 112px 92px; display: grid; grid-template-columns: 650px 1fr; align-items: center; gap: 110px; }
+.rs-three-min { display: grid; grid-template-columns: 1fr 120px; align-items: end; }
+.rs-three-min > span { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 20px; letter-spacing: 0.18em; color: var(--text-mute); opacity: 0; animation: rs-up 420ms 80ms var(--ease-quart) forwards; }
+.rs-three-min strong { margin-top: 24px; font-size: 290px; line-height: 0.78; color: var(--accent); opacity: 0; animation: rs-number-slam 620ms 350ms var(--ease-overshoot) forwards; }
+.rs-three-min em { padding-bottom: 24px; font-family: var(--font-mono); font-size: 35px; font-style: normal; color: var(--text-2); opacity: 0; animation: rs-up 420ms 750ms var(--ease-quart) forwards; }
+.rs-collapse-track { position: absolute; left: 112px; right: 112px; bottom: 130px; height: 8px; background: var(--rule); }
+.rs-collapse-track i { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: var(--text-faint); transform-origin: left; animation: rs-track-collapse 1.3s 1.2s var(--ease-quart) forwards; }
+.rs-collapse-track b { position: absolute; left: 24%; top: -12px; width: 30px; height: 30px; background: var(--accent); opacity: 0; animation: rs-marker 500ms 2.25s var(--ease-overshoot) forwards; }
+.rs-collapse-track span { position: absolute; left: 0; top: -70px; font-family: var(--font-mono); font-size: 18px; color: var(--text-mute); }
+.rs-times { height: 540px; border-left: 2px solid var(--accent); display: flex; flex-direction: column; justify-content: center; padding-left: 90px; opacity: 0; transform: translateX(120px); animation: rs-times-in 700ms 2.7s var(--ease-quart) forwards; }
+.rs-times small { font-family: var(--font-mono); font-size: 20px; letter-spacing: 0.18em; color: var(--text-mute); }
+.rs-times strong { margin-top: 10px; font-size: 300px; line-height: 0.85; }
+.rs-times span { font-family: var(--font-display-en); font-size: 52px; font-weight: 900; color: var(--accent); }
+
+@keyframes rs-bracket { to { transform: scaleX(1); } }
+@keyframes rs-number-slam { from { opacity: 0; transform: scale(1.32); } to { opacity: 1; transform: scale(1); } }
+@keyframes rs-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes rs-row-land { from { opacity: 0; transform: translateX(120px) scaleY(0.6); } to { opacity: 1; transform: translateX(0) scaleY(1); } }
+@keyframes rs-bar-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes rs-band-open { to { transform: scaleX(1); } }
+@keyframes rs-tier-rise { to { opacity: 1; transform: translateY(0); } }
+@keyframes rs-gap-marker { to { transform: scaleY(1); } }
+@keyframes rs-lens-drop { from { opacity: 0; transform: translateY(-120px) scale(1.2); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes rs-axis-y { to { transform: scaleY(1); } }
+@keyframes rs-axis-x { to { transform: scaleX(1); } }
+@keyframes rs-dot-glm { from { opacity: 0; transform: translateY(-220px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes rs-dot-grok { from { opacity: 0; transform: translateY(260px) scale(0.55); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes rs-arrow { to { transform: rotate(45deg) scale(1); } }
+@keyframes rs-race-in { from { opacity: 0; transform: translateX(-120px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes rs-track-collapse { from { transform: scaleX(1); } to { transform: scaleX(0.24); } }
+@keyframes rs-marker { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+@keyframes rs-times-in { to { opacity: 1; transform: translateX(0); } }

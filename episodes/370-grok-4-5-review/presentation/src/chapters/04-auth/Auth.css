@@ -1,0 +1,150 @@
+.au-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-display-cn);
+}
+
+.au-kicker {
+  position: absolute;
+  top: 72px;
+  left: 112px;
+  z-index: 20;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--text-mute);
+}
+
+/* 00 — repository becomes an active work surface */
+.au-repo { display: grid; place-items: center; padding: 126px 112px 82px; }
+.au-repo-window { position: relative; width: 1540px; height: 710px; border: 1px solid var(--rule); background: var(--surface-2); overflow: hidden; animation: au-window-open 700ms var(--ease-quart) both; }
+.au-repo-rail { position: absolute; inset: 0 auto 0 0; width: 142px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; align-items: center; gap: 22px; padding-top: 44px; }
+.au-repo-rail span { width: 42px; height: 5px; background: var(--text-faint); }
+.au-repo-rail i { width: 5px; height: 380px; margin-top: 20px; background: var(--accent); transform-origin: top; animation: au-rail-run 2s 700ms var(--ease-quart) both; }
+.au-repo-copy { position: absolute; left: 242px; top: 150px; display: flex; flex-direction: column; }
+.au-repo-copy > span { font-family: var(--font-mono); font-size: 20px; letter-spacing: 0.2em; color: var(--accent); }
+.au-repo-copy > strong { margin-top: 16px; font-size: 152px; line-height: 0.95; letter-spacing: -0.075em; animation: au-type-slam 650ms 300ms var(--ease-overshoot) both; }
+.au-repo-command { width: 1040px; height: 96px; margin-top: 66px; padding: 0 28px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 40px 1fr auto; align-items: center; font-family: var(--font-mono); }
+.au-repo-command i { font-size: 24px; font-style: normal; color: var(--accent); }
+.au-repo-command b { font-size: 24px; font-weight: 500; }
+.au-repo-command em { font-size: 14px; font-style: normal; letter-spacing: 0.14em; color: var(--text-mute); }
+.au-repo-wave { position: absolute; right: 0; bottom: 42px; width: 1030px; height: 90px; display: flex; align-items: flex-end; gap: 8px; opacity: 0.45; }
+.au-repo-wave span { width: 18px; height: calc(12px + (var(--au-i) * 3px)); max-height: 82px; background: var(--accent); transform: scaleY(0); transform-origin: bottom; animation: au-wave 540ms calc(850ms + var(--au-i) * 45ms) var(--ease-overshoot) forwards; }
+
+/* 01 — twelve endpoints assemble into a complete ledger */
+.au-api { padding: 132px 112px 84px; display: grid; grid-template-columns: 430px 1fr; gap: 72px; align-items: center; }
+.au-api-hero { display: flex; align-items: flex-end; gap: 18px; }
+.au-api-hero > strong { font-size: 250px; line-height: 0.82; color: var(--accent); animation: au-count-land 520ms var(--ease-overshoot) both; }
+.au-api-hero > div { padding-bottom: 18px; display: flex; flex-direction: column; }
+.au-api-hero span { font-family: var(--hero-num-font); font-size: 76px; line-height: 1; }
+.au-api-hero b { margin-top: 8px; font-family: var(--font-mono); font-size: 24px; letter-spacing: 0.18em; color: var(--text-mute); }
+.au-api-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+.au-api-cell { position: relative; height: 154px; padding: 24px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; justify-content: space-between; opacity: 0; transform: scale(0.84); animation: au-cell-lock 300ms calc(var(--au-i) * 90ms) var(--ease-overshoot) forwards; }
+.au-api-cell span { font-family: var(--font-mono); font-size: 13px; color: var(--text-mute); }
+.au-api-cell strong { font-family: var(--font-display-en); font-size: 24px; }
+.au-api-cell i { position: absolute; right: 18px; top: 18px; width: 10px; height: 10px; background: var(--accent); }
+
+/* 02/03 — one stable topology, active layer moves around it */
+.au-capability { padding: 118px 112px 70px; display: grid; place-items: center; }
+.au-core-map { position: relative; width: 900px; height: 620px; transform: translateY(-20px); }
+.au-core-ring { position: absolute; left: 335px; top: 195px; z-index: 3; width: 230px; height: 230px; border: 2px solid var(--accent); background: var(--surface-2); display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 0 70px var(--accent-glow); animation: au-core-arrive 600ms var(--ease-overshoot) both; }
+.au-core-ring span { font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.2em; color: var(--text-mute); }
+.au-core-ring strong { margin-top: 8px; font-family: var(--font-display-en); font-size: 58px; }
+.au-core-node { position: absolute; z-index: 3; width: 170px; height: 112px; border: 1px solid var(--rule); background: var(--surface-2); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-mute); opacity: 0.35; }
+.au-core-node i { font-family: var(--font-mono); font-size: 28px; font-style: normal; }
+.au-core-node span { margin-top: 8px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; }
+.au-core-node.is-active { color: var(--text); opacity: 1; border-color: var(--accent); animation: au-node-charge 560ms var(--ease-overshoot) both; }
+.au-node-email { left: 65px; top: 42px; }.au-node-reset { left: 30px; top: 254px; }.au-node-token { left: 80px; top: 462px; }
+.au-node-github { right: 60px; top: 50px; }.au-node-google { right: 0; top: 275px; }.au-node-owner { right: 80px; top: 468px; }
+.au-core-lines { position: absolute; inset: 0; overflow: visible; }
+.au-core-lines path { fill: none; stroke: var(--rule); stroke-width: 3; stroke-dasharray: 12 12; stroke-dashoffset: 720; animation: au-wire 1.2s 200ms var(--ease-quart) forwards; }
+.au-capability-caption { position: absolute; left: 112px; right: 112px; bottom: 72px; display: flex; justify-content: center; gap: 26px; }
+.au-capability-caption span { min-width: 250px; padding: 14px 24px; border-bottom: 2px solid var(--accent); text-align: center; font-size: 30px; animation: au-caption-up 460ms var(--ease-quart) both; }
+.au-capability-caption span:nth-child(2) { animation-delay: 350ms; }.au-capability-caption span:nth-child(3) { animation-delay: 700ms; }
+.au-oauth-gate { position: absolute; left: 112px; right: 112px; bottom: 70px; height: 84px; display: grid; grid-template-columns: 260px 1fr 280px 1fr 260px; align-items: center; text-align: center; font-family: var(--font-display-en); }
+.au-oauth-gate span { font-size: 34px; font-weight: 800; }.au-oauth-gate strong { font-size: 24px; }.au-oauth-gate i { height: 4px; background: var(--accent); transform-origin: left; animation: au-gate-open 850ms var(--ease-quart) both; }
+
+/* 04 — system map compresses into a score */
+.au-complete { padding: 132px 112px 82px; display: grid; grid-template-columns: 1fr 570px; gap: 94px; align-items: center; }
+.au-complete-map { position: relative; height: 520px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 230px 1fr 230px; align-items: center; justify-items: center; }
+.au-complete-map svg { position: absolute; inset: 80px 0; width: 100%; height: 360px; }.au-complete-map path { fill: none; stroke: var(--accent); stroke-width: 4; stroke-dasharray: 700; stroke-dashoffset: 700; animation: au-path-draw 1s var(--ease-quart) forwards; }
+.au-user-node { width: 180px; height: 180px; border: 2px solid var(--text); display: grid; place-items: center; font-family: var(--font-mono); font-size: 22px; }
+.au-user-node i { width: 60px; height: 60px; border: 1px solid var(--rule); border-radius: 50%; }
+.au-task-stack { z-index: 2; width: 360px; height: 220px; padding: 34px; background: var(--surface-2); border: 1px solid var(--accent); display: flex; flex-direction: column; gap: 20px; }
+.au-task-stack span { font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.12em; }.au-task-stack i { height: 18px; background: var(--text-faint); transform-origin: left; animation: au-task-load 650ms var(--ease-quart) both; }.au-task-stack i:nth-child(2) { animation-delay: 280ms; }.au-task-stack i:nth-child(3) { animation-delay: 460ms; width: 74%; }.au-task-stack i:nth-child(4) { animation-delay: 640ms; width: 48%; }
+.au-landing-node { width: 210px; height: 180px; border: 1px solid var(--rule); display: flex; flex-direction: column; justify-content: center; align-items: center; }.au-landing-node span { font-family: var(--font-mono); color: var(--text-mute); }.au-landing-node strong { margin-top: 12px; font-size: 32px; }
+.au-complete-score { display: flex; flex-direction: column; }.au-complete-score > span { font-size: 35px; color: var(--text-2); }.au-complete-score strong { margin-top: 18px; font-size: 210px; color: var(--accent); animation: au-score-unfold 650ms 3.2s var(--ease-overshoot) both; }.au-complete-score > i { width: 520px; height: 9px; margin-top: 40px; background: var(--surface-3); }.au-complete-score > i b { display: block; width: 100%; height: 100%; background: var(--accent); transform-origin: left; animation: au-meter-full 800ms 3.8s var(--ease-quart) both; }
+
+/* 05 — architecture wall physically splits */
+.au-boundary { display: grid; place-items: center; padding: 120px 112px 70px; }
+.au-boundary-field { position: relative; width: 1480px; height: 650px; display: grid; grid-template-columns: 1fr 280px 1fr; align-items: center; justify-items: center; }
+.au-boundary-user,.au-boundary-data { width: 330px; height: 210px; border: 1px solid var(--rule); display: grid; place-items: center; font-family: var(--font-mono); font-size: 28px; letter-spacing: 0.12em; }
+.au-boundary-wall { width: 8px; height: 580px; background: var(--accent); animation: au-wall-rise 650ms var(--ease-quart) both; }
+.au-boundary-crack { position: absolute; left: 721px; top: 88px; width: 42px; height: 480px; background: var(--surface); clip-path: polygon(45% 0, 70% 29%, 35% 46%, 67% 63%, 25% 100%, 45% 62%, 18% 45%, 48% 28%); transform: scaleY(0); transform-origin: top; animation: au-crack 520ms 1.05s var(--ease-overshoot) forwards; }
+.au-boundary-field strong { position: absolute; font-size: 140px; line-height: 0.86; text-align: center; letter-spacing: -0.08em; opacity: 0; transform: scale(1.4); animation: au-boundary-word 600ms 1.5s var(--ease-overshoot) forwards; }
+
+/* 06 — quality matrix resolves numerically and spatially */
+.au-matrix { padding: 132px 112px 84px; display: grid; grid-template-columns: 350px 1fr 330px; gap: 46px; align-items: center; }
+.au-matrix-copy { display: flex; flex-direction: column; }.au-matrix-copy strong { font-size: 210px; color: var(--text); }.au-matrix-copy span { margin-top: 22px; font-family: var(--font-mono); font-size: 22px; letter-spacing: 0.2em; color: var(--text-mute); }
+.au-matrix-grid { display: grid; grid-template-columns: repeat(8, 88px); grid-template-rows: repeat(4, 88px); gap: 18px; }
+.au-matrix-grid span { display: grid; place-items: center; border: 1px solid var(--rule); background: var(--surface-2); opacity: 0; transform: scale(0.5); animation: au-matrix-lock 240ms calc(var(--au-i) * 65ms) var(--ease-overshoot) forwards; }
+.au-matrix-grid span:nth-child(30) { animation-delay: 3.2s; }
+.au-matrix-grid span:nth-child(31) { animation-delay: 3.55s; }
+.au-matrix-grid span:nth-child(32) { animation-delay: 3.9s; }
+.au-matrix-grid span.is-pass::after { content: ""; width: 28px; height: 28px; background: var(--accent); }.au-matrix-grid span.is-gap { border-color: var(--text-mute); font-family: var(--font-mono); font-size: 38px; color: var(--text); }
+.au-matrix-result { display: flex; flex-direction: column; gap: 22px; opacity: 0; animation: au-fade-in 420ms 4.05s forwards; }.au-matrix-result div { display: flex; align-items: baseline; gap: 18px; }.au-matrix-result b { font-family: var(--hero-num-font); font-size: 108px; }.au-matrix-result span { font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.14em; color: var(--text-mute); }.au-matrix-result > i { height: 1px; background: var(--rule); }.au-matrix-result .is-gap b { color: var(--accent); }
+
+/* 07 — a missing state field is visibly bypassed */
+.au-state { padding: 130px 112px 80px; display: flex; flex-direction: column; justify-content: center; }
+.au-state-flow { display: grid; grid-template-columns: 360px 160px 360px 160px 360px; align-items: center; justify-content: center; }
+.au-state-flow > div { height: 260px; border: 1px solid var(--rule); background: var(--surface-2); display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; animation: au-fade-in 420ms .25s forwards; }.au-state-flow > div:nth-of-type(2) { animation-delay: 1.65s; }.au-state-flow > div:nth-of-type(3) { animation-delay: 3.25s; }.au-state-flow span { font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.14em; color: var(--text-mute); }.au-state-flow b,.au-state-flow strong { margin-top: 22px; font-family: var(--font-display-en); font-size: 52px; }.au-state-missing { border-style: dashed !important; }.au-state-missing strong { color: var(--accent); }.au-state-success strong { font-size: 94px; }
+.au-state-arrow { height: 4px; background: var(--accent); position: relative; transform-origin: left; animation: au-arrow-pass 620ms 1.05s var(--ease-quart) both; }.au-state-arrow:nth-of-type(2) { animation-delay: 2.65s; }.au-state-arrow::after { content: ""; position: absolute; right: -1px; top: -9px; border-top: 11px solid var(--surface); border-bottom: 11px solid var(--surface); border-left: 17px solid var(--accent); }
+.au-state-verdict { width: 1400px; margin: 76px auto 0; display: grid; grid-template-columns: 1fr 280px 1fr; align-items: center; opacity: 0; animation: au-fade-in 480ms 4.45s forwards; }.au-state-verdict span,.au-state-verdict strong { font-size: 48px; text-align: center; }.au-state-verdict i { height: 2px; background: var(--rule); }.au-state-verdict strong { color: var(--accent); }
+
+/* 08 — cross-user path arcs over the intended ownership wall */
+.au-idor { padding: 130px 112px 70px; display: grid; place-items: center; }
+.au-idor-users { position: absolute; left: 180px; top: 330px; z-index: 2; display: flex; flex-direction: column; gap: 82px; }.au-idor-users div { width: 145px; height: 145px; display: grid; place-items: center; border: 2px solid var(--text); background: var(--surface); font-family: var(--hero-num-font); font-size: 76px; }
+.au-idor-vault { position: absolute; right: 195px; top: 325px; z-index: 2; width: 440px; height: 310px; padding: 56px; border: 2px solid var(--accent); background: var(--surface-2); display: flex; flex-direction: column; opacity: 0; animation: au-fade-in 420ms .35s forwards; }.au-idor-vault span { font-family: var(--font-mono); font-size: 19px; color: var(--text-mute); }.au-idor-vault strong { margin-top: 22px; font-family: var(--font-mono); font-size: 28px; }.au-idor-vault i { margin-top: auto; font-family: var(--font-mono); font-size: 19px; font-style: normal; color: var(--accent); }
+.au-idor-path { position: absolute; left: 180px; top: 220px; z-index: 1; width: 1500px; height: 600px; overflow: visible; }.au-idor-path path { fill: none; stroke: var(--accent); stroke-width: 6; stroke-dasharray: 1800; stroke-dashoffset: 1800; animation: au-breach-path 760ms 1s var(--ease-quart) forwards; }.au-idor-path path:nth-child(2) { stroke: var(--text-2); animation-delay: 1.45s; }
+.au-idor-alert { position: absolute; left: 420px; bottom: 96px; z-index: 3; display: flex; align-items: baseline; gap: 28px; background: var(--surface); padding: 20px 32px; border-bottom: 3px solid var(--accent); opacity: 0; animation: au-fade-in 380ms 2.25s forwards; }.au-idor-alert span { font-family: var(--font-mono); font-size: 18px; color: var(--text-mute); }.au-idor-alert strong { font-size: 46px; }
+
+/* 09 — one refresh request visibly forks into two valid successors */
+.au-refresh { padding: 132px 112px 76px; display: grid; grid-template-columns: 1fr 480px; gap: 100px; align-items: center; }
+.au-refresh-fork { position: relative; width: 1040px; height: 610px; }
+.au-refresh-old,.au-refresh-new { position: absolute; width: 245px; height: 170px; border: 2px solid var(--text); background: var(--surface-2); display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-display-en); font-size: 45px; font-weight: 900; }.au-refresh-old { left: 45px; top: 220px; }.au-refresh-new { right: 35px; border-color: var(--accent); }.au-refresh-new.is-one { top: 70px; animation: au-token-top 650ms 1.4s var(--ease-overshoot) both; }.au-refresh-new.is-two { bottom: 70px; animation: au-token-bottom 650ms 2.5s var(--ease-overshoot) both; }.au-refresh-old small,.au-refresh-new small { margin-top: 10px; font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.16em; color: var(--text-mute); }
+.au-refresh-line { position: absolute; left: 290px; width: 520px; height: 5px; background: var(--accent); transform-origin: left; }.au-refresh-line.is-top { top: 303px; transform: rotate(-18deg) scaleX(0); animation: au-fork-top 750ms 1s var(--ease-quart) forwards; }.au-refresh-line.is-bottom { top: 303px; transform: rotate(18deg) scaleX(0); animation: au-fork-bottom 750ms 2s var(--ease-quart) forwards; }
+.au-refresh-score { display: flex; flex-direction: column; }.au-refresh-score > span { font-family: var(--font-mono); font-size: 22px; letter-spacing: 0.18em; color: var(--text-mute); }.au-refresh-score strong { margin-top: 16px; font-size: 200px; color: var(--accent); animation: au-security-drop 650ms 3.55s var(--ease-overshoot) both; }.au-refresh-score > i { width: 450px; height: 8px; margin-top: 32px; background: var(--surface-3); }.au-refresh-score > i b { display: block; width: 55%; height: 100%; background: var(--accent); transform-origin: left; animation: au-meter-half 800ms 4.15s var(--ease-quart) both; }
+.au-refresh-stamp { position: absolute; left: 184px; bottom: 64px; font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.16em; color: var(--text-mute); }
+
+@keyframes au-window-open { from { opacity: 0; transform: scaleX(0.75); } to { opacity: 1; transform: scaleX(1); } }
+@keyframes au-rail-run { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes au-type-slam { from { opacity: 0; transform: translateX(120px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes au-wave { to { transform: scaleY(1); } }
+@keyframes au-count-land { from { opacity: 0; transform: scale(1.5); } to { opacity: 1; transform: scale(1); } }
+@keyframes au-cell-lock { to { opacity: 1; transform: scale(1); } }
+@keyframes au-core-arrive { from { opacity: 0; transform: rotate(-20deg) scale(0.55); } to { opacity: 1; transform: rotate(0) scale(1); } }
+@keyframes au-node-charge { from { transform: translateY(35px); } to { transform: translateY(0); } }
+@keyframes au-wire { to { stroke-dashoffset: 0; } }
+@keyframes au-caption-up { from { opacity: 0; transform: translateY(35px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes au-gate-open { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes au-path-draw { to { stroke-dashoffset: 0; } }
+@keyframes au-task-load { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes au-score-unfold { from { opacity: 0; transform: translateY(70px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes au-meter-full { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes au-wall-rise { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes au-crack { to { transform: scaleY(1); } }
+@keyframes au-boundary-word { to { opacity: 1; transform: scale(1); } }
+@keyframes au-matrix-lock { to { opacity: 1; transform: scale(1); } }
+@keyframes au-fade-in { to { opacity: 1; } }
+@keyframes au-missing-jolt { 0%,100% { transform: translateX(0); } 32% { transform: translateX(-24px); } 68% { transform: translateX(24px); } }
+@keyframes au-arrow-pass { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes au-breach-path { to { stroke-dashoffset: 0; } }
+@keyframes au-token-top { from { opacity: 0; transform: translate(-100px, 110px); } to { opacity: 1; transform: translate(0, 0); } }
+@keyframes au-token-bottom { from { opacity: 0; transform: translate(-100px, -110px); } to { opacity: 1; transform: translate(0, 0); } }
+@keyframes au-fork-top { to { transform: rotate(-18deg) scaleX(1); } }
+@keyframes au-fork-bottom { to { transform: rotate(18deg) scaleX(1); } }
+@keyframes au-security-drop { from { opacity: 0; transform: translateY(-80px) scale(1.25); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes au-meter-half { from { transform: scaleX(0); } to { transform: scaleX(1); } }

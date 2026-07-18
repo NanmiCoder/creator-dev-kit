@@ -1,0 +1,529 @@
+.cs-scene {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  color: var(--text);
+  background: var(--surface);
+  font-family: var(--font-display-cn);
+}
+
+.cs-scene::before,
+.cs-scene::after {
+  content: "";
+  position: absolute;
+  border-radius: var(--r-card);
+  pointer-events: none;
+}
+
+.cs-scene::before {
+  width: 820px;
+  height: 620px;
+  left: 60px;
+  top: 34px;
+  background: var(--accent-soft);
+  filter: blur(96px);
+  opacity: 0.76;
+}
+
+.cs-scene::after {
+  width: 760px;
+  height: 520px;
+  right: 66px;
+  bottom: 46px;
+  background: var(--surface-3);
+  filter: blur(112px);
+  opacity: 0.74;
+}
+
+.cs-kicker {
+  position: absolute;
+  top: 72px;
+  left: 118px;
+  z-index: 5;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.cs-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 690px 1fr;
+  gap: 88px;
+  align-items: center;
+  padding: 138px 118px 108px;
+}
+
+.cs-mode-work {
+  grid-template-columns: 650px 1fr;
+}
+
+.cs-mode-signal {
+  grid-template-columns: 720px 1fr;
+}
+
+.cs-accent {
+  color: var(--accent);
+}
+
+.cs-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.cs-hero-copy h1 {
+  margin: 24px 0 0;
+  font-family: var(--font-display-cn);
+  font-size: 136px;
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.cs-hero-copy p {
+  margin: 34px 0 0;
+  max-width: 720px;
+  font-family: var(--font-body);
+  font-size: 32px;
+  line-height: 1.36;
+  color: var(--text-2);
+}
+
+.cs-rise-wrap {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 12px;
+}
+
+.cs-rise {
+  display: inline-block;
+  transform: translateY(112%);
+  filter: blur(12px);
+  animation: csRise 0.88s var(--ease-expo) both;
+}
+
+.cs-enter-down {
+  opacity: 0;
+  animation: csEnterDown 0.62s var(--ease-quart) both;
+}
+
+.cs-fade {
+  opacity: 0;
+  animation: csFade 0.72s var(--ease-quart) both;
+}
+
+.cs-pop {
+  opacity: 0;
+  animation: csPop 0.76s var(--ease-overshoot) both;
+}
+
+.cs-board {
+  position: relative;
+  min-height: 700px;
+}
+
+.cs-ledger-flow {
+  position: relative;
+  min-height: 620px;
+  border-radius: var(--r-card);
+  background: color-mix(in srgb, var(--surface-2) 88%, var(--surface));
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+.cs-ledger-panel {
+  position: absolute;
+  left: 34px;
+  top: 40px;
+  width: 330px;
+  min-height: 220px;
+  padding: 30px 32px;
+  border-radius: calc(var(--r-card) * 0.74);
+  background: color-mix(in srgb, var(--surface-3) 68%, var(--surface-2));
+  box-shadow: var(--card-shadow);
+}
+
+.cs-ledger-head span,
+.cs-monthly-bar em,
+.cs-ledger-lines span,
+.cs-source-node span,
+.cs-flow-node span,
+.cs-feedback-node span {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.cs-ledger-head b {
+  display: block;
+  margin-top: 22px;
+  font-family: var(--hero-num-font);
+  font-size: 78px;
+  font-style: var(--hero-num-style);
+  font-weight: var(--hero-num-weight);
+  line-height: 0.9;
+  color: var(--accent);
+}
+
+.cs-monthly-bar {
+  position: relative;
+  height: 38px;
+  margin-top: 24px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 72%, var(--surface-3));
+}
+
+.cs-monthly-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--cs-month-fill);
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+  transition: width 620ms var(--ease-expo);
+}
+
+.cs-monthly-bar em {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  font-style: normal;
+  color: var(--text-2);
+}
+
+.cs-ledger-lines {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.cs-ledger-lines span {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cs-ledger-lines span::before {
+  content: "";
+  width: 38px;
+  height: 2px;
+  background: var(--rule);
+}
+
+.cs-flow-map {
+  position: absolute;
+  inset: 0;
+}
+
+.cs-flow-lines {
+  position: absolute;
+  left: 214px;
+  top: 98px;
+  width: 700px;
+  height: 414px;
+  color: var(--rule);
+}
+
+.cs-flow-lines path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.12;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition:
+    opacity 420ms var(--ease-quart),
+    color 420ms var(--ease-quart),
+    stroke-dashoffset 520ms var(--ease-expo);
+}
+
+.cs-ledger-flow .cs-issue-line {
+  opacity: calc(0.12 + var(--cs-issue-flow) * 0.5);
+  color: color-mix(in srgb, var(--accent) calc(var(--cs-issue-flow) * 100%), var(--rule));
+}
+
+.cs-ledger-flow .cs-release-line {
+  opacity: calc(0.12 + var(--cs-release-flow) * 0.5);
+  color: color-mix(in srgb, var(--accent) calc(var(--cs-release-flow) * 100%), var(--rule));
+}
+
+.cs-ledger-flow .cs-media-line {
+  opacity: calc(0.12 + var(--cs-media-flow) * 0.5);
+  color: color-mix(in srgb, var(--accent) calc(var(--cs-media-flow) * 100%), var(--rule));
+}
+
+.cs-ledger-flow .cs-feedback-line {
+  opacity: calc(0.12 + var(--cs-feedback-flow) * 0.5);
+  color: color-mix(in srgb, var(--accent) calc(var(--cs-feedback-flow) * 100%), var(--rule));
+}
+
+.cs-source-node,
+.cs-flow-node,
+.cs-feedback-node {
+  position: absolute;
+  display: grid;
+  align-content: center;
+  border-radius: calc(var(--r-card) * 0.7);
+  background: color-mix(in srgb, var(--surface-2) 88%, var(--surface));
+  box-shadow: var(--card-shadow);
+  color: var(--text-faint);
+  opacity: 0.54;
+  transform: scale(0.98);
+  transition:
+    opacity 380ms var(--ease-quart),
+    transform 380ms var(--ease-quart),
+    color 380ms var(--ease-quart),
+    background 380ms var(--ease-quart),
+    box-shadow 380ms var(--ease-quart);
+}
+
+.cs-source-node {
+  left: 60px;
+  top: 378px;
+  width: 220px;
+  min-height: 104px;
+  padding: 22px 24px;
+  opacity: 1;
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent-soft) 58%, var(--surface-2));
+}
+
+.cs-source-node b {
+  margin-top: 12px;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.cs-flow-node {
+  left: 506px;
+  width: 248px;
+  min-height: 104px;
+  padding: 22px 26px;
+}
+
+.cs-node-issue {
+  top: 126px;
+}
+
+.cs-node-release {
+  top: 246px;
+}
+
+.cs-node-media {
+  top: 366px;
+}
+
+.cs-flow-node b,
+.cs-feedback-node b {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.cs-flow-node span,
+.cs-feedback-node span {
+  margin-top: 12px;
+}
+
+.cs-feedback-node {
+  right: 40px;
+  top: 246px;
+  width: 230px;
+  min-height: 132px;
+  padding: 24px 26px;
+}
+
+.cs-node-seen {
+  opacity: 0.9;
+  color: var(--text);
+}
+
+.cs-node-hot {
+  opacity: 1;
+  transform: scale(1.04);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent-soft) 76%, var(--surface-2));
+  box-shadow: var(--card-shadow), 0 0 58px var(--accent-soft);
+}
+
+.cs-block {
+  border-radius: var(--r-card);
+  background: color-mix(in srgb, var(--surface-2) 88%, var(--surface));
+  box-shadow: var(--card-shadow);
+}
+
+.cs-ledger-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 430px;
+  height: 250px;
+  padding: 34px 38px;
+  color: var(--text);
+}
+
+.cs-ledger-card span,
+.cs-ledger-card em,
+.cs-use-card span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.cs-ledger-card b {
+  display: block;
+  margin-top: 30px;
+  font-family: var(--hero-num-font);
+  font-size: 86px;
+  font-style: var(--hero-num-style);
+  font-weight: var(--hero-num-weight);
+  line-height: 0.92;
+  color: var(--accent);
+}
+
+.cs-ledger-card em {
+  margin-top: 26px;
+  font-style: normal;
+  color: var(--text-2);
+}
+
+.cs-focus-bill,
+.cs-focus-feedback {
+  background: color-mix(in srgb, var(--accent-soft) 78%, var(--surface-2));
+  box-shadow: var(--card-shadow), 0 0 76px var(--accent-soft);
+}
+
+.cs-card-grid {
+  position: absolute;
+  right: 0;
+  top: 48px;
+  width: 570px;
+  display: grid;
+  grid-template-columns: repeat(2, 270px);
+  gap: 26px;
+}
+
+.cs-use-card {
+  min-height: 182px;
+  padding: 30px 32px;
+}
+
+.cs-use-card b {
+  display: block;
+  margin-top: 40px;
+  font-family: var(--font-display-cn);
+  font-size: 44px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.cs-tone-hot {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent-soft) 70%, var(--surface-2));
+}
+
+.cs-tone-signal {
+  background: color-mix(in srgb, var(--surface-3) 76%, var(--surface-2));
+}
+
+.cs-tone-signal b {
+  color: var(--accent);
+}
+
+.cs-stamp-stack {
+  position: absolute;
+  left: 86px;
+  bottom: 32px;
+  display: flex;
+  gap: 22px;
+}
+
+.cs-stamp {
+  width: 270px;
+  min-height: 106px;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  border-radius: var(--r-card);
+  background: color-mix(in srgb, var(--surface-2) 84%, var(--surface));
+  box-shadow: var(--card-shadow);
+  transform: rotate(var(--cs-tilt));
+  font-family: var(--font-body);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-2);
+}
+
+.cs-mode-signal .cs-ledger-card {
+  width: 500px;
+  height: 286px;
+}
+
+.cs-mode-signal .cs-ledger-card b {
+  font-size: 104px;
+}
+
+.cs-mode-signal .cs-stamp {
+  background: color-mix(in srgb, var(--accent-soft) 62%, var(--surface-2));
+}
+
+@keyframes csRise {
+  from {
+    transform: translateY(112%);
+    filter: blur(12px);
+  }
+  to {
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes csEnterDown {
+  from {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes csFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes csPop {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.94) rotate(var(--cs-tilt, 0deg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(var(--cs-tilt, 0deg));
+  }
+}

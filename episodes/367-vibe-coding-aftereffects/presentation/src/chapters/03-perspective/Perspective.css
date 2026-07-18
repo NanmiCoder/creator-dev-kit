@@ -1,0 +1,870 @@
+/* ─────────────────────────────────────────────────────────────────────
+ * Chapter 03 · perspective — 8 屏独立设计
+ * midnight-press 主题 · 暖色 espresso 暗底 + 火热橙 accent
+ * 每句话一屏,跨步即切;字号固定 px;动画用 transform + opacity
+ * 单一 CSS 类前缀 `.pe-` 物理隔离,不动 base.css / tokens.css
+ *
+ * step 0 — 派 1 + 派 2 详情 + 派 3 teaser 占位 (主动作:3 卡片 stagger fade-up + teaser dash 脉冲)
+ * step 1 — 揭晓派 3 (主动作:左侧二派 fade-out + 右侧主卡 scale + 100% 数字 pop)
+ * step 2 — 签名转折   (主动作:handwriting 短屏 + underline scaleX)
+ * step 3 — 时间线     (主动作:4 个 tag 横向 stagger 滑入 + 进度条填充)
+ * step 4 — debug 对比 (主动作:大字揭示 + 双柱由左向右生长)
+ * step 5 — 工作流矩阵 (主动作:4 个圆逐个点亮相继 delay 0/600/1200/1800ms)
+ * step 6 — 妥协       (主动作:bug 标记 stagger pop + 闪烁)
+ * step 7 — 金句       (主动作:大字 reveal + accent 横条从中心 scaleX)
+ * ───────────────────────────────────────────────────────────────────── */
+
+.pe-scene {
+  position: absolute;
+  inset: 0;
+  padding: var(--stage-pad-y) var(--stage-pad-x);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  color: var(--text);
+  animation: pe-fade-in 700ms var(--ease-quart) both;
+}
+
+/* ─── 共用 chrome ─── */
+.pe-masthead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  width: 100%;
+}
+.pe-brand {
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--text);
+}
+.pe-issue {
+  margin-left: auto;
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.pe-rule {
+  margin: var(--space-4) 0 0;
+}
+.pe-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.pe-kicker-center {
+  justify-content: center;
+}
+.pe-em {
+  color: var(--accent);
+}
+.pe-foot {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+  padding-top: var(--space-5);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 0 — 三派并列
+ * ════════════════════════════════════════════════════════════════ */
+.pe-factions {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.pe-factions-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+.pe-counter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.pe-counter-num {
+  font-family: var(--font-display-en);
+  font-style: italic;
+  font-size: 64px;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.pe-counter-lbl {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.pe-factions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+  width: 100%;
+}
+.pe-card {
+  background: var(--surface-2);
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+  padding: 28px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 280px;
+}
+.pe-faction {
+  position: relative;
+}
+.pe-faction-1 {
+  animation: pe-fade-up 700ms var(--ease-quart) 100ms both;
+}
+.pe-faction-2 {
+  animation: pe-fade-up 700ms var(--ease-quart) 500ms both;
+}
+.pe-faction-3 {
+  animation: pe-fade-up 700ms var(--ease-quart) 900ms both;
+  border-color: var(--accent);
+  background: linear-gradient(180deg, var(--accent-soft) 0%, var(--surface-2) 70%);
+}
+/* step 0 视觉规则:narration[0] 只覆盖段 9(前 2 派),派 3 视觉上以 teaser 占位 */
+.pe-faction-3-teaser {
+  border-style: dashed;
+  border-color: var(--text-faint);
+  background: transparent;
+  opacity: 0.55;
+  position: relative;
+  overflow: hidden;
+}
+.pe-faction-3-teaser::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0,
+    transparent 14px,
+    rgba(255, 74, 43, 0.05) 14px,
+    rgba(255, 74, 43, 0.05) 16px
+  );
+  pointer-events: none;
+}
+.pe-faction-3-teaser .pe-faction-num {
+  color: var(--text-faint);
+}
+.pe-faction-3-teaser .pe-faction-tag {
+  color: var(--text-faint);
+}
+.pe-faction-teaser-dash {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+  animation: pe-teaser-pulse 2.4s var(--ease-soft) 1.5s infinite;
+}
+.pe-faction-teaser-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 6px;
+}
+.pe-faction-teaser-cue {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: var(--track-snug);
+  color: var(--text-mute);
+}
+.pe-faction-teaser-floor {
+  color: var(--text-faint);
+  font-style: normal;
+}
+.pe-faction-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pe-faction-num {
+  font-size: 14px;
+  color: var(--text-mute);
+  letter-spacing: var(--track-caps);
+}
+.pe-faction-tag {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.pe-faction-3 .pe-faction-tag {
+  color: var(--accent);
+}
+.pe-faction-h {
+  font-size: 44px;
+  line-height: 1.1;
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: var(--track-tight);
+}
+.pe-faction-body {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+.pe-faction-body-cn {
+  letter-spacing: var(--track-snug);
+}
+.pe-faction-floor {
+  margin-top: auto;
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+  display: inline-flex;
+  align-items: center;
+  border-top: var(--bw-1) solid var(--rule);
+  padding-top: var(--space-3);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 1 — 锁定第三派
+ * ════════════════════════════════════════════════════════════════ */
+.pe-lock {
+  align-self: center;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.55fr) minmax(720px, 1.4fr);
+  gap: var(--space-9);
+  align-items: center;
+  padding-top: var(--space-7);
+}
+.pe-lock-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.pe-lock-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 18px 24px;
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+  opacity: 0.35;
+  filter: grayscale(60%);
+  animation: pe-fade-in 700ms var(--ease-quart) 300ms both;
+}
+.pe-lock-num {
+  font-size: 14px;
+  letter-spacing: var(--track-caps);
+  color: var(--text-mute);
+}
+.pe-lock-h {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: var(--track-tight);
+  color: var(--text-2);
+}
+
+.pe-lock-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+.pe-lock-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.pe-lock-h1 {
+  font-size: 104px;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: var(--track-tight);
+  color: var(--text);
+}
+.pe-lock-100 {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: var(--space-5);
+  padding: 28px 32px;
+  background: var(--accent-soft);
+  border: var(--bw-2) solid var(--accent);
+  border-radius: var(--r-card);
+}
+.pe-lock-100-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+.pe-lock-100-num {
+  font-size: 140px;
+  line-height: 0.95;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.pe-lock-100-pct {
+  font-size: 14px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.pe-lock-100-rule {
+  width: 1px;
+  height: 100px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+.pe-lock-100-pre {
+  font-size: 28px;
+  line-height: 1.3;
+  color: var(--text);
+  letter-spacing: var(--track-snug);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 2 — 签名短屏
+ * ════════════════════════════════════════════════════════════════ */
+.pe-sign-scene {
+  background: radial-gradient(
+    circle at 50% 55%,
+    rgba(255, 74, 43, 0.05) 0%,
+    transparent 60%
+  );
+}
+.pe-sign {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+  text-align: center;
+}
+.pe-sign-h {
+  font-size: 168px;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+  text-align: center;
+  max-width: 14ch;
+}
+.pe-sign-rule {
+  width: 320px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  animation: pe-sign-rule-grow 800ms var(--ease-quart) 1400ms forwards;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 3 — 第一人称时间线
+ * ════════════════════════════════════════════════════════════════ */
+.pe-arc {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.pe-arc-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.pe-arc-h {
+  font-size: 128px;
+  line-height: 1.05;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+.pe-arc-track {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+}
+.pe-arc-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 24px 24px 28px;
+  background: var(--surface-2);
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+  opacity: 0;
+  transform: translateX(-24px);
+}
+.pe-arc-item-1 {
+  animation: pe-slide-in 600ms var(--ease-quart) 1500ms forwards;
+}
+.pe-arc-item-2 {
+  animation: pe-slide-in 600ms var(--ease-quart) 2700ms forwards;
+}
+.pe-arc-item-3 {
+  animation: pe-slide-in 600ms var(--ease-quart) 3900ms forwards;
+}
+.pe-arc-item-4 {
+  animation: pe-slide-in 600ms var(--ease-quart) 5100ms forwards;
+}
+.pe-arc-num {
+  font-size: 14px;
+  letter-spacing: var(--track-caps);
+  color: var(--text-mute);
+}
+.pe-arc-lbl {
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: var(--track-tight);
+  color: var(--text);
+}
+
+.pe-arc-fast {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.pe-arc-fast-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.pe-arc-fast-bar {
+  height: 6px;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  position: relative;
+}
+.pe-arc-fast-fill {
+  position: absolute;
+  inset: 0;
+  width: 0;
+  background: var(--accent);
+  box-shadow: 0 0 14px var(--accent-glow);
+  animation: pe-fast-fill 1800ms var(--ease-quart) 6800ms forwards;
+}
+.pe-arc-fast-tag {
+  font-size: 13px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+  animation: pe-fade-in 600ms var(--ease-quart) 8500ms both;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 4 — debug 成本对比
+ * ════════════════════════════════════════════════════════════════ */
+.pe-cost {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.pe-cost-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.pe-cost-h {
+  font-size: 96px;
+  line-height: 1.05;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+.pe-cost-emph {
+  padding: 28px 36px;
+  background: var(--accent-soft);
+  border-left: var(--bw-4) solid var(--accent);
+  border-radius: 0 var(--r-card) var(--r-card) 0;
+}
+.pe-cost-emph-h {
+  font-size: 72px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: var(--track-tight);
+  color: var(--text);
+}
+.pe-cost-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.pe-cost-bar {
+  display: grid;
+  grid-template-columns: 280px 1fr auto;
+  align-items: center;
+  gap: var(--space-5);
+}
+.pe-cost-bar-lbl {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.pe-cost-bar-track {
+  height: 14px;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  position: relative;
+}
+.pe-cost-bar-fill {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+}
+.pe-cost-bar-fill-write {
+  background: var(--text-2);
+  animation: pe-bar-write 1500ms var(--ease-quart) 2800ms forwards;
+}
+.pe-cost-bar-fill-debug {
+  background: var(--accent);
+  box-shadow: 0 0 14px var(--accent-glow);
+  animation: pe-bar-debug 2200ms var(--ease-quart) 3500ms forwards;
+}
+.pe-cost-bar-tag {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-2);
+  min-width: 80px;
+  text-align: right;
+}
+.pe-cost-bar:last-child .pe-cost-bar-tag {
+  color: var(--accent);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 5 — 工作流矩阵
+ * ════════════════════════════════════════════════════════════════ */
+.pe-wf {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.pe-wf-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.pe-wf-h {
+  font-size: 96px;
+  line-height: 1.05;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+.pe-wf-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+}
+.pe-wf-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 32px 24px 28px;
+  background: var(--surface-2);
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+}
+.pe-wf-cell-1 {
+  animation: pe-wf-on 700ms var(--ease-quart) 800ms both;
+}
+.pe-wf-cell-2 {
+  animation: pe-wf-on 700ms var(--ease-quart) 1400ms both;
+}
+.pe-wf-cell-3 {
+  animation: pe-wf-on 700ms var(--ease-quart) 2000ms both;
+}
+.pe-wf-cell-4 {
+  animation: pe-wf-on 700ms var(--ease-quart) 2600ms both;
+}
+.pe-wf-circle {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  border: var(--bw-2) solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pe-wf-cell-1 .pe-wf-circle,
+.pe-wf-cell-2 .pe-wf-circle,
+.pe-wf-cell-3 .pe-wf-circle,
+.pe-wf-cell-4 .pe-wf-circle {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 24px var(--accent-glow);
+}
+.pe-wf-num {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  color: var(--text-mute);
+}
+.pe-wf-mark {
+  font-size: 56px;
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: 0;
+}
+.pe-wf-lbl {
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: var(--track-tight);
+  color: var(--text);
+  text-align: center;
+}
+.pe-wf-sub {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+  text-align: center;
+}
+.pe-wf-foot {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-2);
+  animation: pe-fade-in 600ms var(--ease-quart) 3500ms both;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 6 — 妥协短屏
+ * ════════════════════════════════════════════════════════════════ */
+.pe-however {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+  padding-top: var(--space-7);
+}
+.pe-however-h {
+  font-size: 112px;
+  line-height: 1.05;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+.pe-however-h-sub {
+  font-size: 96px;
+  line-height: 1.05;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  font-weight: 700;
+}
+.pe-however-bugs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
+  padding-top: var(--space-3);
+}
+.pe-however-bug {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display-en);
+  font-style: italic;
+  font-size: 32px;
+  color: var(--accent);
+  border: var(--bw-2) solid var(--accent);
+  background: var(--accent-soft);
+  opacity: 0;
+  transform: scale(0.4);
+}
+.pe-however-bug-1 {
+  animation: pe-bug-pop 500ms var(--ease-overshoot) 2500ms forwards;
+}
+.pe-however-bug-2 {
+  animation: pe-bug-pop 500ms var(--ease-overshoot) 2700ms forwards;
+}
+.pe-however-bug-3 {
+  animation: pe-bug-pop 500ms var(--ease-overshoot) 2900ms forwards;
+}
+.pe-however-bug-4 {
+  animation: pe-bug-pop 500ms var(--ease-overshoot) 3100ms forwards;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 7 — 金句收束
+ * ════════════════════════════════════════════════════════════════ */
+.pe-finale {
+  background: radial-gradient(
+    circle at 50% 55%,
+    rgba(255, 74, 43, 0.06) 0%,
+    transparent 55%
+  );
+}
+.pe-finale-body {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  padding-top: var(--space-7);
+  text-align: center;
+  max-width: 1400px;
+}
+.pe-finale-kicker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.pe-finale-rule {
+  width: 120px;
+  height: 1px;
+  background: var(--rule);
+}
+.pe-finale-h {
+  font-size: 144px;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+  text-align: center;
+}
+.pe-finale-h-sub {
+  font-size: 144px;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  font-weight: 700;
+}
+.pe-finale-cn {
+  color: var(--text);
+}
+.pe-finale-bar {
+  width: 800px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: var(--r-pill);
+  box-shadow: 0 0 24px var(--accent-glow);
+  transform: scaleX(0);
+  transform-origin: center;
+  animation: pe-finale-bar-grow 1100ms var(--ease-quart) 4200ms forwards;
+}
+.pe-finale-tag {
+  font-size: 16px;
+  letter-spacing: var(--track-snug);
+  color: var(--text-2);
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  animation: pe-fade-in 700ms var(--ease-quart) 5500ms both;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  keyframes — only transform / opacity
+ * ════════════════════════════════════════════════════════════════ */
+@keyframes pe-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pe-fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pe-slide-in {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pe-fast-fill {
+  from { width: 0; }
+  to   { width: 92%; }
+}
+
+@keyframes pe-bar-write {
+  from { width: 0; }
+  to   { width: 22%; }
+}
+
+@keyframes pe-bar-debug {
+  from { width: 0; }
+  to   { width: 88%; }
+}
+
+@keyframes pe-wf-on {
+  0%   { opacity: 0; transform: translateY(16px) scale(0.96); }
+  60%  { opacity: 1; transform: translateY(0) scale(1.03); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pe-bug-pop {
+  0%   { opacity: 0; transform: scale(0.4); }
+  60%  { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pe-sign-rule-grow {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes pe-finale-bar-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes pe-teaser-pulse {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 0.95; }
+}

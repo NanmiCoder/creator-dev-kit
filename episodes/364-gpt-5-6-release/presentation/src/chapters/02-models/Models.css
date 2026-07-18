@@ -1,0 +1,218 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * 章 2 · models —— 三个型号 Sol / Terra / Luna。creator-dark 主题延续。
+ * 颜色/字体走 token；字号/间距固定 px。主内容避开右上角 432×432 头像安全区。
+ * 动画：卡片旋入 / 遮罩升起 / overshoot 弹入 / 印章 / 条形增长 / 价格腰斩收缩。
+ * 全部类名 / keyframes 用 mo- 前缀（避免跨章冲突）。
+ * ─────────────────────────────────────────────────────────────────────── */
+
+.mo-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-display-cn);
+}
+.mo-accent { color: var(--accent); }
+
+/* ── 眉标（左上，避开右上头像区）── */
+.mo-kicker {
+  position: absolute;
+  top: 60px;
+  left: 76px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  z-index: 4;
+}
+.mo-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+  animation: moBlink 1.6s ease-in-out infinite;
+}
+@keyframes moBlink { 0%,100%{opacity:1;} 50%{opacity:0.45;} }
+
+/* ── 共享动画原语 ── */
+.mo-down { opacity: 0; animation: moDown 0.66s var(--ease-quart) both; }
+@keyframes moDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+
+.mo-fade { opacity: 0; animation: moFade 0.74s var(--ease-quart) both; }
+@keyframes moFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.mo-pop { opacity: 0; animation: moPop 0.6s var(--ease-overshoot) both; }
+@keyframes moPop { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
+
+.mo-stamp { opacity: 0; animation: moStamp 0.56s var(--ease-overshoot) both; }
+@keyframes moStamp { 0% { opacity: 0; transform: scale(1.55) rotate(-9deg); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1) rotate(-3deg); } }
+
+.mo-grow { width: 0; animation: moGrow 1.05s var(--ease-expo) both; }
+@keyframes moGrow { from { width: 0; } to { width: var(--mo-w); } }
+
+/* ── 三个天体符号配色 ── */
+.mo-glyph-sun   { color: var(--mix); }   /* 太阳暖橙 */
+.mo-glyph-earth { color: var(--accent); }/* 地球电光绿 */
+.mo-glyph-moon  { color: var(--text-2); }/* 月亮：调亮，与日/地一样醒目 */
+.mo-sun-rays { transform-origin: 32px 32px; animation: moSunSpin 22s linear infinite; }
+@keyframes moSunSpin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+/* ════════════ s0 · 三型号亮相 ════════════ */
+/* 左偏非对称留白：右大左小清出头像角；三卡横向撑满 x:120→1450 */
+.mo-s0 { justify-content: center; align-items: stretch; padding: 0 470px 0 120px; }
+.mo-s0-head {
+  position: absolute; top: 132px; left: 120px; right: 470px; text-align: center;
+  font-size: 56px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; white-space: nowrap;
+}
+.mo-cards {
+  display: flex; justify-content: space-between; gap: 56px;
+  width: 100%; margin-top: 44px;
+}
+.mo-card-in { opacity: 0; animation: moCardIn 0.82s var(--ease-overshoot) both; }
+@keyframes moCardIn { 0% { opacity: 0; transform: translateY(46px) scale(0.88); } 100% { opacity: 1; transform: none; } }
+.mo-card {
+  position: relative; flex: 1 1 0; min-width: 0; height: 486px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 48px 36px; border-radius: 26px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+/* 中间卡片（地球/Terra）描边微微透绿，暗示后面主角 */
+.mo-card:nth-child(2) { border-color: rgba(201,255,58,0.34); box-shadow: var(--card-shadow), 0 0 50px rgba(201,255,58,0.10); }
+.mo-orbit {
+  position: absolute; top: 96px; left: 50%; width: 272px; height: 272px;
+  margin-left: -136px; border-radius: 50%;
+  border: 1px dashed rgba(247,242,232,0.12);
+}
+.mo-glyph { width: 156px; height: 156px; display: block; margin-bottom: 44px; }
+.mo-card-name {
+  font-family: var(--font-display-en); font-weight: 900; font-size: 84px; line-height: 1;
+  color: var(--text); letter-spacing: -0.01em;
+}
+.mo-card-mean {
+  margin-top: 18px; font-size: 38px; font-weight: 700; color: var(--text-2); letter-spacing: 0.22em;
+  padding-left: 0.22em;
+}
+.mo-s0-foot {
+  position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%);
+  display: inline-flex; align-items: center;
+  padding: 15px 36px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-size: 30px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 40px var(--accent-glow); white-space: nowrap;
+}
+
+/* ════════════ s1 · 三型号定位 ════════════ */
+/* 左偏非对称留白清出头像角；三档横向撑满 x:120→1450（宽 1330） */
+.mo-s1 { justify-content: center; padding: 0 470px 0 120px; }
+.mo-tiers {
+  display: grid; grid-template-columns: 1fr 1.28fr 1fr;
+  align-items: stretch; gap: 44px; width: 100%;
+}
+.mo-tier-in { opacity: 0; animation: moTierIn 0.78s var(--ease-overshoot) both; }
+@keyframes moTierIn { 0% { opacity: 0; transform: translateY(40px) scale(0.9); } 100% { opacity: 1; transform: none; } }
+.mo-tier {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  padding: 54px 40px 48px; border-radius: 24px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+}
+.mo-tier-glyph { width: 104px; height: 104px; display: block; margin-bottom: 26px; }
+.mo-tier-name {
+  font-family: var(--font-display-en); font-weight: 900; font-size: 70px; line-height: 1;
+  color: var(--text); letter-spacing: -0.01em; margin-bottom: 24px;
+}
+.mo-tier-tag {
+  display: inline-flex; align-items: center; padding: 12px 28px; border-radius: 12px;
+  font-size: 27px; font-weight: 800; letter-spacing: 0.01em;
+  background: var(--surface-3); border: 1px solid var(--rule); color: var(--text-2);
+}
+.mo-tier-tag-sol  { color: var(--mix); border-color: rgba(255,178,74,0.40); background: var(--mix-soft); }
+.mo-tier-tag-luna { color: var(--neu); }
+.mo-tier-desc { margin-top: 20px; font-size: 28px; font-weight: 600; color: var(--text-mute); }
+
+/* Terra 高亮主角 */
+.mo-tier-hero {
+  background: linear-gradient(180deg, rgba(201,255,58,0.08), var(--surface-2) 55%);
+  border-color: rgba(201,255,58,0.50);
+  box-shadow: var(--card-shadow), 0 0 60px rgba(201,255,58,0.14);
+  transform-origin: center bottom;
+}
+.mo-tier-hero .mo-tier-glyph { width: 124px; height: 124px; }
+.mo-tier-hero .mo-tier-name { font-size: 84px; text-shadow: 0 0 50px rgba(201,255,58,0.35); }
+.mo-tier-tag-hero { background: var(--accent); border-color: var(--accent); color: #0a0c0a; box-shadow: 0 0 26px var(--accent-glow); }
+.mo-tier-pick {
+  position: absolute; top: -26px; left: 50%; transform: translateX(-50%);
+  padding: 11px 26px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-size: 26px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 36px var(--accent-glow); white-space: nowrap; z-index: 3;
+}
+.mo-tier-metrics { display: flex; gap: 22px; margin-top: 32px; width: 100%; justify-content: center; }
+.mo-metric {
+  display: flex; flex-direction: column; align-items: center; gap: 9px;
+  padding: 20px 24px; border-radius: 16px;
+  background: var(--surface); border: 1px solid rgba(201,255,58,0.24); flex: 0 1 auto; min-width: 0;
+}
+.mo-metric em { font-style: normal; font-size: 23px; font-weight: 600; color: var(--text-mute); font-family: var(--font-mono); letter-spacing: 0.04em; }
+.mo-metric b { font-size: 52px; font-weight: 900; line-height: 1; letter-spacing: -0.01em; white-space: nowrap; }
+
+/* ════════════ s2 · 价格策略 ════════════ */
+/* 左偏非对称留白清出头像角；价格条横向撑满 x:120→1450 */
+.mo-s2 { justify-content: center; align-items: stretch; padding: 0 470px 0 120px; }
+.mo-price-stage { width: 100%; display: flex; flex-direction: column; gap: 64px; }
+.mo-price-row { display: grid; grid-template-columns: 104px 250px 1fr; align-items: center; gap: 36px; }
+.mo-price-glyph { width: 92px; height: 92px; display: block; }
+.mo-price-name {
+  font-family: var(--font-display-en); font-weight: 900; font-size: 64px; line-height: 1;
+  color: var(--text); letter-spacing: -0.01em;
+}
+.mo-price-track { position: relative; height: 72px; }
+.mo-price-fill {
+  position: absolute; left: 0; top: 0; height: 100%; border-radius: 16px;
+  display: flex; align-items: center;
+}
+.mo-price-fill-flat { background: var(--surface-3); border: 1px solid var(--rule); }
+.mo-price-cap {
+  position: absolute; left: 28px; top: 50%; transform: translateY(-50%);
+  font-size: 30px; font-weight: 800; white-space: nowrap;
+}
+.mo-cap-flat { color: var(--text-2); }
+
+/* Terra hero 行：旧价幽灵满条 → 实条腰斩到一半 */
+.mo-price-row-hero { grid-template-columns: 112px 250px 1fr; }
+.mo-price-row-hero .mo-price-glyph { width: 100px; height: 100px; }
+.mo-price-row-hero .mo-price-name { font-size: 72px; text-shadow: 0 0 50px rgba(201,255,58,0.35); }
+.mo-price-track-hero { height: 96px; }
+.mo-price-ghost {
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%; border-radius: 18px;
+  background: var(--neg-soft); border: 1px dashed rgba(255,91,84,0.5);
+}
+.mo-price-fill-hero {
+  position: absolute; left: 0; top: 0; width: 50%; height: 100%; border-radius: 18px;
+  background: linear-gradient(90deg, #9fdc1f, var(--accent)); box-shadow: 0 0 34px var(--accent-glow);
+  transform: scaleX(2); transform-origin: left center;
+  animation: moCut 0.7s var(--ease-expo) both;
+}
+@keyframes moCut { from { transform: scaleX(2); } to { transform: scaleX(1); } }
+.mo-cut { opacity: 1; }
+.mo-price-perf {
+  position: absolute; left: 26px; top: 50%; transform: translateY(-50%);
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 32px; font-weight: 900; color: #0a0c0a; white-space: nowrap; z-index: 2;
+}
+.mo-perf-ic { width: 30px; height: 30px; display: inline-block; }
+.mo-price-cut {
+  position: absolute; left: calc(50% + 26px); top: 50%; transform: translateY(-50%);
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 12px 26px; border-radius: 999px;
+  background: var(--neg); color: #fff; font-size: 30px; font-weight: 900; letter-spacing: 0.01em;
+  box-shadow: 0 0 36px var(--neg-glow); white-space: nowrap; z-index: 3;
+}
+.mo-cut-ic { width: 28px; height: 28px; display: inline-block; }
+.mo-s2-foot {
+  position: absolute; left: 50%; bottom: 104px; transform: translateX(-50%);
+  font-size: 46px; font-weight: 800; color: var(--text); white-space: nowrap;
+}

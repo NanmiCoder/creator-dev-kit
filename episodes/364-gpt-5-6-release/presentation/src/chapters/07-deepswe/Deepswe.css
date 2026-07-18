@@ -1,0 +1,224 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * 章 7 · deepswe —— 全片高潮 · 抖包袱。DeepSWE 真榜揭晓 + 国产价格屠夫落点。
+ * 严格沿用章 1（op-）的世界观：近黑底 + 电光绿 accent + 暖白；颜色/字体走 token；
+ * 字号/间距固定 px；主内容避开右上角 432×432 头像安全区（眉标走左上，主体居中/偏下）。
+ * 条形榜复刻章 1 op-s2：三行统一网格 → 轨道等宽，最长条=最高分。
+ * 动画原语：遮罩升起 / overshoot 砸入&印章 / 弹入 / 条形增长 / 数字滚轮 / 上飘淡入。
+ * ─────────────────────────────────────────────────────────────────────── */
+
+.ds-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-display-cn);
+}
+.ds-accent { color: var(--accent); }
+.ds-text { color: var(--text); }
+.mono { font-family: var(--font-mono); }
+
+/* ── 眉标（左上，避开右上头像区）── */
+.ds-kicker {
+  position: absolute;
+  top: 60px;
+  left: 76px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  z-index: 4;
+}
+.ds-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+  animation: dsBlink 1.6s ease-in-out infinite;
+}
+@keyframes dsBlink { 0%,100%{opacity:1;} 50%{opacity:0.45;} }
+
+.ds-no { font-family: var(--font-mono); font-weight: 900; color: var(--neg); }
+
+/* ── 共享动画原语（仿章 1）── */
+.ds-down { opacity: 0; animation: dsDown 0.66s var(--ease-quart) both; }
+@keyframes dsDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+
+.ds-fade { opacity: 0; animation: dsFade 0.74s var(--ease-quart) both; }
+@keyframes dsFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.ds-rise-wrap { display: block; overflow: hidden; padding: 0.04em 0.04em 0.12em; }
+.ds-rise { display: inline-block; transform: translateY(112%); filter: blur(10px); animation: dsRise 0.92s var(--ease-expo) both; }
+@keyframes dsRise { 0% { transform: translateY(112%); filter: blur(10px); } 100% { transform: translateY(0); filter: blur(0); } }
+
+.ds-pop { opacity: 0; animation: dsPop 0.6s var(--ease-overshoot) both; }
+@keyframes dsPop { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
+
+.ds-stamp { opacity: 0; animation: dsStamp 0.56s var(--ease-overshoot) both; }
+@keyframes dsStamp { 0% { opacity: 0; transform: scale(1.55) rotate(-9deg); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1) rotate(-3deg); } }
+
+.ds-grow { width: 0; animation: dsGrow 1.15s var(--ease-expo) both; }
+@keyframes dsGrow { from { width: 0; } to { width: var(--ds-w); } }
+
+.ds-grow-x { transform: scaleX(0); transform-origin: left center; animation: dsGrowX 0.6s var(--ease-expo) both; }
+@keyframes dsGrowX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* 数字滚轮（仿章 1 Roll）*/
+.ds-roll { display: inline-block; height: 1em; line-height: 1; overflow: hidden; vertical-align: top; }
+.ds-roll-col { display: flex; flex-direction: column; transform: translateY(0); animation: dsRoll 1.5s var(--ease-expo) both; }
+.ds-roll-col > span { display: block; height: 1em; text-align: center; }
+@keyframes dsRoll { from { transform: translateY(0); } to { transform: translateY(var(--ds-to)); } }
+/* 数字小数点（独立类，避免与眉标圆点 .ds-dot 冲突）*/
+.ds-pt { display: inline-block; height: 1em; line-height: 1; padding: 0 0.04em; }
+
+/* ════════════ 条形榜单（复刻章 1 op-s2：等宽轨道）════════════ */
+.ds-bars { width: 1540px; max-width: 1540px; display: flex; flex-direction: column; gap: 30px; margin-left: -60px; }
+/* 统一网格 → 轨道等宽，width=100% 的条自然最长 */
+.ds-row { display: grid; grid-template-columns: 138px 360px 1fr 196px; align-items: center; gap: 26px; }
+.ds-rank { font-family: var(--font-mono); font-size: 26px; font-weight: 700; color: var(--text-faint); text-align: right; letter-spacing: 0.02em; }
+.ds-name { font-size: 34px; font-weight: 800; color: var(--text-2); text-align: right; }
+.ds-name em { display: block; font-style: normal; font-size: 17px; font-weight: 500; color: var(--text-faint); font-family: var(--font-mono); letter-spacing: 0.05em; margin-top: 3px; }
+.ds-track { position: relative; height: 34px; background: var(--surface-3); border-radius: 17px; overflow: hidden; }
+.ds-fill { height: 100%; border-radius: 17px; }
+.ds-num { font-family: var(--hero-num-font); font-weight: 900; font-size: 50px; line-height: 1; letter-spacing: -0.02em; color: var(--text-2); display: inline-flex; align-items: flex-end; }
+
+/* 色调：lead=领跑绿 / close=贴脸闭源中性 / open=国产开源暖橙 */
+.ds-fill-lead { background: linear-gradient(90deg, #9fdc1f, var(--accent)); box-shadow: 0 0 30px var(--accent-glow); }
+.ds-fill-close { background: var(--neu); }
+.ds-fill-open { background: linear-gradient(90deg, #e08a2a, var(--mix)); box-shadow: 0 0 26px rgba(255,178,74,0.4); }
+.ds-num-lead { color: var(--accent); text-shadow: 0 0 40px rgba(201,255,58,0.4); }
+.ds-num-close { color: var(--text-2); }
+.ds-num-open { color: var(--mix); text-shadow: 0 0 36px rgba(255,178,74,0.4); }
+
+/* 冠军行放大（第一名最长条 + 大号数字）*/
+.ds-row-hero .ds-name { font-size: 40px; color: var(--text); }
+.ds-row-hero .ds-track { height: 62px; border-radius: 20px; }
+/* 冠军行轨道保持与其余行同色（深色中性槽）→ 只有 fill 宽度被读为「条长」，
+ * 避免暖橙/绿底铺满整条轨道造成「最低分条最长」的错觉。 */
+.ds-row-hero.ds-row .ds-track-lead,
+.ds-row-hero.ds-row .ds-track-open { background: var(--surface-3); }
+.ds-row-hero .ds-fill { border-radius: 20px; }
+.ds-row-hero .ds-num { font-size: 86px; }
+.ds-row-dim { opacity: 0.42; }
+
+/* ════════════ s0 · DeepSWE 真榜 + 硬核设计 ════════════ */
+/* 左对齐铺开：非对称 padding（右大左小避开右上头像）+ 头部加大 + 标签条整行 space-between 撑到两端 */
+.ds-s0 { align-items: flex-start; justify-content: center; gap: 64px; padding: 0 130px 0 120px; }
+.ds-s0-head { display: flex; align-items: center; gap: 44px; align-self: stretch; }
+.ds-s0-ic { width: 132px; height: 132px; color: var(--accent); flex: none; filter: drop-shadow(0 0 24px var(--accent-glow)); }
+.ds-s0-name-wrap { display: flex; flex-direction: column; gap: 16px; }
+.ds-s0-name { margin: 0; font-size: 168px; font-weight: 900; line-height: 0.92; letter-spacing: -0.02em; color: var(--accent); text-shadow: 0 0 70px rgba(201,255,58,0.4); }
+.ds-s0-sub { font-size: 46px; font-weight: 800; color: var(--text-2); }
+.ds-s0-specs { display: flex; align-items: stretch; gap: 26px; flex-wrap: nowrap; align-self: stretch; justify-content: space-between; }
+.ds-spec {
+  display: inline-flex; align-items: center; justify-content: center; gap: 16px; padding: 24px 34px; border-radius: 16px;
+  background: var(--surface-2); border: 1px solid var(--rule);
+  font-size: 34px; font-weight: 800; color: var(--text-2); flex: 1;
+}
+.ds-spec-ic { width: 40px; height: 40px; display: inline-block; color: var(--accent); }
+.ds-spec-num { background: var(--accent-soft); border-color: rgba(201,255,58,0.42); padding: 18px 34px; }
+.ds-spec-big { font-family: var(--hero-num-font); font-weight: 900; font-size: 72px; line-height: 0.9; color: var(--accent); letter-spacing: -0.02em; text-shadow: 0 0 40px rgba(201,255,58,0.4); }
+.ds-spec-unit { font-size: 30px; font-weight: 800; color: var(--text); }
+.ds-spec-t { white-space: nowrap; }
+
+/* ════════════ s1 · 谁最强 + GPT-5.6 缺席 ════════════ */
+/* 左对齐铺开：标题/卡片/标签整体左偏并加宽（880→1330）。
+ * 卡片顶部正好落在 y≈432 带内，故右边界收到 1450（padding-right 470）无条件避开右上头像角。 */
+.ds-s1 { align-items: flex-start; justify-content: center; gap: 48px; padding: 0 470px 0 120px; }
+.ds-s1-q { margin: 0; font-size: 112px; font-weight: 900; line-height: 1.0; color: var(--text); letter-spacing: -0.02em; }
+.ds-s1-absent {
+  position: relative; width: 100%; padding: 48px 60px; border-radius: 22px;
+  background: var(--surface-2); border: 1.5px dashed rgba(255,91,84,0.5);
+  box-shadow: var(--card-shadow);
+}
+.ds-s1-absent-top { font-size: 18px; letter-spacing: 0.12em; color: var(--text-faint); }
+.ds-s1-absent-name { font-size: 92px; font-weight: 900; line-height: 1.0; margin: 6px 0 22px; color: var(--text-mute); letter-spacing: -0.02em; }
+.ds-s1-absent-bar { height: 50px; border-radius: 14px; background: repeating-linear-gradient(45deg, rgba(255,91,84,0.10) 0 14px, transparent 14px 28px); border: 1px solid rgba(255,91,84,0.28); display: flex; align-items: center; justify-content: center; }
+.ds-s1-absent-bar-empty { font-size: 26px; letter-spacing: 0.16em; color: var(--neg); opacity: 0.8; }
+.ds-s1-stamp {
+  position: absolute; right: 40px; top: 50%; transform: translateY(-50%) rotate(-3deg);
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 16px 30px; border: 4px solid var(--neg); border-radius: 14px;
+  background: var(--neg-soft); color: var(--neg); font-size: 40px; font-weight: 900; letter-spacing: 0.02em;
+}
+.ds-s1-stamp-ic { width: 38px; height: 38px; display: inline-block; }
+.ds-s1-tags { display: flex; gap: 20px; }
+.ds-s1-tag {
+  display: inline-flex; align-items: center; gap: 12px; padding: 14px 28px; border-radius: 14px;
+  background: var(--surface-2); border: 1px solid var(--rule); font-size: 30px; font-weight: 700; color: var(--text-2);
+}
+.ds-s1-tag-ic { width: 30px; height: 30px; display: inline-block; color: var(--mix); }
+
+/* ════════════ s2 · 闭源领跑 ════════════ */
+.ds-s2 { justify-content: center; padding: 0 96px; }
+.ds-s2-foot {
+  position: absolute; left: 50%; bottom: 150px; transform: translateX(-50%);
+  padding: 12px 30px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-weight: 900; font-size: 30px; letter-spacing: 0.02em;
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+
+/* ════════════ s3 · 国产 GLM-5.2 开源第一 ════════════ */
+/* s3 左对齐铺开（同 s0/s1）→ 用确定的 margin 控位，最右元素（44.0 / 开源·OPEN SOURCE）
+ * 避开右上头像 432×432 安全区。轨道为 1fr，块收窄时按比例缩短，条长比例（%）不变。 */
+.ds-s3 { justify-content: center; align-items: flex-start; padding: 0 96px; gap: 30px; }
+.ds-bars-s3 { gap: 24px; width: 1326px; max-width: 1326px; margin-left: 44px; }
+.ds-divider {
+  position: relative; grid-column: 1 / -1; height: 2px; margin: 4px 0;
+  background: repeating-linear-gradient(90deg, var(--rule) 0 18px, transparent 18px 30px);
+}
+.ds-divider-t {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  padding-left: 16px; background: var(--surface);
+  font-size: 18px; letter-spacing: 0.16em; color: var(--mix); text-transform: uppercase;
+}
+.ds-s3-gap { display: flex; align-items: center; gap: 26px; }
+.ds-s3-gap-lead { font-size: 40px; font-weight: 800; color: var(--mix); }
+.ds-s3-gap-but {
+  padding: 12px 28px; border: 4px solid var(--text-mute); border-radius: 14px;
+  font-size: 36px; font-weight: 900; color: var(--text-2); background: var(--surface-2); letter-spacing: 0.02em;
+}
+
+/* ════════════ s4 · 价格屠夫（落点）════════════ */
+/* 双价格卡向两端撑开（VS 居中），容器加宽 + space-between；
+ * 右边界收到 ≤1450（padding-right 480）避开右上头像角——price 行顶部在 y<432 带内。 */
+.ds-s4 { justify-content: center; gap: 44px; padding: 0 480px 0 140px; align-items: stretch; }
+.ds-price { display: flex; align-items: stretch; justify-content: space-between; gap: 36px; align-self: stretch; }
+.ds-price-side {
+  position: relative; width: 560px; flex: none; padding: 44px 52px 52px; border-radius: 22px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+  display: flex; flex-direction: column;
+}
+.ds-price-cheap { border-color: rgba(201,255,58,0.45); box-shadow: var(--card-shadow), 0 0 50px rgba(201,255,58,0.14); }
+.ds-price-top { font-size: 20px; letter-spacing: 0.1em; color: var(--text-faint); }
+.ds-price-fig { display: flex; align-items: flex-end; gap: 6px; margin: 16px 0 2px; }
+.ds-price-cur { font-family: var(--hero-num-font); font-weight: 900; font-size: 64px; line-height: 1; color: var(--accent); }
+.ds-price-cur-dear { color: var(--neg); }
+.ds-price-num { font-family: var(--hero-num-font); font-weight: 900; font-size: 132px; line-height: 0.9; letter-spacing: -0.03em; display: inline-flex; align-items: flex-end; }
+.ds-price-num-dear { color: var(--neg); text-shadow: 0 0 60px var(--neg-glow); }
+.ds-price-num.ds-accent { text-shadow: 0 0 60px rgba(201,255,58,0.45); }
+.ds-price-unit { font-size: 26px; font-weight: 700; color: var(--text-mute); margin-top: 6px; }
+.ds-price-ic { position: absolute; right: 40px; top: 36px; width: 46px; height: 46px; color: var(--accent); }
+.ds-price-ic-dear { color: var(--neg); }
+.ds-price-vs {
+  align-self: center; font-family: var(--font-mono); font-weight: 900; font-size: 40px;
+  color: var(--text-faint); letter-spacing: 0.06em;
+}
+.ds-s4-punch {
+  align-self: center;
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 14px 36px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-size: 38px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+.ds-s4-punch-frac { font-family: var(--hero-num-font); font-weight: 900; }
+.ds-s4-ds {
+  align-self: center;
+  display: inline-flex; align-items: center; gap: 14px;
+  font-size: 36px; font-weight: 800; color: var(--text);
+}
+.ds-s4-ds-ic { width: 38px; height: 38px; display: inline-block; color: var(--accent); }

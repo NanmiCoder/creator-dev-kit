@@ -1,0 +1,534 @@
+.cr-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--text);
+  background: var(--surface);
+  font-family: var(--font-display-cn);
+}
+
+.cr-scene::before,
+.cr-scene::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  filter: blur(86px);
+  opacity: 0.62;
+}
+
+.cr-scene::before {
+  width: 620px;
+  height: 440px;
+  left: 90px;
+  top: 82px;
+}
+
+.cr-scene::after {
+  width: 520px;
+  height: 420px;
+  right: 130px;
+  bottom: 60px;
+  opacity: 0.34;
+}
+
+.cr-kicker {
+  position: absolute;
+  top: 72px;
+  left: 118px;
+  z-index: 4;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  opacity: 0;
+  animation: crDown 620ms var(--ease-quart) both;
+}
+
+.cr-accent {
+  color: var(--accent);
+}
+
+.cr-headline {
+  position: relative;
+  z-index: 2;
+}
+
+.cr-eyebrow,
+.cr-curve-label,
+.cr-curve-node span,
+.cr-curve-node b,
+.cr-check-row span,
+.cr-check-row strong,
+.cr-ready-strip span,
+.cr-time-node span,
+.cr-time-node em,
+.cr-settlement span {
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cr-eyebrow {
+  font-size: 24px;
+  color: var(--text-mute);
+  opacity: 0;
+  animation: crFade 760ms var(--ease-quart) 80ms both;
+}
+
+.cr-headline h1 {
+  margin: 24px 0 0;
+  font-family: var(--font-display-cn);
+  font-size: 128px;
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.cr-headline h1 span {
+  display: block;
+}
+
+.cr-headline p {
+  margin: 34px 0 0;
+  max-width: 720px;
+  font-family: var(--font-body);
+  font-size: 31px;
+  line-height: 1.36;
+  color: var(--text-2);
+  opacity: 0;
+  animation: crFade 760ms var(--ease-quart) 240ms both;
+}
+
+.cr-curve-scene,
+.cr-check-scene,
+.cr-closing-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  gap: 76px;
+  align-items: center;
+  padding: 138px 118px 108px;
+}
+
+.cr-curve-scene {
+  grid-template-columns: 650px 1fr;
+}
+
+.cr-check-scene {
+  grid-template-columns: 650px 1fr;
+}
+
+.cr-closing-scene {
+  grid-template-columns: 690px 1fr;
+}
+
+.cr-curve-board {
+  position: relative;
+  width: 920px;
+  height: 620px;
+}
+
+.cr-curve-svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.cr-axis-x,
+.cr-axis-y,
+.cr-cost-line,
+.cr-compound-path,
+.cr-compound-glow {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.cr-axis-x,
+.cr-axis-y {
+  stroke: var(--rule);
+  stroke-width: 4;
+  opacity: 0.42;
+}
+
+.cr-cost-line {
+  stroke: var(--text-faint);
+  stroke-width: 9;
+  stroke-linecap: round;
+  opacity: 0.48;
+}
+
+.cr-compound-path {
+  stroke: var(--accent-soft);
+  stroke-width: 18;
+  stroke-linecap: round;
+  opacity: 0.68;
+}
+
+.cr-compound-glow {
+  stroke: var(--accent);
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-dasharray: 6;
+  stroke-dashoffset: calc(6 - var(--cr-progress));
+  filter: drop-shadow(0 0 18px var(--accent-soft));
+  transition: stroke-dashoffset 700ms var(--ease-expo);
+}
+
+.cr-curve-label {
+  position: absolute;
+  min-height: 44px;
+  padding: 13px 16px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  box-shadow: var(--card-shadow);
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+.cr-curve-short {
+  left: 116px;
+  top: 452px;
+}
+
+.cr-curve-long {
+  right: 78px;
+  top: 72px;
+  color: var(--accent);
+}
+
+.cr-curve-node {
+  position: absolute;
+  left: var(--cr-x);
+  top: var(--cr-y);
+  width: 178px;
+  min-height: 118px;
+  padding: 18px 20px;
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+  box-shadow: var(--card-shadow);
+  color: var(--text-2);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.86);
+  transition:
+    opacity 260ms var(--ease-quart),
+    transform 280ms var(--ease-quart),
+    background 260ms var(--ease-quart),
+    color 260ms var(--ease-quart),
+    box-shadow 260ms var(--ease-quart);
+}
+
+.cr-curve-node-visible {
+  opacity: 0.84;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.cr-curve-node-hot {
+  opacity: 1;
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: var(--card-shadow), 0 0 68px var(--accent-soft);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.cr-curve-node i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  transform: translate(-50%, -88px);
+}
+
+.cr-curve-node span {
+  display: block;
+  font-size: 14px;
+  color: var(--text-mute);
+}
+
+.cr-curve-node b {
+  display: block;
+  margin-top: 18px;
+  font-size: 15px;
+  color: var(--text-2);
+}
+
+.cr-curve-node-hot span,
+.cr-curve-node-hot b {
+  color: var(--text);
+}
+
+.cr-checker {
+  display: grid;
+  gap: 24px;
+}
+
+.cr-check-row {
+  min-height: 144px;
+  padding: 24px 28px;
+  display: grid;
+  grid-template-columns: 96px 1fr 158px 118px;
+  column-gap: 24px;
+  align-items: center;
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+  box-shadow: var(--card-shadow);
+  color: var(--text-2);
+  opacity: 0.62;
+  transition:
+    opacity 260ms var(--ease-quart),
+    background 260ms var(--ease-quart),
+    color 260ms var(--ease-quart),
+    box-shadow 260ms var(--ease-quart),
+    transform 260ms var(--ease-quart);
+}
+
+.cr-check-focus,
+.cr-state-clear,
+.cr-state-ready,
+.cr-state-apply {
+  opacity: 1;
+}
+
+.cr-check-focus {
+  transform: translateX(-14px);
+}
+
+.cr-check-row i {
+  font-family: var(--hero-num-font);
+  font-style: var(--hero-num-style);
+  font-size: 70px;
+  line-height: 0.9;
+  color: var(--text-faint);
+}
+
+.cr-check-copy span,
+.cr-check-row strong {
+  display: block;
+  font-size: 14px;
+  color: var(--text-mute);
+}
+
+.cr-check-copy b {
+  display: block;
+  margin-top: 14px;
+  font-size: 39px;
+  line-height: 1.06;
+  letter-spacing: 0;
+}
+
+.cr-switch {
+  position: relative;
+  width: 154px;
+  height: 52px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 3px var(--rule);
+}
+
+.cr-switch em {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-pill);
+  background: var(--text-faint);
+  transition:
+    left 300ms var(--ease-quart),
+    width 300ms var(--ease-quart),
+    background 300ms var(--ease-quart);
+}
+
+.cr-state-checking .cr-switch em {
+  left: 58px;
+  width: 48px;
+  background: var(--accent-soft);
+}
+
+.cr-state-clear .cr-switch em,
+.cr-state-ready .cr-switch em,
+.cr-state-apply .cr-switch em {
+  left: 110px;
+  background: var(--accent);
+}
+
+.cr-state-clear,
+.cr-state-ready,
+.cr-state-apply {
+  background: var(--surface-3);
+}
+
+.cr-state-clear i,
+.cr-state-ready i,
+.cr-state-apply i,
+.cr-state-clear strong,
+.cr-state-ready strong,
+.cr-state-apply strong {
+  color: var(--accent);
+}
+
+.cr-ready-strip {
+  min-height: 94px;
+  padding: 24px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+  box-shadow: var(--card-shadow);
+  color: var(--text-2);
+  opacity: 0.64;
+  transition:
+    opacity 260ms var(--ease-quart),
+    background 260ms var(--ease-quart),
+    color 260ms var(--ease-quart),
+    box-shadow 260ms var(--ease-quart);
+}
+
+.cr-ready-strip span {
+  font-size: 15px;
+  color: var(--text-mute);
+}
+
+.cr-ready-strip b {
+  font-size: 54px;
+  line-height: 1;
+}
+
+.cr-ready-hot {
+  opacity: 1;
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: var(--card-shadow), 0 0 72px var(--accent-soft);
+}
+
+.cr-timeline {
+  position: relative;
+  width: 930px;
+  height: 560px;
+}
+
+.cr-timeline-rail {
+  position: absolute;
+  left: 78px;
+  right: 78px;
+  top: 258px;
+  height: 18px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 3px var(--rule);
+  overflow: hidden;
+}
+
+.cr-timeline-rail i {
+  display: block;
+  width: var(--cr-rail-width);
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  transition: width 700ms var(--ease-expo);
+}
+
+.cr-time-node {
+  position: absolute;
+  left: var(--cr-time-left);
+  top: 168px;
+  width: 190px;
+  min-height: 188px;
+  padding: 26px 24px;
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+  box-shadow: var(--card-shadow);
+  color: var(--text-2);
+  opacity: 0.58;
+  transform: translateY(14px);
+  transition:
+    opacity 260ms var(--ease-quart),
+    transform 260ms var(--ease-quart),
+    background 260ms var(--ease-quart),
+    color 260ms var(--ease-quart),
+    box-shadow 260ms var(--ease-quart);
+}
+
+.cr-time-hot {
+  opacity: 1;
+  transform: translateY(0);
+  background: var(--surface-3);
+  color: var(--accent);
+  box-shadow: var(--card-shadow), 0 0 64px var(--accent-soft);
+}
+
+.cr-time-node span,
+.cr-time-node em {
+  display: block;
+  font-size: 14px;
+  color: var(--text-mute);
+  font-style: normal;
+}
+
+.cr-time-node b {
+  display: block;
+  margin-top: 30px;
+  min-height: 84px;
+  font-size: 46px;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.cr-time-node em {
+  margin-top: 18px;
+  color: var(--text-faint);
+}
+
+.cr-settlement {
+  position: absolute;
+  left: 236px;
+  bottom: 18px;
+  width: 460px;
+  min-height: 128px;
+  padding: 28px 32px;
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+  box-shadow: var(--card-shadow);
+  color: var(--text-2);
+  text-align: center;
+  transition:
+    background 260ms var(--ease-quart),
+    color 260ms var(--ease-quart),
+    box-shadow 260ms var(--ease-quart);
+}
+
+.cr-settlement span {
+  display: block;
+  font-size: 15px;
+  color: var(--text-mute);
+}
+
+.cr-settlement b {
+  display: block;
+  margin-top: 14px;
+  font-size: 58px;
+  line-height: 1;
+}
+
+.cr-settlement-hot {
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: var(--card-shadow), 0 0 76px var(--accent-soft);
+}
+
+@keyframes crDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes crFade {
+  from { opacity: 0; transform: translateY(24px); filter: blur(8px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}

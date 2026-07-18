@@ -1,0 +1,236 @@
+.st-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-display-cn);
+}
+
+.st-kicker {
+  position: absolute;
+  top: 72px;
+  left: 112px;
+  z-index: 20;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--text-mute);
+}
+
+/* Step 0 — noisy comment field collapses into the relevant pool. */
+.st-pool { display: grid; place-items: center; }
+.st-comment-field {
+  position: absolute;
+  inset: 138px 96px 94px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 18px;
+}
+.st-comment-field i {
+  border: 1px solid var(--rule);
+  background: var(--surface-2);
+  opacity: 0;
+  transform: translateY(34px) scale(0.94);
+  animation: st-tile-in 420ms var(--ease-quart) forwards;
+}
+.st-comment-field i:nth-child(3n) { height: 62%; align-self: center; }
+.st-comment-field i:nth-child(4n) { width: 72%; justify-self: center; }
+.st-comment-field i:nth-child(5n) { background: var(--surface-3); }
+.st-comment-field i:nth-child(7n + 1) { animation-delay: 80ms; }
+.st-comment-field i:nth-child(7n + 2) { animation-delay: 130ms; }
+.st-comment-field i:nth-child(7n + 3) { animation-delay: 180ms; }
+.st-comment-field i:nth-child(7n + 4) { animation-delay: 230ms; }
+.st-comment-field i:nth-child(7n + 5) { animation-delay: 280ms; }
+.st-comment-field i:nth-child(7n + 6) { animation-delay: 330ms; }
+.st-comment-field i:nth-child(7n) { animation-delay: 380ms; }
+.st-pool-count {
+  position: absolute;
+  left: 160px;
+  top: 360px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  animation: st-count-land 620ms 540ms var(--ease-overshoot) forwards;
+}
+.st-pool-count strong { font-size: 176px; line-height: 0.9; }
+.st-pool-count span { margin-top: 24px; font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.18em; color: var(--text-mute); }
+.st-filter-line { position: absolute; left: 850px; top: 300px; width: 2px; height: 470px; background: var(--rule); overflow: hidden; }
+.st-filter-line i { display: block; width: 100%; height: 100%; background: var(--accent); transform: translateY(-100%); animation: st-filter-scan 760ms 1.15s var(--ease-soft) forwards; }
+.st-relevant-count {
+  position: absolute;
+  right: 150px;
+  top: 325px;
+  width: 720px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  opacity: 0;
+  transform: translateX(150px);
+  animation: st-relevant-in 720ms 1.72s var(--ease-quart) forwards;
+}
+.st-relevant-count > span { grid-column: 1 / -1; font-size: 38px; color: var(--text-2); }
+.st-relevant-count strong { margin-top: 26px; font-size: 180px; line-height: 0.88; color: var(--accent); }
+.st-relevant-count em { padding-bottom: 20px; font-family: var(--hero-num-font); font-size: 66px; font-style: normal; color: var(--text-2); }
+
+/* Step 1 — strengths rise, but hit a visible ceiling. */
+.st-position { display: grid; place-items: center; }
+.st-position-board { position: relative; width: 1520px; height: 720px; margin-top: 90px; border-bottom: 2px solid var(--rule); }
+.st-ceiling { position: absolute; left: 40px; right: 40px; top: 75px; border-top: 3px solid var(--text-faint); }
+.st-ceiling::after { content: ""; position: absolute; top: -3px; left: 0; width: 100%; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: center; animation: st-ceiling-draw 700ms 2.45s var(--ease-quart) forwards; }
+.st-ceiling span { position: absolute; right: 0; top: -36px; font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.15em; color: var(--text-mute); }
+.st-position-column { position: absolute; bottom: 0; width: 370px; display: flex; flex-direction: column; align-items: center; }
+.st-position-column i { position: relative; width: 210px; height: 490px; background: var(--surface-2); overflow: hidden; }
+.st-position-column i b { position: absolute; inset: auto 0 0; height: 86%; background: var(--accent); transform: translateY(100%); }
+.st-position-column strong { position: absolute; bottom: 120px; font-size: 78px; color: var(--shell); }
+.st-position-column span { position: absolute; bottom: 60px; font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.18em; color: var(--shell); }
+.st-speed { left: 260px; }
+.st-code { left: 690px; }
+.st-speed i b { animation: st-column-rise 940ms 250ms var(--ease-quart) forwards; }
+.st-code i b { animation: st-column-rise 940ms 720ms var(--ease-quart) forwards; }
+.st-position-stop { position: absolute; right: 55px; top: 260px; display: flex; flex-direction: column; gap: 12px; opacity: 0; transform: translateX(80px); animation: st-stop-in 620ms 2.85s var(--ease-quart) forwards; }
+.st-position-stop span { font-size: 36px; color: var(--text-2); }
+.st-position-stop strong { font-family: var(--font-display-en); font-size: 96px; color: var(--accent); letter-spacing: -0.07em; }
+
+/* Step 2 — two plates physically separate on the community vote axis. */
+.st-fable { display: grid; place-items: center; }
+.st-versus-axis { position: absolute; left: 240px; right: 240px; top: 530px; height: 2px; background: var(--rule); }
+.st-versus-axis span { display: block; width: 100%; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: center; animation: st-axis-open 460ms 120ms var(--ease-quart) forwards; }
+.st-model-plate { position: absolute; top: 292px; width: 610px; height: 330px; padding: 54px; display: grid; grid-template-columns: 120px 1fr 100px; align-items: center; gap: 26px; background: var(--surface-2); border-top: 2px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.st-model-plate img { width: 94px; max-height: 94px; filter: brightness(0) invert(1); }
+.st-model-plate > div { display: flex; flex-direction: column; gap: 10px; }
+.st-model-plate span { font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.16em; color: var(--text-mute); }
+.st-model-plate strong { font-family: var(--font-display-en); font-size: 68px; line-height: 0.9; letter-spacing: -0.05em; }
+.st-model-plate em { font-family: var(--hero-num-font); font-size: 80px; font-style: normal; text-align: right; }
+.st-fable-plate { left: 250px; transform: translateX(230px); opacity: 0; animation: st-fable-left 700ms 230ms var(--ease-quart) forwards; border-top-color: var(--accent); }
+.st-fable-plate em { color: var(--accent); }
+.st-grok-plate { right: 250px; transform: translateX(-230px) translateY(0); opacity: 0; animation: st-grok-right 760ms 560ms var(--ease-overshoot) forwards; }
+.st-grok-plate img { width: 70px; justify-self: center; }
+.st-comparison-tag { position: absolute; left: 772px; top: 690px; width: 376px; display: flex; justify-content: space-between; align-items: center; opacity: 0; animation: st-tag-in 360ms 1.28s var(--ease-quart) forwards; }
+.st-comparison-tag b { font-size: 24px; }
+.st-comparison-tag span { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.15em; color: var(--text-mute); }
+
+/* Step 3 — community stack, explicitly distinct from the later benchmark. */
+.st-tier { padding: 168px 112px 92px; display: grid; grid-template-columns: 1fr 340px; gap: 72px; align-items: center; }
+.st-tier-stack { display: flex; flex-direction: column; gap: 22px; }
+.st-tier-row { height: 190px; display: grid; grid-template-columns: 90px 110px 300px 1fr; align-items: center; gap: 26px; padding: 0 42px; background: var(--surface-2); border-bottom: 1px solid var(--rule); opacity: 0; }
+.st-tier-row > span { font-family: var(--font-mono); font-size: 18px; color: var(--text-mute); }
+.st-tier-row img { width: 80px; max-height: 76px; filter: brightness(0) invert(1); }
+.st-tier-row strong { font-family: var(--font-display-en); font-size: 46px; }
+.st-tier-row i { height: 5px; background: var(--rule); }
+.st-tier-opus { transform: translateX(-140px); animation: st-tier-slide 620ms 120ms var(--ease-quart) forwards; }
+.st-tier-gpt { transform: translateX(140px); animation: st-tier-slide 620ms 420ms var(--ease-quart) forwards; }
+.st-tier-grok { transform: translateY(150px); animation: st-tier-rise 720ms 830ms var(--ease-overshoot) forwards; background: var(--surface-3); border-bottom-color: var(--accent); }
+.st-tier-grok img { width: 58px; justify-self: center; }
+.st-tier-grok i { background: var(--accent); }
+.st-tier-gap { display: flex; flex-direction: column; gap: 26px; opacity: 0; animation: st-tag-in 420ms 1.05s var(--ease-quart) forwards; }
+.st-tier-gap span { font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.15em; color: var(--text-mute); }
+.st-tier-gap > i { position: relative; width: 2px; height: 380px; background: var(--rule); }
+.st-tier-gap > i b { position: absolute; left: -9px; bottom: 0; width: 20px; height: 20px; background: var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: st-gap-drop 620ms 1.18s var(--ease-quart) both; }
+
+/* Step 4 — X orbit and exact positive ratio. */
+.st-x-pulse { display: grid; grid-template-columns: 760px 1fr; align-items: center; padding: 130px 150px 80px; gap: 90px; }
+.st-x-orbit { position: relative; width: 640px; height: 640px; display: grid; place-items: center; }
+.st-x-mark { width: 276px; height: 216px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--accent); background: var(--surface-2); opacity: 0; transform: scale(0.45) rotate(-18deg); animation: st-x-land 620ms 120ms var(--ease-overshoot) forwards; }
+.st-x-mark strong { font-family: var(--font-display-en); font-size: 112px; line-height: .82; }
+.st-x-mark span { margin-top: 20px; font-family: var(--font-mono); font-size: 16px; letter-spacing: .22em; color: var(--text-mute); }
+.st-orbit-ring { position: absolute; border: 2px solid var(--rule); border-radius: 50%; transform: scale(0); animation: st-ring-open 720ms var(--ease-quart) forwards; }
+.st-ring-outer { inset: 14px; animation-delay: 430ms; }
+.st-ring-inner { inset: 112px; animation-delay: 260ms; border-color: var(--accent); }
+.st-orbit-dot { position: absolute; width: 22px; height: 22px; background: var(--accent); box-shadow: 0 0 28px var(--accent-glow); opacity: 0; animation: st-dot-pop 360ms var(--ease-overshoot) forwards; }
+.st-dot-1 { left: 78px; top: 184px; animation-delay: 820ms; }
+.st-dot-2 { right: 90px; bottom: 150px; animation-delay: 1.02s; }
+.st-dot-3 { left: 218px; bottom: 32px; animation-delay: 1.2s; }
+.st-positive-metric { display: flex; flex-direction: column; opacity: 0; transform: translateX(100px); animation: st-metric-in 620ms 1.25s var(--ease-quart) forwards; }
+.st-positive-metric > span { font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.2em; color: var(--text-mute); }
+.st-positive-metric strong { margin-top: 18px; font-size: 190px; line-height: 0.95; color: var(--accent); }
+.st-positive-bar { width: 650px; height: 12px; margin-top: 44px; background: var(--surface-3); overflow: hidden; }
+.st-positive-bar i { display: block; width: 59.3%; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; animation: st-positive-grow 820ms 1.7s var(--ease-quart) forwards; }
+.st-positive-metric em { margin-top: 18px; font-family: var(--font-mono); font-size: 20px; font-style: normal; letter-spacing: 0.14em; color: var(--text-2); }
+
+/* Step 5 — an abstract top-10 wall, not duplicated subtitle text. */
+.st-toplikes { display: grid; place-items: center; }
+.st-like-rack { width: 1580px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.st-like-tile { position: relative; height: 286px; padding: 28px; background: var(--surface-2); border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 20px; opacity: 0; transform: translateY(80px); animation: st-like-rise 460ms var(--ease-quart) forwards; }
+.st-like-tile:nth-child(-n + 5) { animation-delay: 90ms; }
+.st-like-tile:nth-child(n + 6) { animation-delay: 280ms; }
+.st-like-tile span { font-family: var(--font-mono); font-size: 18px; color: var(--text-mute); }
+.st-like-tile i { display: block; height: 9px; background: var(--text-faint); }
+.st-like-tile i:nth-of-type(1) { width: 88%; }
+.st-like-tile i:nth-of-type(2) { width: 68%; }
+.st-like-tile i:nth-of-type(3) { width: 48%; }
+.st-like-tile b { position: absolute; right: 28px; bottom: 28px; width: 42px; height: 42px; background: var(--accent-soft); border: 1px solid var(--accent); }
+.st-like-scan { position: absolute; left: 170px; right: 170px; bottom: 82px; display: grid; grid-template-columns: 180px 1fr; align-items: center; gap: 28px; font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.14em; color: var(--text-mute); }
+.st-like-scan i { height: 3px; background: var(--rule); overflow: hidden; }
+.st-like-scan i::after { content: ""; display: block; width: 100%; height: 100%; background: var(--accent); transform: translateX(-100%); animation: st-like-sweep 650ms 680ms var(--ease-quart) forwards; }
+
+/* Step 6 — the same ten slots reveal their owners. */
+.st-source-map { display: grid; place-items: center; }
+.st-source-rack { width: 1540px; display: grid; grid-template-columns: repeat(10, 1fr); gap: 12px; }
+.st-source-tile { position: relative; height: 330px; overflow: hidden; background: var(--surface-2); border-bottom: 1px solid var(--rule); opacity: 0; transform: translateY(70px); animation: st-source-rise 430ms var(--ease-quart) forwards; }
+.st-source-tile:nth-child(-n + 4) { animation-delay: 80ms; }
+.st-source-tile:nth-child(n + 5):nth-child(-n + 8) { animation-delay: 230ms; }
+.st-source-tile:nth-child(n + 9) { animation-delay: 520ms; }
+.st-source-tile > span { position: absolute; left: 14px; top: 14px; z-index: 2; font-family: var(--font-mono); font-size: 13px; color: var(--text-2); }
+.st-source-tile > strong { height: 100%; display: grid; place-items: center; padding: 28px 14px; font-family: var(--font-mono); font-size: 16px; letter-spacing: .12em; color: var(--text-2); writing-mode: vertical-rl; }
+.st-source-tile.is-official { border-bottom: 5px solid var(--accent); }
+.st-source-tile.is-community { display: grid; place-items: center; }
+.st-source-tile.is-community i { width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--text-faint); }
+.st-source-total { position: absolute; left: 190px; right: 190px; bottom: 104px; display: flex; justify-content: space-between; align-items: flex-end; opacity: 0; animation: st-tag-in 360ms 1.25s var(--ease-quart) forwards; }
+.st-source-total strong { font-size: 118px; line-height: 0.8; color: var(--accent); }
+.st-source-total > span { display: flex; gap: 14px; }
+.st-source-total b { padding: 12px 18px; border: 1px solid var(--rule); font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.13em; }
+
+/* Step 7 — official voice slides away and the reproducible test remains. */
+.st-evidence { display: grid; place-items: center; }
+.st-noise-stack { position: absolute; left: 130px; top: 250px; width: 360px; display: flex; flex-direction: column; gap: 22px; }
+.st-noise-stack span { font-family: var(--font-display-en); font-size: 62px; font-weight: 800; color: var(--text-faint); animation: st-noise-out 740ms 420ms var(--ease-quart) forwards; }
+.st-noise-stack span:nth-child(2) { animation-delay: 520ms; }
+.st-noise-stack span:nth-child(3) { animation-delay: 620ms; }
+.st-noise-stack span:nth-child(4) { animation-delay: 720ms; }
+.st-evidence-gate { position: absolute; left: 540px; top: 210px; width: 120px; height: 660px; }
+.st-evidence-gate i, .st-evidence-gate b { position: absolute; left: 58px; width: 4px; height: 46%; background: var(--accent); transform: scaleY(0); }
+.st-evidence-gate i { top: 0; transform-origin: top; animation: st-gate-draw 520ms 700ms var(--ease-quart) forwards; }
+.st-evidence-gate b { bottom: 0; transform-origin: bottom; animation: st-gate-draw 520ms 700ms var(--ease-quart) forwards; }
+.st-code-proof { width: 1020px; height: 620px; margin-left: 390px; padding: 34px 42px 46px; background: var(--surface-2); border-top: 4px solid var(--accent); opacity: 0; transform: translateX(180px); animation: st-proof-in 720ms 900ms var(--ease-quart) forwards; }
+.st-terminal-top { height: 54px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--rule); }
+.st-terminal-top > span { width: 12px; height: 12px; border-radius: 50%; background: var(--text-faint); }
+.st-terminal-top b { margin-left: auto; font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.16em; color: var(--text-mute); }
+.st-proof-flow { height: 320px; display: grid; grid-template-columns: 1fr 100px 1fr 100px 1fr; align-items: center; }
+.st-proof-flow > div { height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; border: 1px solid var(--rule); }
+.st-proof-flow span { font-family: var(--font-mono); font-size: 14px; color: var(--text-mute); }
+.st-proof-flow strong { font-family: var(--font-display-en); font-size: 42px; }
+.st-proof-flow > i { height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; animation: st-proof-link 360ms 1.75s var(--ease-quart) forwards; }
+.st-proof-flow > i:nth-of-type(2) { animation-delay: 2.05s; }
+.st-proof-verdict { display: flex; align-items: baseline; justify-content: center; gap: 36px; }
+.st-proof-verdict span { font-size: 72px; font-weight: 800; }
+.st-proof-verdict span:last-child { color: var(--text-mute); }
+.st-proof-verdict b { font-family: var(--hero-num-font); font-size: 88px; color: var(--accent); }
+
+@keyframes st-tile-in { to { opacity: 0.44; transform: translateY(0) scale(1); } }
+@keyframes st-count-land { from { opacity: 0; transform: scale(1.25); } to { opacity: 1; transform: scale(1); } }
+@keyframes st-filter-scan { to { transform: translateY(0); } }
+@keyframes st-relevant-in { to { opacity: 1; transform: translateX(0); } }
+@keyframes st-column-rise { to { transform: translateY(0); } }
+@keyframes st-ceiling-draw { to { transform: scaleX(1); } }
+@keyframes st-stop-in { to { opacity: 1; transform: translateX(0); } }
+@keyframes st-axis-open { to { transform: scaleX(1); } }
+@keyframes st-fable-left { to { opacity: 1; transform: translateX(-70px); } }
+@keyframes st-grok-right { to { opacity: 1; transform: translateX(70px) translateY(70px); } }
+@keyframes st-tag-in { to { opacity: 1; } }
+@keyframes st-tier-slide { to { opacity: 1; transform: translateX(0); } }
+@keyframes st-tier-rise { to { opacity: 1; transform: translateY(0); } }
+@keyframes st-gap-drop { from { bottom: 100%; opacity: 0; } to { bottom: 18%; opacity: 1; } }
+@keyframes st-x-land { to { opacity: 1; transform: scale(1) rotate(0); } }
+@keyframes st-ring-open { to { transform: scale(1); } }
+@keyframes st-dot-pop { to { opacity: 1; transform: scale(1); } }
+@keyframes st-metric-in { to { opacity: 1; transform: translateX(0); } }
+@keyframes st-positive-grow { to { transform: scaleX(1); } }
+@keyframes st-like-rise { to { opacity: 1; transform: translateY(0); } }
+@keyframes st-like-sweep { to { transform: translateX(0); } }
+@keyframes st-source-rise { to { opacity: 1; transform: translateY(0); } }
+@keyframes st-noise-out { to { opacity: 0.06; transform: translateX(-90px); } }
+@keyframes st-gate-draw { to { transform: scaleY(1); } }
+@keyframes st-proof-in { to { opacity: 1; transform: translateX(0); } }
+@keyframes st-proof-link { to { transform: scaleX(1); } }

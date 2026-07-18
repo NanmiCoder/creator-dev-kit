@@ -1,0 +1,228 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * 章 1 · open —— 开场。creator-dark：近黑底 + 电光绿 accent + 暖白。
+ * 颜色/字体走 token；字号/间距固定 px。主内容避开右上角 432×432 头像安全区。
+ * 动画：遮罩升起 / 模糊聚焦 / overshoot 砸入 / 光束扫过 / 数字滚轮 / 条形增长 / 印章旋入。
+ * ─────────────────────────────────────────────────────────────────────── */
+
+.op-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-display-cn);
+}
+.op-accent { color: var(--accent); }
+.op-mute { color: var(--text-mute); }
+
+/* ── 眉标（左上，避开右上头像区）── */
+.op-kicker {
+  position: absolute;
+  top: 60px;
+  left: 76px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  z-index: 4;
+}
+.op-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+  animation: opBlink 1.6s ease-in-out infinite;
+}
+.op-dot-warn { background: var(--mix); box-shadow: 0 0 16px rgba(255,178,74,0.6); }
+@keyframes opBlink { 0%,100%{opacity:1;} 50%{opacity:0.45;} }
+
+/* ── 共享动画原语 ── */
+.op-down { opacity: 0; animation: opDown 0.66s var(--ease-quart) both; }
+@keyframes opDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+
+.op-fade { opacity: 0; animation: opFade 0.74s var(--ease-quart) both; }
+@keyframes opFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.op-rise-wrap { display: block; overflow: hidden; padding: 0.04em 0.04em 0.12em; }
+.op-rise { display: inline-block; transform: translateY(112%); filter: blur(10px); animation: opRise 0.92s var(--ease-expo) both; }
+@keyframes opRise { 0% { transform: translateY(112%); filter: blur(10px); } 100% { transform: translateY(0); filter: blur(0); } }
+
+.op-slam { opacity: 0; animation: opSlam 0.72s var(--ease-overshoot) both; }
+@keyframes opSlam { 0% { opacity: 0; transform: scale(1.7); filter: blur(12px); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+
+.op-pop { opacity: 0; animation: opPop 0.6s var(--ease-overshoot) both; }
+@keyframes opPop { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
+
+.op-stamp { opacity: 0; animation: opStamp 0.56s var(--ease-overshoot) both; }
+@keyframes opStamp { 0% { opacity: 0; transform: scale(1.55) rotate(-9deg); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1) rotate(-3deg); } }
+
+.op-grow { width: 0; animation: opGrow 1.15s var(--ease-expo) both; }
+@keyframes opGrow { from { width: 0; } to { width: var(--op-w); } }
+
+/* 数字滚轮 */
+.op-roll { display: inline-block; height: 1em; line-height: 1; overflow: hidden; vertical-align: top; }
+.op-roll-col { display: flex; flex-direction: column; transform: translateY(0); animation: opRoll 1.5s var(--ease-expo) both; }
+.op-roll-col > span { display: block; height: 1em; text-align: center; }
+@keyframes opRoll { from { transform: translateY(0); } to { transform: translateY(var(--op-to)); } }
+
+/* ════════════ s0 · 发布炸点 ════════════ */
+.op-beam {
+  position: absolute; top: 0; left: -45%; width: 45%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(201,255,58,0.12), transparent);
+  transform: skewX(-12deg); pointer-events: none;
+  animation: opBeam 1.5s var(--ease-quart) 0.1s both;
+}
+@keyframes opBeam { from { left: -45%; } to { left: 135%; } }
+.op-s0 { align-items: flex-start; padding: 0 80px 0 120px; }
+.op-s0-hero {
+  margin: 0; display: flex; align-items: baseline; gap: 36px;
+  font-family: var(--hero-num-font); font-weight: 900;
+  font-size: 300px; line-height: 0.86; letter-spacing: -0.03em;
+  color: var(--text);
+}
+.op-s0-num { color: var(--accent); text-shadow: 0 0 70px rgba(201,255,58,0.45); }
+.op-s0-line {
+  display: block; height: 8px; width: 0; margin-top: 30px; border-radius: 4px;
+  background: var(--accent); box-shadow: 0 0 26px var(--accent-glow);
+  animation: opLine 0.6s var(--ease-expo) both;
+}
+@keyframes opLine { from { width: 0; } to { width: 660px; } }
+.op-s0-sub { margin-top: 34px; font-size: 27px; letter-spacing: 0.04em; color: var(--text-2); }
+
+/* ════════════ s1 · 你用不上（反转）════════════ */
+/* 主文左列放大铺开；右侧用 ::before/::after 画一枚巨型 ✕「没权限」回声补白，
+   避开右上 432×432 头像区（✕ 落在 y>432、右缘 <1488）。 */
+.op-s1 { align-items: flex-start; padding: 0 80px 0 124px; }
+.op-s1-pre { position: relative; z-index: 2; font-size: 52px; font-weight: 700; color: var(--text); margin-bottom: 18px; }
+.op-s1-big { position: relative; z-index: 2; margin: 0; font-size: 190px; font-weight: 900; line-height: 1.0; letter-spacing: -0.02em; }
+.op-s1-neg { color: var(--neg); text-shadow: 0 0 60px var(--neg-glow); }
+.op-s1-strike {
+  position: relative; z-index: 2;
+  display: block; height: 14px; width: 748px; margin-top: 10px; transform: scaleX(0); transform-origin: left center;
+  background: var(--neg); border-radius: 7px; box-shadow: 0 0 26px var(--neg-glow);
+  animation: opScaleX 0.5s var(--ease-expo) both;
+}
+/* ── 右侧回声：巨型 ✕（两条旋转粗杠）——「没机会用上」的视觉呼应 ── */
+.op-s1::before, .op-s1::after {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  left: 1192px; top: 660px; width: 392px; height: 30px; margin: -15px 0 0 -196px;
+  border-radius: 16px; background: var(--neg);
+  opacity: 0.16; box-shadow: 0 0 60px var(--neg-glow);
+}
+.op-s1::before { transform: rotate(45deg); }
+.op-s1::after  { transform: rotate(-45deg); }
+@keyframes opScaleX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ════════════ s2 · 91.9 跑分 ════════════ */
+.op-s2 { justify-content: center; padding: 0 96px; }
+.op-s2-bars { width: 1480px; max-width: 1480px; display: flex; flex-direction: column; gap: 34px; margin-left: -80px; }
+/* 三行统一网格 → 轨道等宽，Sol 100% 自然最长 */
+.op-s2-row { display: grid; grid-template-columns: 300px 1fr 250px; align-items: center; gap: 28px; }
+.op-s2-name { font-size: 32px; font-weight: 800; color: var(--text-2); text-align: right; }
+.op-s2-name em { display: block; font-style: normal; font-size: 25px; font-weight: 600; color: var(--text-2); font-family: var(--font-mono); letter-spacing: 0.02em; margin-top: 6px; }
+.op-s2-track { position: relative; height: 32px; background: var(--surface-3); border-radius: 16px; overflow: hidden; }
+.op-s2-fill { height: 100%; background: var(--neu); border-radius: 16px; }
+.op-s2-num { font-size: 34px; color: var(--text-2); }
+
+.op-s2-hero .op-s2-name { font-size: 40px; }
+.op-s2-track-hero { height: 60px; border-radius: 18px; background: var(--accent-soft); }
+.op-s2-fill-hero { background: linear-gradient(90deg, #9fdc1f, var(--accent)); box-shadow: 0 0 34px var(--accent-glow); border-radius: 18px; }
+.op-s2-bignum {
+  font-family: var(--hero-num-font); font-weight: 900; font-size: 96px; line-height: 1;
+  color: var(--accent); letter-spacing: -0.02em; display: inline-flex; align-items: baseline;
+  text-shadow: 0 0 50px rgba(201,255,58,0.4);
+}
+.op-s2-dot { display: inline-block; }
+.op-s2-sota {
+  position: absolute; left: 50%; bottom: 196px; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 12px 24px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-weight: 900; font-size: 28px;
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+.op-s2-sota-ic { width: 30px; height: 30px; display: inline-block; }
+.op-s2-beat { position: absolute; left: 96px; bottom: 110px; font-size: 40px; font-weight: 800; color: var(--text); }
+
+/* ════════════ s3 · 受限发布 ════════════ */
+/* 整体左偏（右侧多留给头像角），内容横向铺开占满左→中右 */
+.op-s3 { align-items: flex-start; justify-content: center; padding: 0 200px 0 120px; }
+.op-s3-gov {
+  display: inline-flex; align-items: center; gap: 18px; margin-bottom: 40px;
+  font-size: 50px; font-weight: 800; color: var(--mix);
+}
+.op-s3-gov-ic { width: 58px; height: 58px; display: inline-block; }
+/* 撑满一条横带：左词 — 巨数 — 单位 推到两端 */
+.op-s3-numline { display: flex; align-items: center; justify-content: space-between; gap: 40px; width: 1330px; }
+.op-s3-only { font-size: 58px; font-weight: 700; color: var(--text-2); }
+.op-s3-num {
+  font-family: var(--hero-num-font); font-weight: 900; font-size: 360px; line-height: 0.84;
+  color: var(--accent); letter-spacing: -0.03em; text-shadow: 0 0 70px rgba(201,255,58,0.4);
+}
+.op-s3-unit { font-size: 64px; font-weight: 800; line-height: 1.02; color: var(--text); }
+.op-s3-tags { display: flex; gap: 26px; margin-top: 44px; }
+.op-s3-tag {
+  display: inline-flex; align-items: center; gap: 14px; padding: 18px 34px; border-radius: 16px;
+  background: var(--surface-2); border: 1px solid var(--rule); font-size: 32px; font-weight: 700; color: var(--text-2);
+}
+.op-s3-tag-ic { width: 32px; height: 32px; display: inline-block; color: var(--accent); }
+.op-s3-tag-no { background: var(--neg-soft); border-color: rgba(255,91,84,0.4); color: var(--neg); }
+.op-s3-no { font-family: var(--font-mono); font-weight: 900; }
+
+/* ════════════ s4 · 测不了 ════════════ */
+/* 横向铺满：巨问句 + 印章 + 两端推开的"你/我都碰不到" */
+.op-s4 { gap: 56px; padding: 0 160px 0 120px; }
+.op-s4-q { position: relative; font-size: 150px; font-weight: 900; color: var(--text); }
+.op-s4-cross {
+  position: absolute; left: -16px; right: -18px; top: 48%; height: 14px; transform: scaleX(0); transform-origin: left center;
+  background: var(--neg); border-radius: 7px; box-shadow: 0 0 24px var(--neg-glow);
+  animation: opScaleX 0.46s var(--ease-expo) both;
+}
+.op-s4-stamp {
+  padding: 16px 44px; border: 5px solid var(--neg); border-radius: 16px;
+  font-size: 56px; font-weight: 900; color: var(--neg); letter-spacing: 0.02em;
+  background: var(--neg-soft);
+}
+/* 两个"碰不到"撑成整条横带，推到左右两端 */
+.op-s4-pair { display: flex; justify-content: space-between; align-items: center; gap: 64px; margin-top: 12px; width: 1560px; }
+.op-s4-who {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 22px;
+  padding: 28px 40px; border-radius: 20px;
+  background: var(--surface-2); border: 1px solid var(--rule);
+  font-size: 64px; font-weight: 800; color: var(--text-2);
+}
+.op-s4-x { font-family: var(--font-mono); font-weight: 900; font-size: 64px; color: var(--neg); }
+
+/* ════════════ s5 · Mythos 剧本重演 ════════════ */
+/* 整体左偏（右侧多留给头像角），两卡推到左右两端铺满横向 */
+.op-s5 { justify-content: center; align-items: flex-start; padding: 0 400px 0 120px; }
+.op-s5-stage {
+  display: flex; align-items: stretch; justify-content: space-between;
+  gap: 40px; margin-top: 30px; width: 1320px;
+}
+.op-s5-in { opacity: 0; animation: opS5In 0.78s var(--ease-overshoot) both; }
+@keyframes opS5In { 0% { opacity: 0; transform: translateY(34px) scale(0.92); } 100% { opacity: 1; transform: none; } }
+.op-s5-card {
+  width: 580px; padding: 48px 52px; border-radius: 22px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+}
+.op-s5-card-mirror { border-color: rgba(201,255,58,0.4); box-shadow: var(--card-shadow), 0 0 50px rgba(201,255,58,0.12); }
+.op-s5-top { font-size: 18px; letter-spacing: 0.12em; color: var(--text-faint); }
+.op-s5-name { font-size: 104px; font-weight: 900; line-height: 1.0; margin: 8px 0 26px; color: var(--text); letter-spacing: -0.02em; }
+.op-s5-card-mirror .op-s5-name { color: var(--accent); text-shadow: 0 0 50px rgba(201,255,58,0.35); }
+.op-s5-warn { display: inline-flex; align-items: center; gap: 12px; font-size: 30px; font-weight: 800; color: var(--neg); }
+.op-s5-warn-lock { color: var(--mix); }
+.op-s5-warn-ic { width: 34px; height: 34px; display: inline-block; }
+.op-s5-echo { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.op-s5-echo-ic { font-size: 72px; line-height: 1; color: var(--accent); animation: opSpin 1s var(--ease-overshoot) both; animation-delay: inherit; }
+@keyframes opSpin { 0% { transform: rotate(-180deg) scale(0.4); opacity: 0; } 100% { transform: rotate(0) scale(1); opacity: 1; } }
+.op-s5-echo-t { font-size: 19px; line-height: 1.25; text-align: center; color: var(--text-mute); letter-spacing: 0.08em; }
+.op-s5-smell { margin-top: 36px; font-size: 44px; font-weight: 800; color: var(--text); }
+.op-s5-tag {
+  margin-top: 26px; padding: 14px 34px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-size: 32px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 40px var(--accent-glow);
+}

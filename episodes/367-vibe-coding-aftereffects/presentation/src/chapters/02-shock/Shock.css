@@ -1,0 +1,497 @@
+/* ─────────────────────────────────────────────────────────────────────
+ * Chapter 02 · shock — 5 屏独立设计
+ * midnight-press 主题 · 暖色 espresso 暗底 + 火热橙 accent
+ * 每句话一屏,跨步即切;字号固定 px;动画用 transform + opacity
+ * 单一 CSS 类前缀 `.sh-` 物理隔离,不动 base.css / tokens.css
+ * ───────────────────────────────────────────────────────────────────── */
+
+.sh-scene {
+  position: absolute;
+  inset: 0;
+  padding: var(--stage-pad-y) var(--stage-pad-x);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  color: var(--text);
+  animation: sh-fade-in 700ms var(--ease-quart) both;
+}
+
+/* ─── 共用 chrome ─── */
+.sh-masthead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  width: 100%;
+}
+.sh-brand {
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--text);
+}
+.sh-issue {
+  margin-left: auto;
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.sh-rule {
+  margin: var(--space-4) 0 0;
+}
+.sh-em {
+  color: var(--accent);
+}
+.sh-em-cn {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 700;
+}
+.sh-foot {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+  padding-top: var(--space-5);
+}
+.sh-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  padding-top: var(--space-5);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 0 — 三栏症状并列 · stagger reveal
+ * ════════════════════════════════════════════════════════════════ */
+.sh-symptoms {
+  align-self: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-7);
+  padding-top: var(--space-5);
+  position: relative;
+}
+.sh-symptom {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-7) var(--space-5);
+  border: var(--bw-1) solid var(--rule);
+  background: var(--surface-2);
+  border-radius: var(--r-card);
+  min-height: 380px;
+  animation: sh-symptom-rise 700ms var(--ease-quart) both;
+}
+.sh-symptom-1 { animation-delay: 0ms; }
+.sh-symptom-2 { animation-delay: 2200ms; }
+.sh-symptom-3 { animation-delay: 4400ms; }
+.sh-symptom-id {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  border-bottom: var(--bw-1) solid var(--rule);
+  padding-bottom: var(--space-3);
+}
+.sh-symptom-num {
+  font-size: 56px;
+  line-height: 1;
+  color: var(--accent);
+}
+.sh-symptom-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.sh-symptom-sub {
+  font-size: 28px;
+  color: var(--text-2);
+  line-height: 1.1;
+  letter-spacing: var(--track-snug);
+}
+.sh-symptom-issue {
+  font-size: 56px;
+  line-height: 1.05;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.sh-symptom-issue-stack {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.sh-issue-sep {
+  font-size: 36px;
+  color: var(--text-faint);
+  font-style: normal;
+}
+.sh-symptom-tag {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+  padding-top: var(--space-4);
+  border-top: var(--bw-1) dashed var(--rule);
+}
+.sh-symptom-axis {
+  position: absolute;
+  bottom: -56px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.sh-axis-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.sh-axis-arrow {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--text-faint) 0%,
+    var(--accent) 60%,
+    var(--accent-glow) 100%
+  );
+  position: relative;
+}
+.sh-axis-arrow::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 1 — 反差短屏 · 不是 bug 多
+ * ════════════════════════════════════════════════════════════════ */
+.sh-scene-bridge {
+  background: radial-gradient(
+    circle at 50% 60%,
+    color-mix(in srgb, var(--accent) 5%, transparent) 0%,
+    transparent 55%
+  );
+}
+.sh-bridge {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+  text-align: center;
+}
+.sh-bridge-pre {
+  font-size: 14px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.sh-bridge-h {
+  font-size: 168px;
+  line-height: 0.95;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-4);
+}
+.sh-bridge-strike {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  animation: sh-fade-in 800ms var(--ease-quart) 2200ms both;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 2 — pull-quote 引述 OP
+ * ════════════════════════════════════════════════════════════════ */
+.sh-scene-quote {
+  background: radial-gradient(
+    circle at 30% 50%,
+    color-mix(in srgb, var(--accent) 7%, transparent) 0%,
+    transparent 60%
+  );
+}
+.sh-quote {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding: 0 var(--space-9);
+}
+.sh-quote-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+.sh-quote-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: var(--bw-1) solid var(--accent);
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+.sh-quote-lbl {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.sh-quote-body {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-5);
+}
+.sh-quote-bar {
+  display: block;
+  width: 6px;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: sh-quote-bar-grow 700ms var(--ease-quart) both;
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+.sh-quote-text {
+  margin: 0;
+  font-size: 88px;
+  line-height: 1.18;
+  letter-spacing: var(--track-tight);
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.sh-quote-foot {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.sh-foot-rule {
+  display: inline-block;
+  width: 64px;
+  height: 1px;
+  background: var(--rule);
+  margin-right: var(--space-3);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 3 — 金句落点 · vibe coding 最大的后遗症
+ * ════════════════════════════════════════════════════════════════ */
+.sh-scene-punch {
+  background: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, var(--accent) 9%, transparent) 0%,
+    transparent 50%
+  );
+}
+.sh-punch {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+  text-align: center;
+}
+.sh-punch-kicker {
+  font-size: 14px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.sh-punch-h {
+  font-size: 184px;
+  line-height: 0.98;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-5);
+  max-width: 14ch;
+}
+.sh-punch-rule {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  animation: sh-fade-in 700ms var(--ease-quart) 2400ms both;
+}
+.sh-punch-rule-bar {
+  display: inline-block;
+  width: 80px;
+  height: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.sh-punch-rule-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 4 — 重新框定 · 三动词逐个揭示
+ * ════════════════════════════════════════════════════════════════ */
+.sh-scene-reframe {
+  background: radial-gradient(
+    circle at 50% 55%,
+    color-mix(in srgb, var(--accent) 6%, transparent) 0%,
+    transparent 60%
+  );
+}
+.sh-reframe {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding: 0 var(--space-9);
+}
+.sh-reframe-lead {
+  font-size: 56px;
+  line-height: 1.15;
+  color: var(--text-2);
+  letter-spacing: var(--track-snug);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.sh-reframe-verbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-5);
+  padding-top: var(--space-5);
+}
+.sh-verb {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: var(--space-3);
+}
+.sh-verb-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+  animation: sh-verb-bar-grow 600ms var(--ease-quart) both;
+}
+.sh-verb-bar-1 { animation-delay: 2000ms; }
+.sh-verb-bar-2 { animation-delay: 3000ms; }
+.sh-verb-bar-3 { animation-delay: 4000ms; }
+.sh-verb-txt {
+  font-size: 144px;
+  line-height: 0.95;
+  letter-spacing: var(--track-tight);
+  color: var(--accent);
+  display: inline-block;
+}
+.sh-verb-en {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.sh-verb-comma {
+  font-size: 144px;
+  line-height: 1;
+  color: var(--text-faint);
+  padding-bottom: var(--space-4);
+}
+.sh-verb-tail {
+  font-size: 56px;
+  line-height: 1;
+  color: var(--text);
+  margin-left: var(--space-4);
+  padding-bottom: var(--space-5);
+}
+.sh-reframe-foot {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+  display: inline-flex;
+  align-items: center;
+  padding-top: var(--space-5);
+  animation: sh-fade-in 700ms var(--ease-quart) 6000ms both;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  keyframes(只用 transform / opacity)
+ * ════════════════════════════════════════════════════════════════ */
+@keyframes sh-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes sh-symptom-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sh-quote-bar-grow {
+  from {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes sh-verb-bar-grow {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

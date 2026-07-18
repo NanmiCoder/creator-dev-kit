@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b4a62" />
+    <meta
+      name="description"
+      content="SALTWIND — 一场穿越七道航门的低多边形帆船竞速。"
+    />
+    <title>SALTWIND · Regatta 01</title>
+  </head>
+  <body>
+    <main id="game-root" aria-label="SALTWIND 帆船竞速游戏">
+      <div id="scene" aria-hidden="true"></div>
+
+      <div class="vignette" aria-hidden="true"></div>
+      <div id="speed-lines" class="speed-lines" aria-hidden="true"></div>
+      <div id="boost-flash" class="boost-flash" aria-hidden="true"></div>
+
+      <section id="hud" class="hud is-hidden" aria-label="比赛信息">
+        <header class="brand-lockup">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <strong>SALTWIND</strong>
+          <span class="brand-divider" aria-hidden="true"></span>
+          <span>REGATTA 01</span>
+        </header>
+
+        <section class="hud-card gate-card" aria-label="航门进度">
+          <span class="eyebrow">GATE <i>闸门</i></span>
+          <div class="gate-count"><strong id="gate-current">00</strong><span>/ 07</span></div>
+          <div id="gate-pips" class="gate-pips" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="score-row"><span>SCORE</span><strong id="score">0000</strong></div>
+        </section>
+
+        <section class="race-time" aria-label="比赛计时">
+          <span class="eyebrow">RACE TIME <i>比赛时间</i></span>
+          <strong id="race-time">0:00.0</strong>
+          <span class="best-time">BEST <b id="best-time">—:—.—</b></span>
+        </section>
+
+        <nav class="top-controls" aria-label="比赛控制">
+          <button id="flow-button" class="control-pill" type="button" title="切换沉浸模式">
+            FLOW <span>流动</span>
+          </button>
+          <button id="sound-button" class="round-button" type="button" aria-pressed="false" title="关闭声音">
+            <span class="sound-icon" aria-hidden="true">◒</span><span class="sr-only">声音</span>
+          </button>
+          <button id="pause-button" class="round-button" type="button" title="暂停比赛">
+            <span aria-hidden="true">Ⅱ</span><span class="sr-only">暂停</span>
+          </button>
+        </nav>
+
+        <section class="hud-card wind-card" aria-label="风向状态">
+          <div id="wind-compass" class="wind-compass"><span>↖</span></div>
+          <div>
+            <span class="eyebrow">WIND FLOW <i>风向流动</i></span>
+            <strong id="wind-state">Beam reach <i>横风航行</i></strong>
+          </div>
+        </section>
+
+        <section class="speed-card" aria-label="船速">
+          <div><strong id="boat-speed">0</strong><span>KN <i>节</i></span></div>
+          <div class="speed-bar"><i id="speed-fill"></i></div>
+          <span class="eyebrow">BOAT SPEED <i>船速</i></span>
+        </section>
+
+        <section class="hud-card sail-card" aria-label="帆面调节">
+          <div class="card-title">
+            <span class="eyebrow">SAIL TRIM <i>帆面调整</i></span>
+            <strong id="trim-percent">68%</strong>
+          </div>
+          <div class="trim-track" aria-hidden="true">
+            <span id="trim-optimal" class="trim-optimal"></span>
+            <i id="trim-fill"></i>
+            <b id="trim-handle"></b>
+          </div>
+          <div class="track-labels"><span>SHEETED IN <i>收紧帆</i></span><span>EASED OUT <i>放松帆</i></span></div>
+          <strong id="trim-hint" class="trim-hint">SAIL DRAWING CLEANLY <i>帆面受风良好</i></strong>
+        </section>
+
+        <section class="hud-card gust-card" aria-label="阵风驱动">
+          <div class="gust-ring" aria-hidden="true">
+            <svg viewBox="0 0 120 120">
+              <circle class="ring-track" cx="60" cy="60" r="48"></circle>
+              <circle id="charge-ring" class="ring-charge" cx="60" cy="60" r="48"></circle>
+            </svg>
+            <strong id="charge-number">0</strong>
+            <small>POWER</small>
+          </div>
+          <div class="gust-copy">
+            <div class="card-title">
+              <span class="eyebrow">GUST DRIVE <i>阵风驱动</i></span>
+              <span>HOLD SPACE <i>按住空格</i></span>
+            </div>
+            <strong id="gust-state">READY <i>准备就绪</i></strong>
+            <div class="energy-track"><i id="energy-fill"></i></div>
+            <span id="gust-hint">HOLD TO CHARGE · RELEASE TO BOOST</span>
+          </div>
+        </section>
+
+        <div id="gate-guide" class="gate-guide" aria-live="polite">
+          <div id="guide-arrow" class="guide-arrow">↑</div>
+          <div><strong id="gate-distance">—m</strong><span>NEXT GATE <i>下一道门</i></span></div>
+        </div>
+
+        <div id="race-toast" class="race-toast" aria-live="polite"></div>
+
+        <div class="key-guide" aria-label="键盘操作说明">
+          <span><kbd>A</kbd> 左转</span>
+          <span><kbd>D</kbd> 右转</span>
+          <span><kbd>W</kbd> 放松帆</span>
+          <span><kbd>S</kbd> 收紧帆</span>
+          <span><kbd>Space</kbd> 阵风</span>
+          <span><kbd>R</kbd> 重开</span>
+        </div>
+
+        <div class="mobile-controls" aria-label="触控操作">
+          <button type="button" data-hold-key="KeyA" aria-label="左转">←</button>
+          <button type="button" data-hold-key="KeyD" aria-label="右转">→</button>
+          <button type="button" data-hold-key="KeyW" aria-label="放松帆">帆−</button>
+          <button type="button" data-hold-key="KeyS" aria-label="收紧帆">帆＋</button>
+          <button class="boost-touch" type="button" data-hold-key="Space" aria-label="蓄力冲刺">GUST</button>
+        </div>
+      </section>
+
+      <section id="start-screen" class="screen-overlay start-screen">
+        <div class="start-shade" aria-hidden="true"></div>
+        <div class="start-brand">
+          <span class="brand-mark large" aria-hidden="true"></span>
+          <span>SALTWIND</span>
+        </div>
+        <div class="start-copy">
+          <span class="eyebrow accent">REGATTA 01 · 七门风帆赛</span>
+          <h1>追风，<br />穿过每一道航门。</h1>
+          <p>调帆借风，收集航海星标，为阵风驱动蓄能。<br />七道门，一条最快航线。</p>
+          <button id="start-button" class="primary-button" type="button">
+            <span>START THE RACE <i>开始比赛</i></span><b>→</b>
+          </button>
+          <div class="start-tips">
+            <span><kbd>A</kbd><kbd>D</kbd> 掌舵</span>
+            <span><kbd>W</kbd><kbd>S</kbd> 调帆</span>
+            <span><kbd>SPACE</kbd> 蓄力</span>
+          </div>
+        </div>
+        <div class="course-stamp" aria-hidden="true">
+          <span>OPEN WATER COURSE</span><strong>07</strong><span>GATES · 1 RUN</span>
+        </div>
+      </section>
+
+      <section id="countdown-screen" class="countdown-screen is-hidden" aria-live="assertive">
+        <span id="countdown-kicker">READY ON THE HELM</span>
+        <strong id="countdown-number">3</strong>
+      </section>
+
+      <section id="pause-screen" class="screen-overlay modal-overlay is-hidden" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+        <div class="modal-card">
+          <span class="eyebrow accent">RACE HELD · 比赛暂停</span>
+          <h2 id="pause-title">Paused</h2>
+          <p>The wind will wait. <i>风会等你。</i></p>
+          <button id="resume-button" class="primary-button" type="button"><span>RESUME RACE <i>继续比赛</i></span><b>→</b></button>
+          <button id="restart-button" class="text-button" type="button">RESTART COURSE <i>重新开始</i></button>
+        </div>
+      </section>
+
+      <section id="finish-screen" class="screen-overlay modal-overlay is-hidden" role="dialog" aria-modal="true" aria-labelledby="finish-title">
+        <div class="modal-card finish-card">
+          <span class="eyebrow accent">COURSE COMPLETE · 航程完成</span>
+          <h2 id="finish-title">Wind mastered.</h2>
+          <div class="finish-medal" aria-hidden="true">✦</div>
+          <div class="finish-stats">
+            <div><span>FINAL TIME</span><strong id="finish-time">0:00.0</strong></div>
+            <div><span>SCORE</span><strong id="finish-score">0000</strong></div>
+          </div>
+          <p id="finish-message">七道航门全部通过。</p>
+          <button id="race-again-button" class="primary-button" type="button"><span>RACE AGAIN <i>再赛一次</i></span><b>↻</b></button>
+        </div>
+      </section>
+
+      <div id="loading" class="loading-screen">
+        <span class="brand-mark large" aria-hidden="true"></span>
+        <strong>SALTWIND</strong>
+        <div class="loading-line"><i></i></div>
+        <span>PREPARING THE TIDE</span>
+      </div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

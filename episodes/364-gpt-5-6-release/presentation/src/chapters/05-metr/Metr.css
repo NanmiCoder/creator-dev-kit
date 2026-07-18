@@ -1,0 +1,296 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * 章 5 · metr —— 第三方评测机构 METR + 能力边界。creator-dark。
+ * 颜色/字体走 token；字号/间距固定 px。主内容避开右上角 432×432 头像安全区。
+ * 动画：遮罩升起 / 模糊聚焦 / overshoot 砸入 / 印章旋入 / 仪表增长 / 划线 / 红线展开。
+ * ─────────────────────────────────────────────────────────────────────── */
+
+.me-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-display-cn);
+}
+.me-accent { color: var(--accent); }
+.me-mute { color: var(--text-mute); }
+
+/* ── 眉标（左上，避开右上头像区）── */
+.me-kicker {
+  position: absolute;
+  top: 60px;
+  left: 76px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  z-index: 4;
+}
+.me-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+  animation: meBlink 1.6s ease-in-out infinite;
+}
+.me-dot-neg { background: var(--neg); box-shadow: 0 0 16px var(--neg-glow); }
+@keyframes meBlink { 0%,100%{opacity:1;} 50%{opacity:0.45;} }
+
+/* ── 共享动画原语 ── */
+.me-down { opacity: 0; animation: meDown 0.66s var(--ease-quart) both; }
+@keyframes meDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+
+.me-fade { opacity: 0; animation: meFade 0.74s var(--ease-quart) both; }
+@keyframes meFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.me-slam { opacity: 0; animation: meSlam 0.72s var(--ease-overshoot) both; }
+@keyframes meSlam { 0% { opacity: 0; transform: scale(1.7); filter: blur(12px); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+
+.me-pop { opacity: 0; animation: mePop 0.6s var(--ease-overshoot) both; }
+@keyframes mePop { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
+
+.me-stamp { opacity: 0; animation: meStamp 0.56s var(--ease-overshoot) both; }
+@keyframes meStamp { 0% { opacity: 0; transform: scale(1.55) rotate(-9deg); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1) rotate(-3deg); } }
+
+.me-grow { width: 0; animation: meGrow 1.2s var(--ease-expo) both; }
+@keyframes meGrow { from { width: 0; } to { width: var(--me-w); } }
+
+/* 划掉横线（从左铺开） */
+@keyframes meScaleX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ════════════ s0 · 测不了 → METR（拿到预览权限）════════════ */
+.me-s0 { align-items: flex-start; justify-content: center; gap: 104px; padding: 116px 300px 124px 120px; }
+.me-s0-flip { display: flex; align-items: center; justify-content: space-between; gap: 48px; width: 100%; }
+
+.me-s0-us {
+  position: relative; display: inline-flex; align-items: center; gap: 28px;
+  padding: 40px 56px; border-radius: 22px; flex-shrink: 0;
+  background: var(--neg-soft); border: 1px solid rgba(255,91,84,0.34);
+}
+.me-s0-us-x { width: 58px; height: 58px; color: var(--neg); }
+.me-s0-us-t { font-size: 62px; font-weight: 800; color: var(--text-2); white-space: nowrap; }
+.me-s0-us-strike {
+  position: absolute; left: 24px; right: 24px; top: 52%; height: 9px; transform: scaleX(0); transform-origin: left center;
+  background: var(--neg); border-radius: 5px; box-shadow: 0 0 20px var(--neg-glow);
+  animation: meScaleX 0.5s var(--ease-expo) both;
+}
+.me-s0-arrow { font-size: 88px; font-weight: 900; color: var(--text-faint); line-height: 1; flex-shrink: 0; }
+
+.me-s0-org {
+  position: relative; display: inline-flex; align-items: center; gap: 30px;
+  padding: 38px 50px; border-radius: 24px; flex-shrink: 0;
+  background: var(--surface-2); border: 1px solid rgba(201,255,58,0.4);
+  box-shadow: var(--card-shadow), 0 0 50px rgba(201,255,58,0.12);
+}
+.me-org-in { opacity: 0; animation: meOrgIn 0.8s var(--ease-overshoot) both; }
+@keyframes meOrgIn { 0% { opacity: 0; transform: translateX(40px) scale(0.9); } 100% { opacity: 1; transform: none; } }
+.me-s0-glyph { width: 92px; height: 92px; color: var(--accent); flex-shrink: 0; }
+.me-s0-org-tx { display: flex; flex-direction: column; gap: 6px; }
+.me-s0-org-name {
+  font-size: 96px; font-weight: 900; line-height: 0.9; letter-spacing: 0.02em; color: var(--text);
+  font-family: var(--font-display-en);
+}
+.me-s0-org-sub { font-size: 22px; letter-spacing: 0.14em; color: var(--text-mute); }
+.me-s0-badge {
+  position: absolute; right: -18px; top: -26px;
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 12px 22px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-weight: 900; font-size: 24px;
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+.me-s0-badge-dot { width: 12px; height: 12px; border-radius: 50%; background: #0a0c0a; }
+.me-s0-foot {
+  align-self: stretch; display: inline-flex; align-items: center; gap: 28px;
+  font-size: 60px; font-weight: 800; color: var(--text); white-space: nowrap;
+}
+.me-s0-foot::before {
+  content: ""; width: 64px; height: 6px; border-radius: 3px; flex-shrink: 0;
+  background: var(--accent); box-shadow: 0 0 24px var(--accent-glow);
+}
+.me-s0-foot::after {
+  content: ""; flex: 1 1 auto; height: 1px; min-width: 80px;
+  background: linear-gradient(90deg, var(--rule), transparent);
+}
+
+/* ════════════ s1 · 作弊率全场最高 + 三手法 ════════════ */
+.me-s1 { justify-content: center; gap: 30px; padding: 0 110px; }
+.me-s1-head { font-size: 40px; font-weight: 700; color: var(--text-2); align-self: flex-start; margin-left: 8px; }
+.me-s1-gauge {
+  position: relative; width: 1500px; max-width: 1500px;
+  display: grid; grid-template-columns: 360px 1fr; align-items: center; gap: 30px;
+}
+.me-s1-label {
+  font-size: 92px; font-weight: 900; line-height: 1; color: var(--neg);
+  text-shadow: 0 0 50px var(--neg-glow); letter-spacing: 0.01em;
+}
+.me-s1-track {
+  position: relative; height: 70px; background: var(--surface-3); border-radius: 18px; overflow: hidden;
+  display: flex; align-items: center;
+}
+.me-s1-fill {
+  height: 100%; border-radius: 18px;
+  background: linear-gradient(90deg, #ff8a52, var(--neg));
+  box-shadow: 0 0 34px var(--neg-glow);
+}
+.me-s1-peak {
+  position: absolute; right: 26px; font-size: 30px; font-weight: 900; color: #2a0a0a; letter-spacing: 0.1em;
+}
+.me-s1-verdict {
+  position: absolute; right: 0; top: -54px;
+  padding: 10px 22px; border-radius: 12px;
+  background: var(--neg); color: #fff; font-size: 26px; font-weight: 900;
+  box-shadow: 0 0 30px var(--neg-glow);
+}
+.me-s1-ways {
+  display: flex; justify-content: space-between; gap: 32px; margin-top: 18px;
+  width: 1500px; max-width: 1500px;
+}
+.me-s1-way {
+  flex: 1 1 0;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  padding: 38px 26px; border-radius: 20px;
+  background: var(--surface-2); border: 1px solid var(--rule);
+}
+.me-s1-way-ic {
+  width: 72px; height: 72px; color: var(--neg);
+  display: grid; place-items: center;
+  background: var(--neg-soft); border-radius: 16px; padding: 16px; box-sizing: border-box;
+}
+.me-s1-way-t { font-size: 36px; font-weight: 800; color: var(--text); text-align: center; }
+
+/* ════════════ s2 · 能力分作废 ════════════ */
+.me-s2 {
+  flex-direction: row; align-items: center; justify-content: space-between;
+  gap: 56px; padding: 0 96px 0 120px;
+}
+.me-s2-scores { display: flex; flex-direction: column; gap: 22px; width: 840px; flex-shrink: 0; }
+.me-s2-score {
+  position: relative; display: grid; grid-template-columns: 1fr 150px; align-items: center;
+  padding: 28px 40px; border-radius: 16px;
+  background: var(--surface-2); border: 1px solid var(--rule);
+}
+.me-s2-score-name { font-size: 46px; font-weight: 800; color: var(--text-2); }
+.me-s2-score-num { font-size: 30px; font-weight: 900; color: var(--neu); text-align: right; letter-spacing: 0.06em; }
+.me-s2-score-strike {
+  position: absolute; left: 22px; right: 22px; top: 52%; height: 8px; transform: scaleX(0); transform-origin: left center;
+  background: var(--neg); border-radius: 5px; box-shadow: 0 0 18px var(--neg-glow);
+  animation: meScaleX 0.46s var(--ease-expo) both;
+}
+.me-s2-stamp-wrap {
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 32px;
+}
+.me-s2-stamp {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 52px 80px; border: 6px solid var(--neg); border-radius: 24px;
+  background: rgba(255,91,84,0.16); backdrop-filter: blur(3px);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.5), 0 0 50px var(--neg-glow);
+}
+.me-s2-stamp-line { font-size: 38px; font-weight: 800; color: var(--neg); letter-spacing: 0.1em; }
+.me-s2-stamp-big { font-size: 100px; font-weight: 900; color: var(--neg); line-height: 1; text-shadow: 0 0 40px var(--neg-glow); white-space: nowrap; }
+.me-s2-stamp-note {
+  display: inline-flex; align-items: center; gap: 16px;
+  padding: 18px 36px; border-radius: 999px;
+  background: var(--neg-soft); border: 1px solid rgba(255,91,84,0.4);
+  font-size: 32px; font-weight: 800; color: var(--neg); white-space: nowrap;
+}
+.me-s2-stamp-note-ic { width: 30px; height: 30px; color: var(--neg); flex-shrink: 0; }
+
+/* ════════════ s3 · 没更强 + 离自动化研发远 ════════════ */
+.me-s3 { align-items: flex-start; justify-content: center; gap: 52px; padding: 0 220px 0 120px; }
+.me-s3-subject {
+  display: inline-flex; align-items: center; gap: 22px;
+  font-family: var(--hero-num-font); font-weight: 900; font-size: 120px; line-height: 1;
+  color: var(--text); letter-spacing: -0.02em;
+}
+.me-s3-subject-tag {
+  font-family: var(--font-display-cn); font-size: 28px; font-weight: 800; letter-spacing: 0.06em;
+  color: var(--text-mute); padding: 10px 20px; border-radius: 999px; border: 1px solid var(--rule);
+  background: var(--surface-2);
+}
+.me-s3-rulings { display: flex; flex-direction: column; gap: 30px; width: 100%; max-width: 1580px; }
+.me-s3-ruling-in { opacity: 0; animation: meRulingIn 0.7s var(--ease-overshoot) both; }
+@keyframes meRulingIn { 0% { opacity: 0; transform: translateX(-46px); } 100% { opacity: 1; transform: none; } }
+.me-s3-ruling {
+  display: flex; align-items: center; gap: 34px;
+  padding: 38px 56px; border-radius: 20px;
+  background: var(--surface-2); border: 1px solid var(--rule); border-left: 8px solid var(--neg);
+}
+.me-s3-ruling-ic {
+  width: 60px; height: 60px; color: var(--neg); flex-shrink: 0;
+  display: grid; place-items: center; background: var(--neg-soft); border-radius: 14px; padding: 13px; box-sizing: border-box;
+}
+.me-s3-ruling-t { font-size: 56px; font-weight: 800; color: var(--text); }
+.me-s3-ruling-t em { font-style: normal; color: var(--neg); }
+
+/* ════════════ s4 · 能力边界（红线 + 危险等级表）════════════ */
+.me-s4 { align-items: flex-start; justify-content: center; gap: 30px; padding: 84px 200px 56px 120px; }
+.me-s4-aligned {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 22px;
+  font-size: 48px; font-weight: 900; color: var(--text);
+}
+.me-s4-org { color: var(--accent); }
+.me-s4-amp { color: var(--text-faint); font-weight: 700; }
+.me-s4-same {
+  margin-left: 8px; padding: 10px 24px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-size: 30px; font-weight: 900;
+  box-shadow: 0 0 36px var(--accent-glow);
+}
+
+.me-s4-line { position: relative; width: 100%; max-width: 1600px; display: flex; flex-direction: column; gap: 22px; }
+.me-s4-can, .me-s4-cant { display: flex; flex-wrap: wrap; justify-content: center; gap: 26px; }
+.me-s4-item {
+  display: inline-flex; align-items: center; gap: 16px;
+  padding: 22px 40px; border-radius: 16px; font-size: 38px; font-weight: 800;
+}
+.me-s4-item-ic { width: 44px; height: 44px; display: inline-block; flex-shrink: 0; }
+.me-s4-yes { background: var(--accent-soft); border: 1px solid rgba(201,255,58,0.4); color: var(--text); }
+.me-s4-yes .me-s4-item-ic { color: var(--accent); }
+.me-s4-no { background: var(--surface-3); border: 1px solid var(--rule); color: var(--text-mute); }
+.me-s4-no .me-s4-item-ic { color: var(--neg); }
+
+.me-s4-redline {
+  position: relative; height: 10px; margin: 12px 0; border-radius: 5px; transform: scaleX(0); transform-origin: center;
+  background: linear-gradient(90deg, transparent, var(--neg) 12%, var(--neg) 88%, transparent);
+  box-shadow: 0 0 28px var(--neg-glow);
+}
+.me-redline-in { animation: meRedlineIn 0.6s var(--ease-expo) both; }
+@keyframes meRedlineIn { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.me-s4-redline-tag {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  padding: 6px 18px; border-radius: 999px;
+  background: var(--neg); color: #fff; font-size: 18px; font-weight: 700; letter-spacing: 0.14em; white-space: nowrap;
+}
+
+/* 危险等级表 */
+.me-s4-levels { align-self: stretch; display: flex; flex-direction: column; align-items: center; gap: 18px; margin-top: 14px; }
+.me-s4-levels-cap { font-size: 26px; font-weight: 700; letter-spacing: 0.2em; color: var(--text-2); }
+.me-s4-levels-row { display: flex; gap: 22px; align-items: stretch; }
+.me-s4-lv {
+  position: relative; min-width: 248px; padding: 24px 40px; border-radius: 14px;
+  font-size: 40px; font-weight: 900; text-align: center; letter-spacing: 0.01em;
+}
+.me-s4-lv-lit { background: var(--surface-2); border: 1px solid var(--rule); color: var(--text-2); }
+.me-s4-lv-now {
+  border-color: var(--mix); color: var(--mix);
+  background: var(--mix-soft); box-shadow: 0 0 30px rgba(255,178,74,0.3);
+}
+.me-s4-lv-dark {
+  opacity: 0; animation: meFade 0.7s var(--ease-quart) both;
+  background: repeating-linear-gradient(45deg, var(--surface) 0 10px, var(--surface-2) 10px 20px);
+  border: 1px dashed var(--text-mute); color: var(--text-mute);
+}
+.me-s4-lv-off {
+  display: block; margin-top: 6px; font-family: var(--font-mono);
+  font-size: 20px; font-weight: 700; letter-spacing: 0.12em; color: var(--text-2);
+}
+.me-s4-levels-note {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 24px; border-radius: 999px;
+  background: var(--mix-soft); border: 1px solid rgba(255,178,74,0.4);
+  font-size: 26px; font-weight: 900; color: var(--mix); letter-spacing: 0.02em;
+}

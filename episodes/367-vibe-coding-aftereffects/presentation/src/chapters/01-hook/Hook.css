@@ -1,0 +1,597 @@
+/* ─────────────────────────────────────────────────────────────────────
+ * Chapter 01 · hook — 6 屏独立设计
+ * midnight-press 主题 · 暖色 espresso 暗底 + 火热橙 accent
+ * 每句话一屏,跨步即切;字号固定 px;动画用 transform + opacity
+ * 单一 CSS 类前缀 `.hk-` 物理隔离,不动 base.css / tokens.css
+ * ───────────────────────────────────────────────────────────────────── */
+
+.hk-scene {
+  position: absolute;
+  inset: 0;
+  padding: var(--stage-pad-y) var(--stage-pad-x);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  color: var(--text);
+  animation: hk-fade-in 700ms var(--ease-quart) both;
+}
+
+/* ─── 共用 chrome ─── */
+.hk-masthead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  width: 100%;
+}
+.hk-brand {
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--text);
+}
+.hk-issue {
+  margin-left: auto;
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.hk-rule {
+  margin: var(--space-4) 0 0;
+}
+.hk-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.hk-em {
+  color: var(--accent);
+}
+.hk-foot {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+  padding-top: var(--space-5);
+}
+.hk-divider {
+  margin: 0;
+  width: 120px;
+  height: 1px;
+  background: var(--rule);
+  border: 0;
+}
+
+/* hero 字号阶(章节内自由) */
+.hk-h1 {
+  font-size: 168px;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  max-width: 18ch;
+  color: var(--text);
+}
+.hk-h2 {
+  font-size: 128px;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+}
+.hk-h2-lg {
+  font-size: 144px;
+}
+.hk-h2-xl {
+  font-size: 200px;
+  line-height: 0.95;
+}
+.hk-h3-warning {
+  font-size: 96px;
+  line-height: 1.05;
+  margin: var(--space-4) 0 0;
+  color: var(--text);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 0 — 钩子
+ * ════════════════════════════════════════════════════════════════ */
+.hk-cover {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.hk-meta {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+.hk-meta-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.hk-meta-num {
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 500;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+.hk-meta-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.hk-meta-sep {
+  width: 1px;
+  background: var(--rule);
+  margin: 6px 0;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 1 — 客服 Agent + 替代目标
+ * ════════════════════════════════════════════════════════════════ */
+.hk-target {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.hk-target-time {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.hk-time-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.hk-time-axis {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.hk-time-node {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+.hk-time-node-start {
+  color: var(--text);
+}
+.hk-time-node-pending {
+  color: var(--text-faint);
+}
+.hk-time-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rule);
+  flex-shrink: 0;
+}
+.hk-time-dot-done {
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.hk-time-txt {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.hk-time-seg {
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+  margin: 0 var(--space-3);
+  position: relative;
+}
+.hk-time-seg-pending {
+  background: repeating-linear-gradient(
+    to right,
+    var(--text-faint) 0,
+    var(--text-faint) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  opacity: 0.6;
+}
+.hk-time-line {
+  position: absolute;
+  inset: 0;
+}
+.hk-time-line-pending {
+  /* 同 .hk-time-seg-pending */
+}
+
+.hk-target-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.hk-target-pills {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.hk-target-pre {
+  font-size: 28px;
+  color: var(--text-2);
+  letter-spacing: var(--track-snug);
+  text-transform: none;
+}
+.hk-target-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 22px;
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-pill);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface-2);
+  font-family: var(--font-body);
+  letter-spacing: var(--track-snug);
+}
+.hk-target-amp {
+  font-size: 36px;
+  color: var(--text-mute);
+  font-style: italic;
+  line-height: 1;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 2 — 团队构成
+ * ════════════════════════════════════════════════════════════════ */
+.hk-team {
+  align-self: center;
+  display: grid;
+  grid-template-columns: minmax(560px, 1fr) minmax(720px, 1.05fr);
+  gap: var(--space-9);
+  padding-top: var(--space-7);
+  align-items: center;
+}
+.hk-team-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.hk-team-roles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.hk-role {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 18px 24px;
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+}
+.hk-role-empty {
+  border-style: dashed;
+  border-color: var(--text-faint);
+  background: transparent;
+}
+.hk-role-empty .hk-role-tag {
+  color: var(--text-faint);
+  border-color: var(--text-faint);
+}
+.hk-role-num {
+  font-size: 14px;
+  color: var(--text-mute);
+  letter-spacing: var(--track-caps);
+  text-align: center;
+  border-right: var(--bw-1) solid var(--rule);
+  padding-right: var(--space-4);
+}
+.hk-role-lbl {
+  font-size: 13px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.hk-role-empty .hk-role-lbl {
+  color: var(--text-mute);
+}
+.hk-role-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-pill);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  background: transparent;
+  letter-spacing: var(--track-caps);
+}
+.hk-role-tag-name {
+  font-size: 22px;
+  font-family: var(--font-body);
+  letter-spacing: var(--track-snug);
+  padding: 8px 18px;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 3 — Codex 赶工
+ * ════════════════════════════════════════════════════════════════ */
+.hk-rush {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+}
+.hk-rush-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.hk-rush-sub {
+  margin: 0;
+  font-size: 56px;
+  line-height: 1.1;
+  color: var(--text-2);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.hk-rush-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: 24px 28px;
+  background: var(--surface-2);
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+}
+.hk-rush-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.hk-rush-stat-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+  min-width: 120px;
+}
+.hk-rush-stat-val {
+  font-size: 14px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+}
+.hk-rush-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.hk-rush-progress-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+  min-width: 120px;
+}
+.hk-rush-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  position: relative;
+}
+.hk-rush-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) 100%
+  );
+  animation: hk-progress-fill 3000ms var(--ease-quart) forwards;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 4 — v1 上线
+ * ════════════════════════════════════════════════════════════════ */
+.hk-ship {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: var(--space-9);
+  padding-top: var(--space-7);
+}
+.hk-ship-tick {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hk-tick-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(123, 200, 138, 0.16);
+  border: 2px solid rgb(123, 200, 138);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: hk-fade-in 700ms var(--ease-quart) both;
+}
+.hk-tick-mark {
+  font-size: 140px;
+  color: rgb(123, 200, 138);
+  line-height: 1;
+  text-shadow: 0 0 24px rgba(123, 200, 138, 0.4);
+  animation: hk-tick-pop 700ms var(--ease-overshoot) 200ms both;
+}
+.hk-tick-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(123, 200, 138, 0.18) 0%,
+    transparent 70%
+  );
+  animation: hk-tick-glow 2.4s var(--ease-soft) infinite;
+  pointer-events: none;
+}
+.hk-ship-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.hk-ship-sub {
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-2);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 5 — 问题开始爆
+ * ════════════════════════════════════════════════════════════════ */
+.hk-climax {
+  background: radial-gradient(
+    circle at 50% 55%,
+    rgba(255, 74, 43, 0.06) 0%,
+    transparent 55%
+  );
+}
+.hk-climax-body {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+}
+.hk-climax-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 8px 16px;
+  border: var(--bw-1) solid var(--accent);
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+}
+.hk-climax-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+  animation: hk-alert-pulse 1s var(--ease-soft) infinite;
+}
+.hk-climax-lbl {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.hk-climax-h {
+  font-size: 144px;
+  line-height: 1.02;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  text-align: center;
+  max-width: 12ch;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  keyframes(只用 transform / opacity)
+ * ════════════════════════════════════════════════════════════════ */
+@keyframes hk-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hk-progress-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 78%;
+  }
+}
+
+@keyframes hk-tick-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hk-tick-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes hk-alert-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 12px var(--accent-glow);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 24px var(--accent-glow);
+    transform: scale(1.25);
+  }
+}

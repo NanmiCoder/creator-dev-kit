@@ -1,0 +1,323 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * 章 6 · verdict —— 裁决 + 真实选型。creator-dark 主题延续。
+ * 颜色/字体走 token；字号/间距固定 px。主内容避开右上角 432×432 头像安全区。
+ * 动画：遮罩升起 / 模糊聚焦 / overshoot 弹入 / 划淡 / 划掉 / 印章旋入 / 金句落版砸光。
+ * 全部类名 / keyframes 用 vd- 前缀（避免跨章冲突）。
+ * ─────────────────────────────────────────────────────────────────────── */
+
+.vd-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-display-cn);
+}
+.vd-accent { color: var(--accent); }
+
+/* ── 眉标（左上，避开右上头像区）── */
+.vd-kicker {
+  position: absolute;
+  top: 60px;
+  left: 76px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  z-index: 4;
+}
+.vd-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+  animation: vdBlink 1.6s ease-in-out infinite;
+}
+.vd-dot-warn { background: var(--mix); box-shadow: 0 0 16px rgba(255,178,74,0.6); }
+@keyframes vdBlink { 0%,100%{opacity:1;} 50%{opacity:0.45;} }
+
+/* ── 共享动画原语 ── */
+.vd-down { opacity: 0; animation: vdDown 0.66s var(--ease-quart) both; }
+@keyframes vdDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+
+.vd-fade { opacity: 0; animation: vdFade 0.74s var(--ease-quart) both; }
+@keyframes vdFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.vd-pop { opacity: 0; animation: vdPop 0.6s var(--ease-overshoot) both; }
+@keyframes vdPop { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
+
+.vd-stamp { opacity: 0; animation: vdStamp 0.56s var(--ease-overshoot) both; }
+@keyframes vdStamp { 0% { opacity: 0; transform: scale(1.55) rotate(-9deg); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1) rotate(-3deg); } }
+
+.vd-rise-wrap { display: block; overflow: hidden; padding: 0.04em 0.06em 0.14em; }
+.vd-rise { display: inline-block; transform: translateY(112%); filter: blur(10px); animation: vdRise 0.92s var(--ease-expo) both; }
+@keyframes vdRise { 0% { transform: translateY(112%); filter: blur(10px); } 100% { transform: translateY(0); filter: blur(0); } }
+
+@keyframes vdScaleX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ════════════ s0 · 我的判断：真正的新闻 ≠ 它多强 ════════════ */
+.vd-s0 { align-items: flex-start; justify-content: center; padding: 0 96px 0 120px; }
+.vd-s0-pre { font-size: 46px; font-weight: 700; color: var(--text-2); margin-bottom: 22px; }
+.vd-s0-big {
+  margin: 0; display: flex; align-items: center; gap: 36px;
+  font-size: 128px; font-weight: 900; line-height: 1.02; letter-spacing: -0.02em; color: var(--text);
+}
+.vd-s0-neq {
+  font-family: var(--hero-num-font); font-size: 132px; line-height: 1;
+  color: var(--neg); text-shadow: 0 0 50px var(--neg-glow);
+}
+.vd-s0-strong { display: flex; flex-direction: column; gap: 10px; }
+.vd-s0-faint { position: relative; display: inline-block; }
+/* "有多强" 划淡：覆盖一道暗化条 + 文本本身降透 */
+.vd-s0-faint .vd-rise { color: var(--text-mute); }
+.vd-s0-dim {
+  position: absolute; left: -6px; right: -6px; top: 54%; height: 10px; transform-origin: left center; transform: scaleX(0);
+  background: var(--text-faint); border-radius: 5px;
+  animation: vdScaleX 0.5s var(--ease-expo) both;
+}
+.vd-s0-turn {
+  display: inline-flex; align-items: center; gap: 20px; margin-top: 40px;
+  font-size: 52px; font-weight: 800; color: var(--text);
+}
+.vd-s0-arrow { color: var(--accent); font-size: 56px; line-height: 1; }
+
+/* ════════════ s1 · 这一周三件事 → 配给制 ════════════ */
+/* 横向铺满：左偏非对称 padding（左 120 / 右 470），三卡撑开占满左→右。
+ * 卡顶落在 y≈349（<432 头像带内），故右缘收到 1450（padding-right 470）避开右上 432×432 头像角。 */
+.vd-s1 { justify-content: center; align-items: stretch; padding: 0 470px 0 120px; }
+.vd-s1-rail {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px;
+  width: 100%; margin-top: 26px;
+  align-self: center;
+}
+.vd-s1-in { opacity: 0; animation: vdS1In 0.78s var(--ease-overshoot) both; }
+@keyframes vdS1In { 0% { opacity: 0; transform: translateY(42px) scale(0.9); } 100% { opacity: 1; transform: none; } }
+.vd-s1-card {
+  position: relative; display: flex; flex-direction: column; align-items: flex-start;
+  padding: 48px 48px 44px; border-radius: 24px; min-height: 380px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+}
+.vd-s1-no {
+  position: absolute; top: 30px; right: 36px;
+  font-size: 30px; font-weight: 700; color: var(--text-faint); letter-spacing: 0.04em;
+}
+.vd-s1-ic { width: 64px; height: 64px; display: block; margin-bottom: 26px; }
+.vd-ic-mix { color: var(--mix); }
+.vd-ic-neg { color: var(--neg); }
+.vd-s1-name { font-size: 44px; font-weight: 900; color: var(--text); letter-spacing: -0.01em; line-height: 1.05; }
+.vd-s1-act {
+  margin-top: 16px; display: inline-flex; align-items: center;
+  padding: 9px 22px; border-radius: 12px; font-size: 30px; font-weight: 800;
+}
+.vd-s1-act-mix { color: var(--mix); background: var(--mix-soft); border: 1px solid rgba(255,178,74,0.4); }
+.vd-s1-act-neg { color: var(--neg); background: var(--neg-soft); border: 1px solid rgba(255,91,84,0.4); }
+.vd-s1-to {
+  margin-top: auto; padding-top: 28px; display: inline-flex; align-items: center; gap: 16px;
+}
+.vd-s1-to-num {
+  font-family: var(--hero-num-font); font-weight: 900; font-size: 76px; line-height: 0.9;
+  color: var(--accent); letter-spacing: -0.02em; text-shadow: 0 0 36px rgba(201,255,58,0.35);
+}
+.vd-s1-plus { font-size: 48px; vertical-align: super; }
+.vd-s1-to-u { font-size: 30px; font-weight: 700; color: var(--text-2); line-height: 1.2; }
+.vd-s1-to-u em { font-style: normal; color: var(--text); }
+.vd-s1-to-neg { color: var(--neg); }
+.vd-s1-to-mix { color: var(--mix); font-size: 40px; font-weight: 900; letter-spacing: 0.04em; }
+.vd-s1-no-ic { width: 40px; height: 40px; display: inline-block; color: var(--neg); }
+.vd-s1-verdict {
+  position: absolute; left: 50%; bottom: 84px; transform: translateX(-50%);
+  padding: 15px 38px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-size: 32px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 40px var(--accent-glow); white-space: nowrap;
+}
+
+/* ════════════ s2 · 金句：能力不再稀缺，权限才稀缺（全片最重金句·铺满放大）════════════ */
+.vd-s2 { justify-content: center; gap: 64px; padding: 0 80px; }
+.vd-s2-setup { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.vd-s2-q { font-size: 54px; font-weight: 800; color: var(--text-2); }
+.vd-s2-strike { position: relative; font-size: 54px; font-weight: 800; color: var(--text-mute); }
+.vd-s2-cross {
+  position: absolute; left: -8px; right: -8px; top: 52%; height: 8px; transform-origin: left center; transform: scaleX(0);
+  background: var(--neg); border-radius: 4px; box-shadow: 0 0 18px var(--neg-glow);
+  animation: vdScaleX 0.42s var(--ease-expo) both;
+}
+.vd-s2-q2 { font-size: 56px; font-weight: 800; color: var(--text); }
+.vd-s2-q2 em { display: block; margin-top: 10px; font-style: normal; font-size: 34px; font-weight: 600; color: var(--text-mute); }
+
+.vd-s2-thesis { margin: 0; display: flex; flex-direction: column; align-items: stretch; gap: 18px; text-align: center; width: 1500px; max-width: calc(100% - 0px); }
+/* 关键词 ↔ 尾词推到两端，金句横向铺满整条带，字号拉到最大 */
+.vd-s2-line {
+  display: flex; align-items: baseline; flex-wrap: nowrap; justify-content: space-between;
+  font-size: 168px; font-weight: 900; line-height: 1.0; letter-spacing: -0.02em;
+}
+.vd-s2-tail { display: inline-flex; }
+.vd-s2-mute { color: var(--text); }
+.vd-s2-hot { position: relative; color: var(--accent); text-shadow: 0 0 70px rgba(201,255,58,0.5); }
+.vd-s2-hot .vd-rise-wrap:first-child { color: var(--text); -webkit-text-fill-color: var(--text); }
+/* 金句第二行落版砸光：底部一道电光绿线扫满 */
+.vd-s2-slam {
+  position: absolute; left: 0; bottom: -18px; width: 100%; height: 12px; transform-origin: center; transform: scaleX(0);
+  background: var(--accent); border-radius: 6px; box-shadow: 0 0 40px var(--accent-glow);
+  animation: vdSlamLine 0.6s var(--ease-overshoot) both; animation-delay: inherit;
+}
+@keyframes vdSlamLine { 0% { transform: scaleX(0); opacity: 0; } 60% { opacity: 1; } 100% { transform: scaleX(1); opacity: 1; } }
+
+/* ════════════ s3 · 强模型因特殊原因不给用（横向铺满 + 纵向撑满）════════════ */
+/* 左偏非对称 padding：右缘收到 1450（padding-right 470）→ 右侧红框整列退出右上 432×432
+ * 头像 x 区，于是三段可纵向居中拉满高度而不压头像圆。stage 给定高度撑满画面。 */
+.vd-s3 { justify-content: center; align-items: stretch; padding: 0 470px 0 120px; }
+.vd-s3-stage {
+  display: flex; align-items: center; justify-content: space-between; gap: 40px;
+  width: 100%; height: 660px; align-self: center;
+}
+.vd-s3-src {
+  flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px;
+  padding: 72px 52px; border-radius: 26px; width: 466px; align-self: stretch;
+  background: var(--surface-2); border: 1px solid rgba(201,255,58,0.4);
+  box-shadow: var(--card-shadow), 0 0 50px rgba(201,255,58,0.12);
+}
+.vd-s3-src-ic { width: 168px; height: 168px; display: block; color: var(--accent); }
+.vd-s3-src-t { font-size: 54px; font-weight: 800; color: var(--text); text-align: center; line-height: 1.22; }
+.vd-s3-gate { flex: none; display: flex; flex-direction: column; align-items: center; gap: 36px; }
+.vd-s3-reason {
+  font-family: var(--font-mono); font-size: 32px; letter-spacing: 0.04em; color: var(--mix);
+  white-space: nowrap;
+}
+.vd-s3-gate-ic { width: 188px; height: 188px; display: block; color: var(--neg); filter: drop-shadow(0 0 28px var(--neg-glow)); }
+.vd-s3-blocked { flex: none; display: flex; flex-direction: column; justify-content: center; gap: 44px; align-self: stretch; }
+.vd-s3-no {
+  display: inline-flex; align-items: center; gap: 22px;
+  padding: 36px 44px; border-radius: 20px; font-size: 54px; font-weight: 800; color: var(--text-2);
+  background: var(--neg-soft); border: 1px solid rgba(255,91,84,0.4);
+}
+.vd-s3-no b { color: var(--neg); font-weight: 900; }
+.vd-s3-x { font-family: var(--font-mono); font-weight: 900; font-size: 48px; color: var(--neg); }
+
+/* ════════════ s4 · 选型·国外（横向铺满）════════════ */
+/* 主选型卡顶部落在 y≈352（<432 头像带内），右缘收到 1450（padding-right 470）→ 卡片右上角
+ * 彻底退出右上 432×432 头像角，不再贴/压头像虚线圆。 */
+.vd-s4 { justify-content: center; align-items: stretch; padding: 0 470px 0 120px; }
+/* 标题居中于选型卡上方：横跨卡片内容盒 [120,1450] 并 text-align:center（卡心 x≈785）。
+ * 用 left/right 定位而非 translateX —— vd-fade 动画结束会把 transform 归零，故不靠 transform 居中。 */
+.vd-s4-head {
+  position: absolute; top: 150px; left: 120px; right: 470px; text-align: center;
+  font-size: 50px; font-weight: 800; color: var(--text); white-space: nowrap;
+}
+.vd-pick-in { opacity: 0; animation: vdPickIn 0.82s var(--ease-overshoot) both; }
+@keyframes vdPickIn { 0% { opacity: 0; transform: translateY(46px) scale(0.9); } 100% { opacity: 1; transform: none; } }
+.vd-pick-card {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  width: 100%; padding: 60px 80px 54px; border-radius: 28px; margin-top: 40px;
+  align-self: center;
+  background: linear-gradient(180deg, rgba(201,255,58,0.08), var(--surface-2) 52%);
+  border: 1px solid rgba(201,255,58,0.5);
+  box-shadow: var(--card-shadow), 0 0 60px rgba(201,255,58,0.14);
+}
+.vd-pick-top { display: flex; align-items: center; gap: 32px; }
+.vd-pick-region {
+  font-size: 62px; font-weight: 900; color: var(--accent); letter-spacing: 0.04em;
+  text-shadow: 0 0 40px rgba(201,255,58,0.35);
+}
+.vd-pick-cond {
+  font-size: 33px; font-weight: 700; color: var(--text-2);
+  padding: 12px 28px; border-radius: 12px; background: var(--surface-3); border: 1px solid var(--rule);
+}
+.vd-pick-arrow { font-size: 54px; color: var(--text-faint); line-height: 1; margin: 20px 0 24px; }
+.vd-pick-combo { display: flex; align-items: center; gap: 40px; }
+.vd-pick-model {
+  font-family: var(--font-display-en); font-weight: 900; font-size: 100px; line-height: 1;
+  color: var(--text); letter-spacing: -0.01em;
+}
+.vd-pick-plus { font-size: 62px; font-weight: 700; color: var(--accent); }
+.vd-pick-tool {
+  display: inline-flex; align-items: center; gap: 20px;
+  padding: 22px 36px; border-radius: 18px;
+  background: var(--accent-soft); border: 1px solid rgba(201,255,58,0.45);
+}
+.vd-pick-tool-ic { width: 62px; height: 62px; display: inline-block; color: var(--accent); }
+.vd-pick-tool-t {
+  font-family: var(--font-display-en); font-weight: 900; font-size: 74px; line-height: 1; color: var(--accent);
+}
+.vd-pick-tool-t em {
+  display: block; font-family: var(--font-display-cn); font-style: normal; font-size: 24px; font-weight: 600;
+  color: var(--text-mute); letter-spacing: 0.06em; margin-top: 4px;
+}
+.vd-pick-badge {
+  margin-top: 38px; display: inline-flex; align-items: center; gap: 14px;
+  padding: 15px 38px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-size: 34px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+.vd-pick-badge-ic { width: 32px; height: 32px; display: inline-block; }
+
+/* ════════════ s5 · 选型·国内 + GPT-5.6 待开放（左偏铺满）════════════ */
+.vd-s5 { justify-content: center; align-items: stretch; padding: 0 110px 0 120px; }
+.vd-s5-grid {
+  display: grid; grid-template-columns: 1.92fr 1fr; gap: 44px;
+  width: 100%; align-items: stretch; margin-top: 20px; align-self: center;
+}
+/* 国内推荐卡（主） */
+.vd-s5-pick {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  padding: 50px 56px 44px; border-radius: 28px;
+  background: linear-gradient(180deg, rgba(201,255,58,0.08), var(--surface-2) 52%);
+  border: 1px solid rgba(201,255,58,0.5);
+  box-shadow: var(--card-shadow), 0 0 60px rgba(201,255,58,0.14);
+}
+.vd-s5-region {
+  font-size: 52px; font-weight: 900; color: var(--accent); letter-spacing: 0.04em;
+  text-shadow: 0 0 40px rgba(201,255,58,0.35); margin-bottom: 30px;
+}
+.vd-s5-models { display: flex; align-items: center; gap: 24px; }
+.vd-s5-model {
+  font-family: var(--font-display-en); font-weight: 900; font-size: 64px; line-height: 1;
+  color: var(--text); letter-spacing: -0.01em; white-space: nowrap;
+}
+.vd-s5-or { font-size: 32px; font-weight: 700; color: var(--text-mute); }
+.vd-s5-with { display: flex; align-items: center; gap: 22px; margin-top: 30px; }
+.vd-s5-plus { font-size: 48px; font-weight: 700; color: var(--accent); }
+.vd-s5-cc {
+  display: inline-flex; align-items: center; gap: 16px;
+  padding: 16px 30px; border-radius: 18px;
+  background: var(--accent-soft); border: 1px solid rgba(201,255,58,0.45);
+  font-family: var(--font-display-en); font-weight: 900; font-size: 54px; line-height: 1; color: var(--accent);
+}
+.vd-s5-cc-ic { width: 48px; height: 48px; display: inline-block; }
+.vd-s5-cap {
+  margin-top: 36px; display: inline-flex; align-items: center; gap: 14px;
+  padding: 14px 36px; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a; font-size: 32px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+.vd-s5-cap-ic { width: 30px; height: 30px; display: inline-block; }
+/* GPT-5.6 待开放占位（次） */
+.vd-s5-soon-in { opacity: 0; animation: vdSoonIn 0.78s var(--ease-overshoot) both; }
+@keyframes vdSoonIn { 0% { opacity: 0; transform: translateY(40px) scale(0.92); } 100% { opacity: 1; transform: none; } }
+.vd-s5-soon {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 48px 44px; border-radius: 28px;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,178,74,0.05) 0 14px, transparent 14px 28px),
+    var(--surface-2);
+  border: 1px dashed rgba(255,178,74,0.45); box-shadow: var(--card-shadow);
+}
+.vd-s5-soon-ic { width: 76px; height: 76px; display: block; color: var(--mix); margin-bottom: 22px; }
+.vd-s5-soon-name {
+  font-family: var(--font-display-en); font-weight: 900; font-size: 78px; line-height: 1;
+  color: var(--text); letter-spacing: -0.01em;
+}
+.vd-s5-soon-sub { margin-top: 12px; font-size: 19px; letter-spacing: 0.18em; color: var(--text-faint); }
+.vd-s5-soon-when {
+  margin-top: 28px; padding: 11px 26px; border-radius: 12px;
+  font-size: 28px; font-weight: 800; color: var(--mix);
+  background: var(--mix-soft); border: 1px solid rgba(255,178,74,0.4); white-space: nowrap;
+}
+.vd-s5-soon-me {
+  margin-top: 22px; padding: 13px 30px; border-radius: 999px;
+  background: var(--mix); color: #0a0c0a; font-size: 28px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 36px rgba(255,178,74,0.5); white-space: nowrap;
+}

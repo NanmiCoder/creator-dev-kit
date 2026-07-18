@@ -1,0 +1,49 @@
+/* 出镜视频的圆形头像安全区 —— 开发辅助。
+ * 默认不渲染，需要检查边界时用 ?safe=1 打开（见 AvatarSafeZone.tsx）。
+ * 只保留右上角小区域；不要因此让整条右侧留空。 */
+.avatar-safe {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  z-index: 30;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+}
+.avatar-safe--top-right { top: 0; right: 0; }
+.avatar-safe--bottom-left { bottom: 0; left: 0; }
+.avatar-safe--top-left { top: 0; left: 0; }
+.avatar-safe--bottom-right { bottom: 0; right: 0; }
+
+.avatar-safe-ring {
+  width: 236px;
+  height: 236px;
+  border-radius: 50%;
+  border: 2px dashed color-mix(in srgb, var(--accent) 40%, transparent);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 7%, transparent),
+    transparent 68%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.avatar-safe-label {
+  font-family: var(--font-display-cn);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--accent) 72%, var(--text));
+}
+
+.avatar-safe-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}

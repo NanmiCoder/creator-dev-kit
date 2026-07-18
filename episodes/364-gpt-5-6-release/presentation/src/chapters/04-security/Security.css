@@ -1,0 +1,315 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * 章 4 · security —— 网安"史上最强"·抠字眼。
+ *   基调=祛魅/泼冷水：官方喊"史上最强网安模型"，但在 ExploitBench 上只是
+ *   用 ~1/3 算力【追平】Mythos 预览版——赢在省、不在更强；个别维度 Mythos 还更高。
+ *   配色用 绿(accent)+橙(mix)+灰(neu)，少用全红——这是"打折扣"不是"翻车"。
+ *   颜色/字体走 token；字号/间距固定 px。主内容避开右上角 432×432 头像安全区。
+ *   动画：遮罩升起 / overshoot 砸入 / 印章旋入 / 条形增长 / 放大镜扫视 / 判词逐条落。
+ * ─────────────────────────────────────────────────────────────────────── */
+
+.se-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-display-cn);
+}
+.se-accent { color: var(--accent); }
+.se-mix { color: var(--mix); }
+.se-neu { color: var(--neu); }
+.se-mute { color: var(--text-mute); }
+
+/* ── 眉标（左上，避开右上头像区）── */
+.se-kicker {
+  position: absolute;
+  top: 60px;
+  left: 76px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  z-index: 4;
+}
+.se-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+  animation: seBlink 1.6s ease-in-out infinite;
+}
+.se-dot-mix { background: var(--mix); box-shadow: 0 0 16px var(--mix-soft); }
+@keyframes seBlink { 0%,100%{opacity:1;} 50%{opacity:0.45;} }
+
+/* ── 共享动画原语（rise / slam / pop / stamp / grow / fade / down）── */
+.se-down { opacity: 0; animation: seDown 0.66s var(--ease-quart) both; }
+@keyframes seDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+
+.se-fade { opacity: 0; animation: seFade 0.74s var(--ease-quart) both; }
+@keyframes seFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.se-rise-wrap { display: block; overflow: hidden; padding: 0.04em 0.04em 0.12em; }
+.se-rise { display: inline-block; transform: translateY(112%); filter: blur(10px); animation: seRise 0.92s var(--ease-expo) both; }
+@keyframes seRise { 0% { transform: translateY(112%); filter: blur(10px); } 100% { transform: translateY(0); filter: blur(0); } }
+
+.se-slam { opacity: 0; animation: seSlam 0.72s var(--ease-overshoot) both; }
+@keyframes seSlam { 0% { opacity: 0; transform: scale(1.7); filter: blur(12px); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+
+.se-pop { opacity: 0; animation: sePop 0.6s var(--ease-overshoot) both; }
+@keyframes sePop { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
+
+.se-stamp { opacity: 0; animation: seStamp 0.56s var(--ease-overshoot) both; }
+@keyframes seStamp { 0% { opacity: 0; transform: scale(1.55) rotate(-9deg); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1) rotate(-3deg); } }
+
+.se-grow { width: 0; animation: seGrow 1.15s var(--ease-expo) both; }
+@keyframes seGrow { from { width: 0; } to { width: var(--se-w); } }
+
+/* 柱状高度增长（算力对比柱用）*/
+.se-grow-y { height: 0; animation: seGrowY 1.05s var(--ease-expo) both; }
+@keyframes seGrowY { from { height: 0; } to { height: var(--se-h); } }
+
+/* ════════════════════════════════════════════════════════════════════════
+ * s0 · Sol 主打网安 + 官方"史上最强网安模型" + 但要抠字眼
+ * ════════════════════════════════════════════════════════════════════════ */
+/* 整体左偏，内容横向铺到 ~1450（右上头像区留空）：盾牌/大标/底线/落句撑满左→中右 */
+.se-s0 { align-items: flex-start; padding: 0 110px 0 120px; }
+
+/* 盾牌 + 大标"史上最强网安模型"（带引号 + 放大镜暗示抠字眼）*/
+.se-s0-top {
+  display: inline-flex; align-items: center; gap: 26px; margin-bottom: 30px;
+}
+.se-s0-shield {
+  width: 104px; height: 104px; display: inline-block; color: var(--accent);
+  filter: drop-shadow(0 0 26px var(--accent-glow));
+}
+.se-s0-eyebrow { font-size: 50px; font-weight: 800; color: var(--text); }
+.se-s0-eyebrow em { font-style: normal; color: var(--accent); }
+
+.se-s0-quote {
+  position: relative; margin: 0; display: flex; align-items: flex-start;
+  font-size: 162px; font-weight: 900; line-height: 1.0; letter-spacing: -0.02em;
+  color: var(--text);
+}
+.se-s0-qmark {
+  font-family: var(--hero-num-font); font-size: 162px; line-height: 0.9;
+  color: var(--accent); opacity: 0.55; margin-right: 4px;
+}
+.se-s0-qmark-r { margin-left: 4px; margin-right: 0; }
+.se-s0-strongest { color: var(--accent); text-shadow: 0 0 60px rgba(201,255,58,0.4); }
+
+/* 放大镜：暗示"要抠字眼"，挂在大标右下 */
+.se-s0-lens {
+  position: absolute; right: -118px; bottom: -34px; width: 130px; height: 130px;
+  color: var(--mix); filter: drop-shadow(0 0 24px var(--mix-soft));
+}
+.se-s0-lens-star {
+  position: absolute; right: 8px; top: 0; font-family: var(--hero-num-font);
+  font-size: 64px; line-height: 1; color: var(--mix);
+}
+
+.se-s0-line {
+  display: block; height: 10px; width: 0; margin-top: 48px; border-radius: 5px;
+  background: var(--accent); box-shadow: 0 0 26px var(--accent-glow);
+  animation: seLine 0.6s var(--ease-expo) both;
+}
+@keyframes seLine { from { width: 0; } to { width: 1180px; } }
+
+.se-s0-foot {
+  margin-top: 40px; display: inline-flex; align-items: center; gap: 20px;
+  font-size: 58px; font-weight: 800; color: var(--mix);
+}
+.se-s0-foot-ic { width: 60px; height: 60px; display: inline-block; }
+.se-s0-foot b { color: var(--mix); }
+
+/* ════════════════════════════════════════════════════════════════════════
+ * s1 · ExploitBench：1/3 算力追平 Mythos 预览版（算力对比柱）
+ * ════════════════════════════════════════════════════════════════════════ */
+/* 整体左偏（右侧留 ~380px 给右上头像区），内容横向铺开占满左到中部 */
+.se-s1 { justify-content: center; padding: 0 380px 0 120px; }
+.se-s1-head {
+  font-size: 42px; font-weight: 800; color: var(--text); margin-bottom: 10px; text-align: center;
+}
+.se-s1-bench {
+  display: inline-flex; align-items: center; gap: 14px; margin-bottom: 50px;
+  padding: 10px 26px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--rule);
+  font-family: var(--font-mono); font-size: 30px; font-weight: 800;
+  letter-spacing: 0.02em; color: var(--accent);
+}
+.se-s1-bench-ic { width: 30px; height: 30px; display: inline-block; }
+.se-s1-bench em { font-style: normal; font-size: 18px; color: var(--text-faint); font-family: var(--font-display-cn); letter-spacing: 0; }
+
+/* 两根算力柱，达到同一条"达成线" */
+.se-s1-stage {
+  position: relative; display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 0; height: 440px; width: 1240px;
+}
+/* 达成线：横贯顶部，标"同等效果·追平" */
+.se-s1-goal {
+  position: absolute; left: 40px; right: 40px; top: 18px; height: 0;
+  border-top: 3px dashed var(--accent); transform: scaleX(0); transform-origin: center;
+  animation: seScaleX 0.7s var(--ease-expo) both;
+}
+@keyframes seScaleX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.se-s1-goal-tag {
+  position: absolute; right: 0; top: -42px; padding: 8px 18px; border-radius: 10px;
+  background: var(--accent); color: #0a0c0a; font-size: 24px; font-weight: 900;
+  box-shadow: 0 0 30px var(--accent-glow);
+}
+
+.se-s1-col { display: flex; flex-direction: column; align-items: center; }
+.se-s1-bar {
+  width: 320px; border-radius: 22px 22px 0 0; position: relative;
+  display: flex; align-items: flex-start; justify-content: center;
+}
+/* Mythos 满格算力（中性灰）*/
+.se-s1-bar-mythos {
+  background: linear-gradient(180deg, var(--surface-3), var(--neu-soft));
+  border: 2px solid var(--neu); border-bottom: none;
+}
+/* Sol 1/3 算力（绿，更省）—— 顶部空出的部分用幽灵描边表示"省下的算力" */
+.se-s1-bar-sol {
+  background: linear-gradient(180deg, #9fdc1f, var(--accent));
+  border-radius: 22px 22px 0 0;
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+.se-s1-bar-cap {
+  margin-top: 18px; font-family: var(--hero-num-font); font-weight: 900;
+  font-size: 60px; line-height: 1; letter-spacing: -0.02em;
+}
+.se-s1-bar-mythos .se-s1-bar-cap { color: var(--neu); }
+.se-s1-bar-sol-num { color: #0a0c0a; }
+.se-s1-bar-unit { font-size: 24px; font-weight: 800; }
+
+.se-s1-col-name { margin-top: 22px; font-size: 34px; font-weight: 800; color: var(--text-2); text-align: center; }
+.se-s1-col-name em { display: block; font-style: normal; font-size: 19px; color: var(--text-faint); font-family: var(--font-mono); letter-spacing: 0.04em; margin-top: 4px; }
+.se-s1-col-sol .se-s1-col-name { color: var(--text); }
+.se-s1-col-sol .se-s1-col-name strong { color: var(--accent); }
+
+/* "省下的算力"幽灵区：Sol 柱顶到达成线之间的虚线框 */
+.se-s1-saved {
+  position: absolute; left: 0; right: 0; bottom: 100%;
+  border: 2px dashed rgba(201,255,58,0.5); border-bottom: none; border-radius: 22px 22px 0 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.se-s1-saved-t {
+  font-size: 22px; font-weight: 800; color: var(--accent); text-align: center; line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+/* 中间"≈ 追平"判词 */
+.se-s1-eq {
+  position: absolute; left: 50%; top: 200px; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.se-s1-eq-sign { font-family: var(--hero-num-font); font-size: 88px; line-height: 1; color: var(--accent); }
+.se-s1-eq-t { font-size: 26px; font-weight: 900; color: var(--accent); letter-spacing: 0.04em; }
+
+/* ════════════════════════════════════════════════════════════════════════
+ * s2 · 抠字眼：追平 ✓ / 更省 ✓ / 碾压 ✗（三连判词 + 落句）
+ * ════════════════════════════════════════════════════════════════════════ */
+/* 整体左偏，三连判词推到两端铺满（右上头像区留空）*/
+.se-s2 { justify-content: center; align-items: flex-start; padding: 0 350px 0 120px; }
+.se-s2-head {
+  font-size: 40px; font-weight: 800; color: var(--text-mute); margin-bottom: 48px;
+  letter-spacing: 0.02em;
+}
+.se-s2-head em { font-style: normal; color: var(--text); }
+
+.se-verdicts { display: flex; justify-content: space-between; gap: 40px; width: 1330px; }
+.se-verdict {
+  flex: 1; padding: 54px 40px; border-radius: 22px; position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 24px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+}
+.se-verdict-yes { border-color: rgba(201,255,58,0.4); box-shadow: var(--card-shadow), 0 0 44px rgba(201,255,58,0.1); }
+.se-verdict-no { border-color: rgba(139,148,162,0.4); background: var(--surface); opacity: 0.92; }
+
+.se-verdict-mark {
+  width: 96px; height: 96px; border-radius: 50%; display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.se-verdict-yes .se-verdict-mark { background: var(--accent-soft); color: var(--accent); }
+.se-verdict-no .se-verdict-mark { background: var(--neu-soft); color: var(--neu); }
+.se-verdict-mark-ic { width: 52px; height: 52px; display: inline-block; }
+
+.se-verdict-word { font-size: 60px; font-weight: 900; line-height: 1; letter-spacing: -0.01em; }
+.se-verdict-yes .se-verdict-word { color: var(--text); }
+.se-verdict-no .se-verdict-word { color: var(--neu); }
+.se-verdict-sub { font-size: 24px; font-weight: 700; color: var(--text-mute); font-family: var(--font-mono); letter-spacing: 0.06em; }
+.se-verdict-no .se-verdict-sub { color: var(--text-faint); }
+
+/* 落句：赢在省，不是赢在更强 */
+.se-s2-foot {
+  margin-top: 56px; font-size: 58px; font-weight: 800; color: var(--text);
+}
+.se-s2-foot .se-win { color: var(--accent); }
+.se-s2-foot .se-not { color: var(--neu); text-decoration: line-through; text-decoration-color: var(--neu); text-decoration-thickness: 4px; }
+
+/* ════════════════════════════════════════════════════════════════════════
+ * s3 · 反证 + 收：Twitter 贴图"个别维度 Mythos 还更高" → "史上最强"听听就行
+ * ════════════════════════════════════════════════════════════════════════ */
+/* 整体左偏，左右两栏铺满（右上头像区留空）：左=贴图反证卡，右=结论判词 */
+.se-s3 { justify-content: center; align-items: flex-start; gap: 0; padding: 0 350px 0 120px; }
+.se-s3-grid {
+  display: grid; grid-template-columns: 860px 1fr; gap: 70px; align-items: center; width: 1330px;
+}
+.se-s3-col-card { display: flex; flex-direction: column; }
+.se-s3-col-out { display: flex; flex-direction: column; align-items: flex-start; }
+
+/* Twitter 贴图感小卡 */
+.se-s3-card {
+  width: 860px; padding: 38px 44px; border-radius: 20px; transform: rotate(-2deg);
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+}
+.se-s3-card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.se-s3-avatar {
+  width: 52px; height: 52px; border-radius: 50%; flex: none;
+  background: linear-gradient(135deg, var(--surface-3), var(--neu-soft));
+  border: 1px solid var(--rule); display: inline-flex; align-items: center; justify-content: center;
+  color: var(--text-mute);
+}
+.se-s3-avatar-ic { width: 30px; height: 30px; display: inline-block; }
+.se-s3-handle { display: flex; flex-direction: column; line-height: 1.2; }
+.se-s3-handle b { font-size: 26px; font-weight: 800; color: var(--text); }
+.se-s3-handle span { font-size: 20px; color: var(--text-faint); font-family: var(--font-mono); }
+.se-s3-bird { margin-left: auto; width: 34px; height: 34px; color: var(--neu); }
+
+.se-s3-card-body { font-size: 32px; font-weight: 700; color: var(--text-2); line-height: 1.45; }
+.se-s3-card-body .se-hi { color: var(--mix); font-weight: 900; }
+
+/* 小卡里的迷你维度条：个别一项 Mythos 反超 */
+.se-s3-mini { margin-top: 24px; display: flex; flex-direction: column; gap: 14px; }
+.se-s3-mini-row { display: grid; grid-template-columns: 130px 1fr auto; align-items: center; gap: 16px; }
+.se-s3-mini-name { font-size: 20px; font-weight: 700; color: var(--text-mute); font-family: var(--font-mono); text-align: right; }
+.se-s3-mini-track { position: relative; height: 18px; background: var(--surface-3); border-radius: 9px; overflow: hidden; }
+.se-s3-mini-fill { height: 100%; border-radius: 9px; }
+.se-s3-mini-fill-mythos { background: var(--mix); box-shadow: 0 0 18px var(--mix-soft); }
+.se-s3-mini-fill-sol { background: var(--neu); }
+.se-s3-mini-val { font-size: 20px; font-weight: 800; font-family: var(--font-mono); min-width: 56px; }
+.se-s3-mini-val-hi { color: var(--mix); }
+.se-s3-mini-val-lo { color: var(--text-faint); }
+
+/* 标签：个别 ≠ 全面（右栏顶，左对齐）*/
+.se-s3-badge {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 16px;
+  padding: 14px 30px; border-radius: 12px;
+  background: var(--mix-soft); border: 1px solid rgba(255,178,74,0.4);
+  font-size: 36px; font-weight: 800; color: var(--mix);
+}
+.se-s3-badge b { font-family: var(--hero-num-font); font-weight: 900; }
+
+/* 落版：史上最强四个字，听听就行（右栏，左对齐）*/
+.se-s3-kicker-out {
+  margin-top: 44px; font-size: 46px; font-weight: 800; color: var(--text-2); text-align: left;
+}
+.se-s3-kicker-out .se-q { color: var(--neu); }
+.se-s3-final {
+  margin-top: 22px; align-self: flex-start; padding: 18px 48px; border-radius: 999px;
+  background: var(--neu); color: #0a0c0a; font-size: 58px; font-weight: 900; letter-spacing: 0.04em;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+}

@@ -1,0 +1,766 @@
+/* ─────────────────────────────────────────────────────────────────────
+ * Chapter 06 · take — 8 屏独立设计
+ * midnight-press 主题 · 暖色 espresso 暗底 + 火热橙 accent
+ * 每句话一屏,跨步即切;字号固定 px;动画用 transform + opacity
+ * 单一 CSS 类前缀 `.ta-` 物理隔离,不动 base.css / tokens.css
+ * ───────────────────────────────────────────────────────────────────── */
+
+.ta-scene {
+  position: absolute;
+  inset: 0;
+  padding: var(--stage-pad-y) var(--stage-pad-x);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  color: var(--text);
+  animation: ta-fade-in 700ms var(--ease-quart) both;
+}
+
+/* ─── 共用 chrome ─── */
+.ta-masthead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  width: 100%;
+}
+.ta-brand {
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--text);
+}
+.ta-issue {
+  margin-left: auto;
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ta-rule {
+  margin: var(--space-4) 0 0;
+}
+.ta-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ta-kicker-center {
+  justify-content: center;
+  display: flex;
+  margin: 0 auto;
+}
+.ta-em {
+  color: var(--accent);
+}
+.ta-foot {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+  padding-top: var(--space-5);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 0 — 转折 · 恰恰相反
+ * ════════════════════════════════════════════════════════════════ */
+.ta-turn {
+  align-self: center;
+  display: grid;
+  grid-template-columns: minmax(620px, 1.2fr) minmax(440px, 0.9fr);
+  gap: var(--space-9);
+  padding-top: var(--space-7);
+  align-items: center;
+}
+.ta-turn-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.ta-turn-stripped {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+.ta-turn-pre {
+  font-family: var(--font-display-cn);
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--track-tight);
+  color: var(--text);
+}
+.ta-turn-ghost {
+  font-family: var(--font-display-cn);
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--track-tight);
+  color: var(--text-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--text-faint);
+  text-decoration-thickness: 2px;
+}
+.ta-turn-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+.ta-turn-bar {
+  display: inline-block;
+  width: 64px;
+  height: 2px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.ta-turn-em {
+  font-size: 88px;
+  font-style: italic;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: var(--track-tight);
+}
+.ta-turn-line {
+  font-size: 112px;
+  line-height: 1.02;
+  letter-spacing: var(--track-tight);
+  margin: var(--space-3) 0 0;
+  color: var(--text);
+}
+.ta-turn-snippet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 24px 28px;
+  background: var(--surface-2);
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+  align-self: start;
+}
+.ta-turn-snippet-head {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.ta-turn-code {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--text-2);
+  white-space: pre-wrap;
+  font-variant-numeric: tabular-nums;
+}
+.ta-turn-code-c {
+  color: var(--text-2);
+}
+.ta-turn-code-ok {
+  color: var(--accent);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 1 — 转变 · 4 个动词
+ * ════════════════════════════════════════════════════════════════ */
+.ta-shift {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-5);
+}
+.ta-shift-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.ta-shift-h {
+  font-size: 152px;
+  line-height: 1.02;
+  letter-spacing: var(--track-tight);
+  margin: var(--space-3) 0 0;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+.ta-shift-sub {
+  margin: var(--space-3) 0 0;
+  font-size: 48px;
+  line-height: 1.1;
+  color: var(--text-2);
+  letter-spacing: var(--track-snug);
+}
+.ta-shift-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+.ta-shift-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 28px 26px;
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+  min-height: 240px;
+  position: relative;
+}
+.ta-shift-card-final {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.ta-shift-num {
+  font-size: 13px;
+  color: var(--text-mute);
+  letter-spacing: var(--track-caps);
+  text-align: left;
+}
+.ta-shift-cn {
+  font-family: var(--font-display-cn);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text-2);
+  letter-spacing: var(--track-snug);
+}
+.ta-shift-word {
+  font-size: 56px;
+  line-height: 1.02;
+  color: var(--text);
+  letter-spacing: var(--track-tight);
+  margin-top: var(--space-2);
+}
+.ta-shift-card-final .ta-shift-word {
+  color: var(--accent);
+}
+.ta-shift-lbl {
+  margin-top: auto;
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 2 — 主金句 · 双行排版
+ * ════════════════════════════════════════════════════════════════ */
+.ta-scene-climax {
+  background: radial-gradient(
+    circle at 50% 55%,
+    rgba(255, 74, 43, 0.06) 0%,
+    transparent 55%
+  );
+}
+.ta-quote-body {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+  padding-top: var(--space-7);
+  text-align: center;
+}
+.ta-quote-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  width: 100%;
+}
+.ta-quote-line {
+  font-size: 132px;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  max-width: 24ch;
+}
+.ta-quote-line-2 {
+  font-size: 96px;
+  line-height: 1.08;
+  max-width: 28ch;
+}
+.ta-quote-en {
+  font-style: italic;
+  color: var(--accent);
+}
+.ta-quote-emph {
+  font-style: italic;
+  color: var(--text);
+}
+.ta-quote-emph-warm {
+  color: var(--accent);
+}
+.ta-quote-final {
+  font-style: italic;
+  color: var(--accent);
+  margin-left: var(--space-3);
+}
+.ta-quote-comma {
+  font-size: 96px;
+  color: var(--text-mute);
+  line-height: 1;
+}
+.ta-quote-rule {
+  width: 200px;
+  height: 1px;
+  background: var(--rule);
+  margin: var(--space-3) 0;
+}
+.ta-quote-foot {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+  margin-top: var(--space-4);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 3 — 回扣 · vibe coding 最大的后遗症
+ * ════════════════════════════════════════════════════════════════ */
+.ta-callback {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 74, 43, 0.04) 0%,
+    transparent 60%
+  );
+}
+.ta-cb-body {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+  padding-top: var(--space-5);
+}
+.ta-cb-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 6px 16px;
+  border: var(--bw-1) dashed var(--rule);
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ta-cb-h {
+  font-size: 168px;
+  line-height: 1.02;
+  letter-spacing: var(--track-tight);
+  margin: 0;
+  color: var(--text);
+  text-align: center;
+}
+.ta-cb-h .ta-cb-em {
+  color: var(--accent);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 4 — 互动引子 · 评论区问一个问题
+ * ════════════════════════════════════════════════════════════════ */
+.ta-ask-intro {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-5);
+}
+.ta-ask-intro-h {
+  font-size: 168px;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  margin: var(--space-3) 0 0;
+  color: var(--text);
+  max-width: 14ch;
+}
+.ta-ask-intro-q {
+  color: var(--accent);
+  margin-left: var(--space-3);
+}
+.ta-ask-intro-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  font-size: 14px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ta-ask-intro-arrow .serif-it {
+  font-size: 36px;
+  color: var(--accent);
+  line-height: 1;
+  animation: ta-arrow-bob 1.6s var(--ease-soft) infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 5 — 二选一 · Accept All 派 vs Review All 派
+ * ════════════════════════════════════════════════════════════════ */
+.ta-poll {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding-top: var(--space-5);
+}
+.ta-poll-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.ta-poll-h {
+  font-size: 96px;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  margin: var(--space-3) 0 0;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+.ta-poll-q {
+  color: var(--accent);
+  margin-left: var(--space-3);
+}
+.ta-poll-stage {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  gap: var(--space-5);
+}
+.ta-poll-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: 36px 32px;
+  border: var(--bw-2) solid var(--rule);
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+  position: relative;
+  min-height: 320px;
+}
+.ta-poll-card-a {
+  border-color: var(--text-faint);
+}
+.ta-poll-card-b {
+  border-color: var(--accent);
+}
+.ta-poll-card-head {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.ta-poll-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: var(--bw-1) solid var(--rule);
+  border-radius: 50%;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface-3);
+}
+.ta-poll-card-b .ta-poll-tag {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.ta-poll-tag-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ta-poll-card-h {
+  font-size: 88px;
+  line-height: 1.02;
+  letter-spacing: var(--track-tight);
+  margin: var(--space-3) 0 0;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.ta-poll-card-b .ta-poll-card-h .ta-em {
+  color: var(--accent);
+}
+.ta-poll-card-sub {
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.ta-poll-card-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: var(--bw-1) solid var(--rule);
+}
+.ta-poll-stat-lbl {
+  font-size: 11px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ta-poll-stat-val {
+  font-size: 14px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.ta-poll-vs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-3);
+}
+.ta-poll-vs .serif-it {
+  font-size: 56px;
+  color: var(--accent);
+  font-style: italic;
+  line-height: 1;
+}
+.ta-poll-vs-rule {
+  width: 1px;
+  height: 80px;
+  background: var(--rule);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 6 — 二次互动 · 评论框 mockup
+ * ════════════════════════════════════════════════════════════════ */
+.ta-share {
+  align-self: center;
+  display: grid;
+  grid-template-columns: minmax(560px, 1fr) minmax(620px, 1.05fr);
+  gap: var(--space-9);
+  padding-top: var(--space-5);
+  align-items: center;
+}
+.ta-share-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.ta-share-h {
+  font-size: 132px;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  margin: var(--space-3) 0 0;
+  color: var(--text);
+}
+.ta-share-mock {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-2);
+  border: var(--bw-1) solid var(--rule);
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
+.ta-share-mock-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 14px 20px;
+  background: var(--surface-3);
+  border-bottom: var(--bw-1) solid var(--rule);
+}
+.ta-share-mock-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-faint);
+}
+.ta-share-mock-dot:nth-child(2) { background: var(--text-faint); }
+.ta-share-mock-dot:nth-child(3) { background: var(--text-faint); }
+.ta-share-mock-url {
+  margin-left: auto;
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ta-share-mock-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: 28px 32px 32px;
+}
+.ta-share-mock-prompt {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.ta-share-mock-field {
+  display: block;
+  font-size: 38px;
+  line-height: 1.4;
+  color: var(--text);
+  letter-spacing: var(--track-snug);
+}
+.ta-share-mock-line {
+  font-family: var(--font-display-cn);
+  font-weight: 700;
+}
+.ta-share-mock-cursor {
+  font-style: italic;
+  color: var(--text-2);
+}
+.ta-share-mock-caret {
+  display: inline-block;
+  width: 3px;
+  height: 38px;
+  background: var(--accent);
+  vertical-align: middle;
+  margin-left: 4px;
+  animation: ta-caret-blink 1s steps(2) infinite;
+}
+.ta-share-mock-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-3);
+}
+.ta-share-mock-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 22px;
+  background: var(--accent);
+  color: var(--shell);
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  step 7 — 签名 · 阿江 / 下期见 / 拜拜
+ * ════════════════════════════════════════════════════════════════ */
+.ta-scene-signoff {
+  background: radial-gradient(
+    circle at 50% 60%,
+    rgba(255, 74, 43, 0.04) 0%,
+    transparent 65%
+  );
+}
+.ta-signoff {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+  padding-top: var(--space-5);
+  text-align: center;
+}
+.ta-signoff-tag {
+  font-size: 12px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ta-signoff-name {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.ta-signoff-who {
+  font-size: 224px;
+  font-style: italic;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: var(--track-tight);
+}
+.ta-signoff-comma {
+  font-size: 120px;
+  color: var(--accent);
+  line-height: 1;
+}
+.ta-signoff-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+.ta-signoff-line {
+  margin: 0;
+  font-size: 88px;
+  line-height: 1.1;
+  letter-spacing: var(--track-tight);
+  color: var(--text);
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.ta-signoff-line-2 {
+  font-size: 112px;
+}
+.ta-signoff-bye {
+  font-style: italic;
+  color: var(--accent);
+}
+.ta-signoff-dot {
+  font-size: 112px;
+  color: var(--accent);
+  line-height: 1;
+}
+.ta-signoff-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  font-size: 13px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.ta-signoff-mark .serif-it {
+  font-size: 24px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  keyframes(只用 transform / opacity)
+ * ════════════════════════════════════════════════════════════════ */
+@keyframes ta-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ta-arrow-bob {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50%      { transform: translateY(8px); opacity: 1; }
+}
+
+@keyframes ta-caret-blink {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}

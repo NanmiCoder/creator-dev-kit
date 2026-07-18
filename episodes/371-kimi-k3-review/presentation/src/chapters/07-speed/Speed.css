@@ -1,0 +1,180 @@
+.sp-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-display-cn);
+}
+
+.sp-scene img { object-fit: contain; }
+
+.sp-kimi-mark {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--font-display-en);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.sp-kimi-mark img { width: 94px; height: 94px; }
+.sp-kimi-mark.is-compact { gap: 18px; font-size: 24px; }
+.sp-kimi-mark.is-compact img { width: 68px; height: 68px; }
+
+/* 00 — a radar sweep resolves the test signal into a clear verdict. */
+.sp-feel { display: grid; place-items: center; }
+.sp-feel-radar {
+  position: absolute;
+  width: 850px;
+  height: 850px;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.78);
+  animation: sp-radar-land 620ms 80ms var(--ease-quart) forwards;
+}
+.sp-feel-radar > span { position: absolute; inset: 16.6%; border: 1px solid var(--rule); border-radius: 50%; }
+.sp-feel-radar > span:nth-child(2) { inset: 33.2%; }
+.sp-feel-radar > span:nth-child(3) { inset: 49.4%; background: var(--accent); border-color: var(--accent); box-shadow: 0 0 54px var(--accent-glow); }
+.sp-feel-sweep { position: absolute; left: 50%; top: 50%; width: 47%; height: 2px; transform-origin: left; background: var(--accent); animation: sp-radar-sweep 2.3s 380ms var(--ease-soft) forwards; }
+.sp-feel-center { position: relative; z-index: 2; width: 1040px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.sp-feel-center .sp-kimi-mark { opacity: 0; transform: translateY(-30px); animation: sp-copy-rise 420ms 360ms var(--ease-quart) forwards; }
+.sp-feel-center > strong { margin-top: 40px; font-size: 178px; line-height: 0.94; letter-spacing: -0.06em; opacity: 0; transform: scale(0.7); animation: sp-verdict-lock 650ms 1.3s var(--ease-overshoot) forwards; }
+.sp-feel-caption { margin-top: 36px; font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.2em; color: var(--text-mute); opacity: 0; animation: sp-fade-in 320ms 2.35s var(--ease-quart) forwards; }
+.sp-feel-signal { position: absolute; left: 112px; right: 112px; bottom: 106px; height: 2px; background: var(--rule); overflow: hidden; }
+.sp-feel-signal span { display: block; width: 100%; height: 100%; background: var(--accent); transform: translateX(-100%); animation: sp-signal-read 2.9s 260ms var(--ease-soft) forwards; }
+
+/* 01 — compute packets compress into a narrow physical throat. */
+.sp-bottleneck { display: grid; grid-template-columns: 680px 1fr; align-items: center; gap: 100px; padding: 112px 124px; }
+.sp-bottleneck-copy { display: flex; flex-direction: column; align-items: flex-start; }
+.sp-bottleneck-copy > span { font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.2em; color: var(--text-mute); }
+.sp-bottleneck-copy > strong { margin-top: 34px; font-size: 104px; line-height: 1.02; letter-spacing: -0.055em; opacity: 0; clip-path: inset(0 0 100% 0); animation: sp-copy-cut 540ms 180ms var(--ease-quart) forwards; }
+.sp-bottleneck-copy > em { margin-top: 42px; font-size: 30px; font-style: normal; color: var(--accent); opacity: 0; transform: translateY(24px); animation: sp-copy-rise 420ms 3.1s var(--ease-quart) forwards; }
+.sp-pipeline { position: relative; height: 500px; align-self: center; }
+.sp-pipe-wide { position: absolute; left: 0; top: 142px; width: 520px; height: 216px; border-top: 2px solid var(--rule); border-bottom: 2px solid var(--rule); }
+.sp-pipe-wide::before, .sp-pipe-wide::after { content: ""; position: absolute; right: -42px; width: 126px; height: 2px; background: var(--rule); transform-origin: right; }
+.sp-pipe-wide::before { top: -2px; transform: rotate(31deg); }
+.sp-pipe-wide::after { bottom: -2px; transform: rotate(-31deg); }
+.sp-pipe-wide i, .sp-pipe-output i { position: absolute; width: 50px; height: 50px; background: var(--accent); box-shadow: 0 0 30px var(--accent-glow); opacity: 0; animation: sp-packet-crush 2.7s var(--ease-soft) forwards; }
+.sp-pipe-wide i:nth-child(1) { left: 24px; top: 42px; animation-delay: 250ms; }
+.sp-pipe-wide i:nth-child(2) { left: 120px; top: 122px; animation-delay: 520ms; }
+.sp-pipe-wide i:nth-child(3) { left: 224px; top: 36px; animation-delay: 820ms; }
+.sp-pipe-wide i:nth-child(4) { left: 326px; top: 114px; animation-delay: 1.12s; }
+.sp-pipe-neck { position: absolute; left: 500px; top: 218px; width: 250px; height: 64px; border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); }
+.sp-pipe-neck span { position: absolute; left: 112px; top: -40px; width: 8px; height: 140px; background: var(--accent); box-shadow: 0 0 42px var(--accent-glow); opacity: 0; transform: scaleY(0); animation: sp-gate-close 360ms 2.75s var(--ease-quart) forwards; }
+.sp-pipe-output { position: absolute; left: 750px; top: 218px; width: 210px; height: 64px; border-top: 2px solid var(--rule); border-bottom: 2px solid var(--rule); }
+.sp-pipe-output i { top: 10px; width: 40px; height: 40px; animation-name: sp-packet-output; animation-duration: 580ms; }
+.sp-pipe-output i:nth-child(1) { left: 24px; animation-delay: 3.25s; }
+.sp-pipe-output i:nth-child(2) { left: 108px; animation-delay: 3.65s; }
+.sp-compute-label { position: absolute; right: 40px; bottom: 24px; display: flex; flex-direction: column; align-items: flex-end; }
+.sp-compute-label span { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.18em; color: var(--text-mute); }
+.sp-compute-label strong { margin-top: 6px; font-size: 54px; color: var(--accent); }
+
+/* 02 — two real projects cross one shared ten-minute finish line. */
+.sp-grok-run { display: grid; grid-template-columns: 540px 1fr; grid-template-rows: 250px 1fr; gap: 40px 90px; padding: 104px 118px 96px; }
+.sp-grok-brand { display: flex; align-items: center; align-self: end; gap: 24px; opacity: 0; transform: translateX(-48px); animation: sp-copy-rise 440ms 120ms var(--ease-quart) forwards; }
+.sp-grok-brand img { width: 118px; max-height: 84px; filter: brightness(0) invert(1); }
+.sp-grok-brand span { font-family: var(--font-display-en); font-size: 46px; font-weight: 700; }
+.sp-stopwatch { grid-column: 2; grid-row: 1; justify-self: end; align-self: end; display: grid; grid-template-columns: auto auto; align-items: end; }
+.sp-stopwatch-label { grid-column: 1 / -1; margin-bottom: 10px; font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.18em; color: var(--text-mute); text-align: right; }
+.sp-stopwatch strong { font-size: 204px; color: var(--accent); opacity: 0; transform: translateY(58px); animation: sp-timer-land 560ms 1.65s var(--ease-overshoot) forwards; }
+.sp-stopwatch em { padding: 0 0 22px 24px; font-family: var(--font-mono); font-size: 30px; font-style: normal; color: var(--text-2); }
+.sp-project-race { position: relative; grid-column: 1 / -1; align-self: center; height: 380px; padding-right: 120px; display: flex; flex-direction: column; justify-content: center; gap: 54px; }
+.sp-race-line { position: relative; height: 104px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); display: flex; align-items: center; }
+.sp-race-line > span { position: absolute; left: 0; top: -34px; font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.18em; color: var(--text-mute); }
+.sp-race-runner { position: absolute; left: 0; width: 118px; height: 72px; background: var(--accent); box-shadow: 0 0 34px var(--accent-glow); transform: translateX(0); }
+.sp-runner-one { animation: sp-run-project 3.1s 1s var(--ease-quart) forwards; }
+.sp-runner-two { animation: sp-run-project 3.1s 1.5s var(--ease-quart) forwards; }
+.sp-race-line b { position: absolute; right: 8px; font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.15em; color: var(--accent); opacity: 0; }
+.sp-race-line:first-child b { animation: sp-fade-in 260ms 4.05s var(--ease-quart) forwards; }
+.sp-race-line:nth-child(2) b { animation: sp-fade-in 260ms 4.55s var(--ease-quart) forwards; }
+.sp-race-finish { position: absolute; top: 4px; bottom: 4px; right: 118px; width: 4px; background: var(--accent); }
+.sp-race-finish span { position: absolute; top: -34px; left: -31px; font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.18em; color: var(--accent); }
+
+/* 03 — the previous baseline collapses while K3's hour dial takes the stage. */
+.sp-kimi-run { display: grid; grid-template-columns: 340px 90px 620px 1fr; align-items: center; gap: 54px; padding: 112px; }
+.sp-baseline-memory { height: 410px; padding: 54px 42px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; justify-content: center; color: var(--text-faint); opacity: 0; animation: sp-memory-in 420ms 100ms var(--ease-quart) forwards; }
+.sp-baseline-memory img { width: 88px; max-height: 62px; filter: brightness(0) invert(1); opacity: 0.35; }
+.sp-baseline-memory span { margin-top: 28px; font-family: var(--font-display-en); font-size: 25px; }
+.sp-baseline-memory strong { margin-top: 14px; font-family: var(--font-mono); font-size: 32px; }
+.sp-duration-divider { position: relative; width: 4px; height: 610px; background: var(--rule); overflow: hidden; }
+.sp-duration-divider span { position: absolute; inset: 0; background: var(--accent); transform: translateY(-100%); animation: sp-divider-drop 1.8s 520ms var(--ease-soft) forwards; }
+.sp-kimi-duration { align-self: center; display: flex; flex-direction: column; align-items: flex-start; }
+.sp-kimi-duration .sp-kimi-mark { opacity: 0; transform: translateY(-22px); animation: sp-copy-rise 360ms 360ms var(--ease-quart) forwards; }
+.sp-kimi-duration > strong { margin-top: 42px; font-size: 224px; color: var(--accent); opacity: 0; transform: scale(1.22); animation: sp-hour-land 620ms 1.1s var(--ease-overshoot) forwards; }
+.sp-kimi-duration > span { margin-top: 20px; font-size: 38px; color: var(--text-2); }
+.sp-hour-dial { position: relative; justify-self: end; width: 510px; height: 610px; display: grid; place-items: center; }
+.sp-chrono { position: relative; width: 470px; height: 470px; border: 1px solid var(--rule); border-radius: 50%; opacity: 0; transform: scale(0.74); animation: sp-chrono-in 480ms 380ms var(--ease-quart) forwards; }
+.sp-chrono-ring { position: absolute; inset: 34px; border: 4px solid var(--accent); border-radius: 50%; clip-path: inset(0 50% 0 0); animation: sp-ring-turn 2.3s 600ms var(--ease-soft) forwards; }
+.sp-chrono-hand { position: absolute; left: 50%; top: 50%; width: 188px; height: 4px; background: var(--accent); transform-origin: left; animation: sp-hand-turn 2.55s 540ms var(--ease-soft) forwards; }
+.sp-chrono-center { position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; border-radius: 50%; background: var(--text); transform: translate(-50%, -50%); }
+.sp-chrono-tick { position: absolute; left: calc(50% - 2px); top: 12px; width: 4px; height: 22px; background: var(--text-mute); transform-origin: 2px 223px; }
+.sp-chrono-tick-0 { transform: rotate(0deg); }.sp-chrono-tick-1 { transform: rotate(30deg); }.sp-chrono-tick-2 { transform: rotate(60deg); }.sp-chrono-tick-3 { transform: rotate(90deg); }.sp-chrono-tick-4 { transform: rotate(120deg); }.sp-chrono-tick-5 { transform: rotate(150deg); }.sp-chrono-tick-6 { transform: rotate(180deg); }.sp-chrono-tick-7 { transform: rotate(210deg); }.sp-chrono-tick-8 { transform: rotate(240deg); }.sp-chrono-tick-9 { transform: rotate(270deg); }.sp-chrono-tick-10 { transform: rotate(300deg); }.sp-chrono-tick-11 { transform: rotate(330deg); }
+.sp-card-limit { position: absolute; right: 0; bottom: 0; width: 220px; padding: 24px 28px; background: var(--surface-2); border-top: 2px solid var(--accent); opacity: 0; transform: translateY(40px); animation: sp-copy-rise 380ms 2.75s var(--ease-quart) forwards; }
+.sp-card-limit span { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.16em; color: var(--text-mute); }
+.sp-card-limit strong { display: block; margin-top: 8px; font-size: 46px; }
+
+/* 04 — local and global streams converge, then the exception cuts across. */
+.sp-reputation { display: grid; grid-template-columns: 1fr 600px 1fr; align-items: center; padding: 104px 112px; }
+.sp-reputation-stream { position: relative; height: 520px; display: flex; align-items: center; gap: 30px; overflow: hidden; }
+.sp-reputation-stream > span { position: relative; z-index: 2; font-size: 82px; font-weight: 700; opacity: 0; }
+.sp-stream-local { justify-content: flex-start; }
+.sp-stream-global { justify-content: flex-end; flex-direction: row-reverse; }
+.sp-stream-local > span { animation: sp-stream-local 520ms 500ms var(--ease-quart) forwards; }
+.sp-stream-global > span { animation: sp-stream-global 520ms 1.45s var(--ease-quart) forwards; }
+.sp-reputation-stream i { width: 78px; height: 3px; background: var(--rule); }
+.sp-stream-local i { opacity: 0; animation: sp-stream-local 520ms var(--ease-quart) forwards; }
+.sp-stream-global i { opacity: 0; animation: sp-stream-global 520ms var(--ease-quart) forwards; }
+.sp-stream-local i:nth-of-type(1) { animation-delay: 850ms; }.sp-stream-local i:nth-of-type(2) { animation-delay: 1.15s; }.sp-stream-local i:nth-of-type(3) { animation-delay: 1.45s; }
+.sp-stream-global i:nth-of-type(1) { animation-delay: 1.8s; }.sp-stream-global i:nth-of-type(2) { animation-delay: 2.1s; }.sp-stream-global i:nth-of-type(3) { animation-delay: 2.4s; }
+.sp-reputation-core { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.sp-reputation-core .sp-kimi-mark { opacity: 0; transform: scale(0.7); animation: sp-verdict-lock 450ms 2.45s var(--ease-overshoot) forwards; }
+.sp-reputation-core > strong { margin-top: 34px; font-size: 116px; line-height: 1; letter-spacing: -0.055em; opacity: 0; transform: translateY(40px); animation: sp-copy-rise 500ms 3.05s var(--ease-quart) forwards; }
+.sp-reputation-cut { position: absolute; left: 112px; right: 112px; bottom: 86px; height: 126px; padding: 0 42px; background: var(--surface-2); border-top: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; gap: 42px; opacity: 0; transform: translateY(150px); animation: sp-limit-cut 560ms 5.2s var(--ease-quart) forwards; }
+.sp-reputation-cut span { font-family: var(--font-mono); font-size: 19px; letter-spacing: 0.2em; color: var(--accent); }
+.sp-reputation-cut strong { font-size: 40px; }
+
+/* 05 — the speed signal physically hits a wall labelled with its cause. */
+.sp-final-choke { display: grid; grid-template-columns: 1fr 410px; align-items: center; padding: 112px 180px; }
+.sp-final-lane { position: absolute; left: 112px; right: 548px; top: 50%; height: 180px; transform: translateY(-50%); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; }
+.sp-final-lane span { position: absolute; top: 58px; width: 64px; height: 64px; background: var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: sp-signal-hit 1.3s var(--ease-expo) forwards; }
+.sp-final-lane span:nth-child(1) { left: -100px; animation-delay: 60ms; }.sp-final-lane span:nth-child(2) { left: -220px; animation-delay: 180ms; }.sp-final-lane span:nth-child(3) { left: -340px; animation-delay: 300ms; }.sp-final-lane span:nth-child(4) { left: -460px; animation-delay: 420ms; }.sp-final-lane span:nth-child(5) { left: -580px; animation-delay: 540ms; }
+.sp-final-copy { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; }
+.sp-final-copy > span { font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.18em; color: var(--text-mute); opacity: 0; animation: sp-fade-in 240ms 100ms var(--ease-quart) forwards; }
+.sp-final-copy > strong { margin-top: 30px; padding: 0 24px 12px 0; background: var(--surface); font-size: 148px; letter-spacing: -0.06em; opacity: 0; clip-path: inset(0 100% 0 0); animation: sp-copy-reveal-x 400ms 250ms var(--ease-quart) forwards; }
+.sp-final-wall { position: relative; z-index: 3; height: 610px; background: var(--surface-2); border-left: 8px solid var(--accent); display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transform: translateX(120px); animation: sp-wall-slam 360ms 880ms var(--ease-overshoot) forwards; }
+.sp-final-wall span { font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.18em; color: var(--text-mute); }
+.sp-final-wall strong { margin-top: 20px; font-size: 92px; }
+
+@keyframes sp-radar-land { to { opacity: 0.72; transform: scale(1); } }
+@keyframes sp-radar-sweep { from { transform: rotate(-90deg); } to { transform: rotate(244deg); } }
+@keyframes sp-verdict-lock { to { opacity: 1; transform: scale(1); } }
+@keyframes sp-copy-rise { to { opacity: 1; transform: translate(0, 0); } }
+@keyframes sp-fade-in { to { opacity: 1; } }
+@keyframes sp-signal-read { to { transform: translateX(0); } }
+@keyframes sp-copy-cut { to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes sp-packet-crush { 0% { opacity: 0; transform: translateX(-70px) scale(0.75); } 20% { opacity: 1; } 80%, 100% { opacity: 1; transform: translateX(420px) scale(0.42); } }
+@keyframes sp-gate-close { to { opacity: 1; transform: scaleY(1); } }
+@keyframes sp-packet-output { from { opacity: 0; transform: translateX(-60px) scale(0.52); } to { opacity: 0.8; transform: translateX(58px) scale(0.52); } }
+@keyframes sp-timer-land { to { opacity: 1; transform: translateY(0); } }
+@keyframes sp-run-project { to { transform: translateX(1444px); } }
+@keyframes sp-memory-in { to { opacity: 0.7; } }
+@keyframes sp-divider-drop { to { transform: translateY(0); } }
+@keyframes sp-hour-land { to { opacity: 1; transform: scale(1); } }
+@keyframes sp-chrono-in { to { opacity: 1; transform: scale(1); } }
+@keyframes sp-ring-turn { from { transform: rotate(-90deg); } to { transform: rotate(270deg); } }
+@keyframes sp-hand-turn { from { transform: rotate(-90deg); } to { transform: rotate(270deg); } }
+@keyframes sp-stream-local { from { opacity: 0; transform: translateX(-80px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes sp-stream-global { from { opacity: 0; transform: translateX(80px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes sp-limit-cut { to { opacity: 1; transform: translateY(0); } }
+@keyframes sp-signal-hit { to { transform: translateX(1480px); } }
+@keyframes sp-copy-reveal-x { to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes sp-wall-slam { to { opacity: 1; transform: translateX(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-scene *, .sp-scene *::before, .sp-scene *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+  }
+}

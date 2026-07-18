@@ -1,0 +1,209 @@
+.rk-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-display-cn);
+}
+
+.rk-scene img { object-fit: contain; }
+
+/* 00 — the final board is assembled as five live rank signals. */
+.rk-opening {
+  display: grid;
+  grid-template-columns: 780px 720px;
+  place-content: center;
+  gap: 110px;
+}
+
+.rk-opening-copy { align-self: center; }
+.rk-opening-copy span,
+.rk-weight-copy > span,
+.rk-board-title > span,
+.rk-rank-hero > span,
+.rk-scope-copy span,
+.rk-boundary-copy > span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  letter-spacing: 0.19em;
+  color: var(--text-mute);
+}
+.rk-opening-copy strong {
+  display: block;
+  margin-top: 28px;
+  font-size: 148px;
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  animation: rk-title-cut 720ms 120ms var(--ease-quart) forwards;
+}
+.rk-opening-radar {
+  position: relative;
+  width: 620px;
+  height: 620px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  transform: scale(0.82);
+  opacity: 0;
+  animation: rk-radar-lock 650ms 260ms var(--ease-overshoot) forwards;
+}
+.rk-opening-radar::before,
+.rk-opening-radar::after {
+  content: "";
+  position: absolute;
+  background: var(--rule);
+}
+.rk-opening-radar::before { width: 760px; height: 1px; }
+.rk-opening-radar::after { width: 1px; height: 760px; }
+.rk-opening-radar i {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 26px var(--accent-glow);
+  transform: translate(-50%, -50%) scale(0);
+  animation: rk-signal-pop 320ms var(--ease-overshoot) forwards;
+}
+.rk-opening-radar i:nth-child(1) { left: 50%; top: 7%; animation-delay: 350ms; }
+.rk-opening-radar i:nth-child(2) { left: 88%; top: 36%; animation-delay: 470ms; }
+.rk-opening-radar i:nth-child(3) { left: 73%; top: 84%; animation-delay: 590ms; }
+.rk-opening-radar i:nth-child(4) { left: 27%; top: 84%; animation-delay: 710ms; }
+.rk-opening-radar i:nth-child(5) { left: 12%; top: 36%; animation-delay: 830ms; }
+.rk-opening-radar b { font-family: var(--hero-num-font); font-size: 204px; color: var(--accent); line-height: 0.8; }
+.rk-opening-radar span { position: absolute; bottom: 150px; font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.18em; color: var(--text-2); }
+
+/* 01–02 — two project weights physically close a 100% dial. */
+.rk-weight { display: grid; grid-template-columns: 690px 630px; place-content: center; align-items: center; gap: 150px; }
+.rk-weight-copy { display: grid; grid-template-columns: auto auto; align-items: end; }
+.rk-weight-copy > span { grid-column: 1 / -1; margin-bottom: 28px; }
+.rk-weight-copy > strong { font-size: 292px; line-height: 0.72; color: var(--accent); transform: translateY(90px); opacity: 0; animation: rk-weight-land 620ms 120ms var(--ease-overshoot) forwards; }
+.rk-weight-copy > em { font-family: var(--font-display-en); font-size: 92px; line-height: 0.9; font-style: normal; color: var(--text-2); }
+.rk-weight-copy p { grid-column: 1 / -1; margin: 52px 0 0; font-size: 54px; line-height: 1.16; color: var(--text-2); }
+.rk-weight-dial { position: relative; width: 630px; height: 630px; }
+.rk-weight-dial svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.rk-weight-dial circle { fill: none; stroke-width: 46; }
+.rk-dial-track { stroke: var(--rule); }
+.rk-dial-auth { stroke: var(--accent); stroke-linecap: butt; stroke-dasharray: 618 1031; stroke-dashoffset: 618; animation: rk-dial-auth 1.6s 220ms var(--ease-quart) forwards; }
+.rk-dial-web { stroke: var(--text-2); stroke-linecap: butt; stroke-dasharray: 413 1031; stroke-dashoffset: 1031; animation: rk-dial-web 1.2s 650ms var(--ease-quart) forwards; }
+.rk-dial-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.rk-dial-center strong { font-size: 158px; color: var(--text-faint); }
+.rk-weight-dial:not(.is-complete) .rk-dial-center strong { color: var(--accent); }
+.rk-weight-dial:not(.is-complete) .rk-dial-center strong::after { content: "60"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--accent); }
+.rk-weight-dial:not(.is-complete) .rk-dial-center strong { color: transparent; }
+.rk-dial-center span { margin-top: 20px; font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.18em; color: var(--text-mute); }
+.rk-weight-rail { position: absolute; left: 112px; bottom: 88px; width: 560px; display: flex; align-items: center; gap: 22px; font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.16em; color: var(--text-mute); }
+.rk-weight-rail i { width: 350px; height: 3px; background: var(--rule); overflow: hidden; }
+.rk-weight-rail i::after { content: ""; display: block; height: 100%; background: var(--accent); animation: rk-rail-fill 1.7s 380ms var(--ease-quart) both; }
+.rk-weight-split { display: flex; align-items: center; gap: 48px; }
+.rk-weight-part { width: 280px; display: flex; flex-direction: column; }
+.rk-weight-part strong { font-size: 176px; }
+.rk-weight-part span { margin-top: 22px; font-size: 28px; line-height: 1.2; color: var(--text-2); }
+.rk-weight-part.is-auth { opacity: 0.36; }
+.rk-weight-part.is-web { opacity: 0; transform: translateX(80px); animation: rk-web-arrive 620ms 120ms var(--ease-overshoot) forwards; }
+.rk-weight-part.is-web strong { color: var(--accent); }
+.rk-weight-plus { font-family: var(--font-display-en); font-size: 72px; color: var(--text-faint); }
+.rk-total-lock { position: absolute; right: 256px; bottom: 94px; display: flex; align-items: center; gap: 18px; font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.18em; color: var(--accent); opacity: 0; animation: rk-lock-in 300ms 1.62s var(--ease-quart) forwards; }
+.rk-total-lock i { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 22px var(--accent-glow); }
+
+/* 03 — an empty five-slot board opens before any score is disclosed. */
+.rk-board-intro { display: grid; grid-template-columns: 630px 860px; place-content: center; align-items: center; gap: 130px; }
+.rk-board-title strong { display: block; margin-top: 28px; font-size: 118px; letter-spacing: -0.055em; }
+.rk-board-title em { display: block; margin-top: 34px; font-size: 28px; line-height: 1.4; font-style: normal; color: var(--text-2); }
+.rk-empty-board { display: flex; flex-direction: column; gap: 20px; }
+.rk-empty-row { height: 112px; display: grid; grid-template-columns: 72px 1fr 140px; gap: 34px; align-items: center; border-bottom: 1px solid var(--rule); opacity: 0; transform: translateX(100px); animation: rk-empty-dock 240ms calc(var(--rk-i) * 130ms) var(--ease-quart) forwards; }
+.rk-empty-row span { font-family: var(--font-mono); font-size: 24px; color: var(--text-faint); }
+.rk-empty-row i,
+.rk-empty-row b { height: 12px; background: var(--rule); }
+.rk-empty-row b { width: 118px; justify-self: end; }
+
+/* 04–08 — each model owns one step; earlier rows stay as quiet context. */
+.rk-reveal { display: grid; grid-template-columns: 540px 1030px; place-content: center; align-items: center; gap: 120px; }
+.rk-rank-hero { height: 690px; display: flex; flex-direction: column; justify-content: center; }
+.rk-rank-hero > strong { margin-top: 42px; font-size: 224px; color: var(--accent); transform: translateX(-90px); opacity: 0; animation: rk-rank-slam 460ms 90ms var(--ease-overshoot) forwards; }
+.rk-rank-score { margin-top: 54px; display: grid; grid-template-columns: 84px 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 22px; }
+.rk-rank-score i { grid-row: 1 / 3; height: 3px; background: var(--accent); transform-origin: left; transform: scaleX(0); animation: rk-score-rule 520ms 420ms var(--ease-quart) forwards; }
+.rk-rank-score b { font-size: 82px; font-weight: 900; color: var(--text); opacity: 0; animation: rk-score-in 320ms 560ms var(--ease-quart) forwards; }
+.rk-rank-score em { font-family: var(--font-mono); font-size: 14px; font-style: normal; letter-spacing: 0.16em; color: var(--text-mute); opacity: 0; animation: rk-score-in 300ms 620ms var(--ease-quart) forwards; }
+.rk-board { width: 1030px; display: flex; flex-direction: column; }
+.rk-row { position: relative; height: 138px; display: grid; grid-template-columns: 72px 80px 1fr 130px; align-items: center; gap: 28px; padding: 0 34px; border-bottom: 1px solid var(--rule); overflow: visible; }
+.rk-row-rank { font-family: var(--font-mono); font-size: 22px; color: var(--text-faint); }
+.rk-logo { width: 66px; height: 66px; display: grid; place-items: center; }
+.rk-logo img { max-width: 62px; max-height: 48px; filter: brightness(0) invert(1); opacity: 0.86; }
+.rk-logo.is-kimi img { max-height: 64px; filter: none; }
+.rk-logo.is-zhipu img { filter: none; }
+.rk-row > strong { font-family: var(--font-display-en); font-size: 31px; letter-spacing: -0.02em; white-space: nowrap; }
+.rk-row > em { font-size: 46px; font-style: normal; text-align: right; }
+.rk-row.is-future .rk-logo,
+.rk-row.is-future > strong,
+.rk-row.is-future > em { visibility: hidden; }
+.rk-row.is-past { color: var(--text-faint); opacity: 0.42; }
+.rk-row.is-current { background: var(--accent-soft); border-top: 3px solid var(--accent); border-bottom-color: var(--accent); }
+.rk-row.is-current::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 7px; background: var(--accent); transform: scaleY(0); transform-origin: top; animation: rk-current-strike 580ms 80ms var(--ease-quart) forwards; }
+.rk-row.is-current .rk-logo { opacity: 0; transform: scale(0.62) rotate(-8deg); animation: rk-logo-lock 460ms 180ms var(--ease-overshoot) forwards; }
+.rk-row.is-current > strong { clip-path: inset(0 100% 0 0); animation: rk-name-wipe 540ms 260ms var(--ease-quart) forwards; }
+.rk-row.is-current > em { opacity: 0; transform: translateX(46px); animation: rk-row-score 400ms 440ms var(--ease-quart) forwards; }
+
+/* 09 — the board collapses back into the only two projects measured. */
+.rk-scope { display: grid; grid-template-rows: 570px auto; place-content: center; gap: 66px; }
+.rk-scope-projects { width: 1500px; display: grid; grid-template-columns: 500px 300px 500px; justify-content: center; align-items: center; gap: 70px; }
+.rk-scope-project { height: 430px; padding: 60px; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--rule); background: var(--surface-2); display: flex; flex-direction: column; justify-content: center; }
+.rk-scope-project strong { font-size: 170px; color: var(--accent); }
+.rk-scope-project span { margin-top: 34px; font-size: 34px; line-height: 1.2; color: var(--text-2); }
+.rk-scope-project.is-auth { transform: translateX(-140px); opacity: 0; animation: rk-project-close-left 620ms 100ms var(--ease-quart) forwards; }
+.rk-scope-project.is-web { transform: translateX(140px); opacity: 0; animation: rk-project-close-right 620ms 100ms var(--ease-quart) forwards; }
+.rk-scope-link { display: flex; align-items: center; gap: 20px; font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.16em; color: var(--text-mute); }
+.rk-scope-link i { flex: 1; height: 2px; background: var(--accent); transform: scaleX(0); animation: rk-link-draw 360ms 650ms var(--ease-quart) forwards; }
+.rk-scope-copy { text-align: center; }
+.rk-scope-copy strong { display: block; margin-top: 20px; font-size: 76px; letter-spacing: -0.04em; }
+
+/* 10 — measured scope stays solid while the unmeasured capability field keeps orbiting. */
+.rk-boundary { display: grid; place-items: center; }
+.rk-boundary-orbit { position: absolute; width: 880px; height: 880px; border: 1px solid var(--rule); border-radius: 50%; animation: rk-orbit-turn 3s 100ms var(--ease-soft) both; }
+.rk-boundary-orbit::before,
+.rk-boundary-orbit::after { content: ""; position: absolute; inset: 92px; border: 1px solid var(--rule); border-radius: 50%; }
+.rk-boundary-orbit::after { inset: 210px; border-color: var(--accent); opacity: 0.45; }
+.rk-boundary-orbit i { position: absolute; width: 15px; height: 15px; border-radius: 50%; background: var(--text-faint); }
+.rk-boundary-orbit i:nth-child(1) { left: 48px; top: 285px; }
+.rk-boundary-orbit i:nth-child(2) { right: 90px; top: 176px; }
+.rk-boundary-orbit i:nth-child(3) { right: 28px; bottom: 310px; }
+.rk-boundary-orbit i:nth-child(4) { left: 150px; bottom: 112px; }
+.rk-boundary-orbit i:nth-child(5) { left: 430px; top: -8px; }
+.rk-boundary-orbit b { position: absolute; inset: 330px; border: 5px solid var(--accent); border-radius: 50%; background: var(--surface); box-shadow: 0 0 60px var(--accent-glow); }
+.rk-boundary-copy { position: relative; z-index: 2; width: 900px; height: 500px; display: grid; grid-template-columns: 1fr 130px 1fr; grid-template-rows: auto 1fr; align-items: center; text-align: center; }
+.rk-boundary-copy > span { grid-column: 1 / -1; margin-bottom: 30px; }
+.rk-boundary-copy strong,
+.rk-boundary-copy b { font-size: 62px; line-height: 1.12; }
+.rk-boundary-copy strong { opacity: 0; animation: rk-boundary-left 480ms 150ms var(--ease-quart) forwards; }
+.rk-boundary-copy b { font-weight: 700; color: var(--text-2); opacity: 0; animation: rk-boundary-right 480ms 740ms var(--ease-quart) forwards; }
+.rk-boundary-copy > i { position: absolute; left: 50%; top: 108px; bottom: 52px; width: 1px; background: var(--rule); }
+.rk-boundary-copy em { font-family: var(--font-display-en); font-size: 106px; font-style: normal; color: var(--accent); opacity: 0; transform: scale(0); animation: rk-neq-pop 420ms 520ms var(--ease-overshoot) forwards; }
+
+@keyframes rk-title-cut { to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes rk-radar-lock { to { opacity: 1; transform: scale(1); } }
+@keyframes rk-signal-pop { to { transform: translate(-50%, -50%) scale(1); } }
+@keyframes rk-weight-land { to { opacity: 1; transform: translateY(0); } }
+@keyframes rk-dial-auth { to { stroke-dashoffset: 0; } }
+@keyframes rk-dial-web { to { stroke-dashoffset: 618; } }
+@keyframes rk-rail-fill { from { transform: scaleX(0); transform-origin: left; } to { transform: scaleX(1); transform-origin: left; } }
+@keyframes rk-web-arrive { to { opacity: 1; transform: translateX(0); } }
+@keyframes rk-lock-in { to { opacity: 1; } }
+@keyframes rk-empty-dock { to { opacity: 1; transform: translateX(0); } }
+@keyframes rk-rank-slam { to { opacity: 1; transform: translateX(0); } }
+@keyframes rk-score-rule { to { transform: scaleX(1); } }
+@keyframes rk-score-in { to { opacity: 1; } }
+@keyframes rk-current-strike { to { transform: scaleY(1); } }
+@keyframes rk-logo-lock { to { opacity: 1; transform: scale(1) rotate(0); } }
+@keyframes rk-name-wipe { to { clip-path: inset(0 0 0 0); } }
+@keyframes rk-row-score { to { opacity: 1; transform: translateX(0); } }
+@keyframes rk-project-close-left { to { opacity: 1; transform: translateX(0); } }
+@keyframes rk-project-close-right { to { opacity: 1; transform: translateX(0); } }
+@keyframes rk-link-draw { to { transform: scaleX(1); } }
+@keyframes rk-orbit-turn { to { transform: rotate(22deg); } }
+@keyframes rk-boundary-left { to { opacity: 1; transform: translateX(-35px); } }
+@keyframes rk-boundary-right { to { opacity: 1; transform: translateX(35px); } }
+@keyframes rk-neq-pop { to { opacity: 1; transform: scale(1); } }

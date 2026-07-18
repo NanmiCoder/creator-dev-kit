@@ -136,6 +136,8 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
+!.env.example
 .envrc
 .venv
 env/
@@ -215,6 +217,18 @@ pnpm-debug.log*
 
 # Playwright MCP
 .playwright-mcp/
+
+# Local browser/auth state
+*.auth-state.json
+
+# Agent and QA working files
+.claude/
+.mavis/
+qa/
+qa-*/
+qa-*.png
+*.tsbuildinfo
+.vite/
 
 # OS files
 .DS_Store

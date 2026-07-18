@@ -1,0 +1,258 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * 章 3 · score —— 91 分怎么来的 + 真榜缺席（埋包袱）。creator-dark 同 1 章语汇。
+ * 颜色/字体走 token；字号/间距固定 px。主内容避开右上角 432×432 头像安全区。
+ * 动画：遮罩升起 / overshoot 砸入 / 弹入 / 印章旋入 / 条形增长 / 流水线节点。
+ * ─────────────────────────────────────────────────────────────────────── */
+
+.sc-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-display-cn);
+}
+.sc-accent   { color: var(--accent); }
+.sc-neg-t    { color: var(--neg); }
+.mono        { font-family: var(--font-mono); }
+
+/* ── 眉标（左上，避开右上头像区）── */
+.sc-kicker {
+  position: absolute;
+  top: 60px;
+  left: 76px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  z-index: 4;
+}
+.sc-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+  animation: scBlink 1.6s ease-in-out infinite;
+}
+.sc-dot-warn { background: var(--mix); box-shadow: 0 0 16px rgba(255,178,74,0.6); }
+@keyframes scBlink { 0%,100%{opacity:1;} 50%{opacity:0.45;} }
+
+/* ── 共享动画原语 ── */
+.sc-down { opacity: 0; animation: scDown 0.66s var(--ease-quart) both; }
+@keyframes scDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+
+.sc-fade { opacity: 0; animation: scFade 0.74s var(--ease-quart) both; }
+@keyframes scFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.sc-pop { opacity: 0; animation: scPop 0.6s var(--ease-overshoot) both; }
+@keyframes scPop { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
+
+.sc-slam { opacity: 0; animation: scSlam 0.72s var(--ease-overshoot) both; }
+@keyframes scSlam { 0% { opacity: 0; transform: scale(1.7); filter: blur(12px); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+
+.sc-stamp { opacity: 0; animation: scStamp 0.56s var(--ease-overshoot) both; }
+@keyframes scStamp { 0% { opacity: 0; transform: scale(1.55) rotate(-9deg); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1) rotate(-3deg); } }
+
+.sc-rise-wrap { display: block; overflow: hidden; padding: 0.04em 0.04em 0.12em; }
+.sc-rise { display: inline-block; transform: translateY(112%); filter: blur(10px); animation: scRise 0.92s var(--ease-expo) both; }
+@keyframes scRise { 0% { transform: translateY(112%); filter: blur(10px); } 100% { transform: translateY(0); filter: blur(0); } }
+
+.sc-grow-x { transform: scaleX(0); transform-origin: left center; animation: scGrowX 0.5s var(--ease-expo) both; }
+@keyframes scGrowX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ════════════ s0 · 91.9 = Ultra（拆→并行→拼）════════════ */
+/* 非对称 padding（右大左小）整体左偏；头部 + 流水线横向撑满 */
+.sc-s0 { justify-content: center; gap: 84px; padding: 0 200px 0 120px; }
+.sc-s0-head { display: flex; align-items: baseline; gap: 44px; width: 100%; justify-content: center; }
+.sc-s0-q { font-size: 60px; font-weight: 700; color: var(--text-2); }
+.sc-s0-num {
+  font-family: var(--hero-num-font); font-weight: 900; font-size: 248px; line-height: 0.84;
+  color: var(--accent); letter-spacing: -0.03em; text-shadow: 0 0 70px rgba(201,255,58,0.42);
+}
+.sc-s0-by { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; font-size: 32px; font-weight: 700; color: var(--text-mute); }
+.sc-s0-tag {
+  font-family: var(--font-mono); font-weight: 900; font-size: 42px; letter-spacing: 0.02em;
+  color: var(--text); padding: 8px 24px; border-radius: 12px;
+  background: var(--surface-2); border: 1px solid rgba(201,255,58,0.4);
+}
+
+/* 流水线：撑满整行，节点放大、两端推开 */
+.sc-flow { display: flex; align-items: center; justify-content: space-between; gap: 36px; width: 100%; }
+.sc-flow-arrow {
+  flex: 1; min-width: 96px; height: 7px; border-radius: 4px;
+  background: linear-gradient(90deg, var(--text-faint), var(--accent));
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+.sc-flow-main {
+  display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 0 0 auto;
+  width: 268px; padding: 38px 0; border-radius: 22px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+}
+.sc-flow-main-ic { width: 72px; height: 72px; color: var(--accent); }
+.sc-flow-main-t { font-size: 38px; font-weight: 900; color: var(--text); }
+.sc-flow-main-s { font-size: 24px; color: var(--text-mute); letter-spacing: 0.08em; }
+.sc-flow-fan { display: flex; flex-direction: column; align-items: center; gap: 20px; flex: 0 0 auto; }
+.sc-flow-fan-label { font-size: 27px; font-weight: 700; color: var(--text-2); }
+.sc-flow-fan-row { display: flex; gap: 24px; }
+.sc-flow-bot {
+  width: 128px; height: 150px; display: flex; align-items: center; justify-content: center;
+  border-radius: 18px; background: var(--surface-3); border: 1px solid var(--rule);
+}
+.sc-flow-bot-ic { width: 68px; height: 68px; color: var(--text-2); }
+.sc-flow-merge {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 0 0 auto;
+  width: 288px; padding: 32px 0; border-radius: 22px;
+  background: var(--accent-soft); border: 1px solid rgba(201,255,58,0.5);
+  box-shadow: var(--card-shadow), 0 0 50px rgba(201,255,58,0.14);
+}
+.sc-flow-merge-t { font-size: 26px; color: var(--text-mute); letter-spacing: 0.08em; }
+.sc-flow-merge-num {
+  font-family: var(--hero-num-font); font-weight: 900; font-size: 86px; line-height: 1;
+  color: var(--accent); letter-spacing: -0.02em; text-shadow: 0 0 40px rgba(201,255,58,0.4);
+}
+
+/* ════════════ s1 · 代价 + 普通模式 ≈ Mythos ════════════ */
+/* 代价 chip 行上沿在 y<432，整页右缘须 ≤~1450 避右上头像；非对称 padding（右 470 左 120）
+   把代价行 + VS 行一起左偏铺满，右缘压在安全区外。*/
+.sc-s1 { justify-content: center; gap: 64px; padding: 0 470px 0 120px; }
+.sc-s1-cost { display: flex; justify-content: space-between; gap: 36px; width: 100%; }
+.sc-s1-chip {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 20px;
+  padding: 26px 44px; border-radius: 16px; font-size: 52px; font-weight: 900;
+  background: var(--surface-2); border: 1px solid var(--rule);
+}
+.sc-s1-chip-ic { width: 50px; height: 50px; display: inline-block; }
+.sc-s1-pos { color: var(--accent); border-color: rgba(201,255,58,0.4); background: var(--accent-soft); }
+.sc-s1-neg { color: var(--neg); border-color: rgba(255,91,84,0.4); background: var(--neg-soft); }
+
+.sc-s1-vs { display: flex; align-items: center; justify-content: space-between; gap: 48px; width: 100%; }
+.sc-s1-side {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 40px 48px; border-radius: 22px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+}
+.sc-s1-side-top { font-size: 20px; letter-spacing: 0.12em; color: var(--text-faint); }
+.sc-s1-side-sub { font-size: 32px; font-weight: 800; color: var(--text-2); margin-top: 2px; }
+.sc-s1-side-num {
+  font-family: var(--hero-num-font); font-weight: 900; font-size: 130px; line-height: 1;
+  color: var(--text); letter-spacing: -0.02em; margin-top: 10px;
+}
+.sc-s1-side-num.sc-accent { text-shadow: 0 0 50px rgba(201,255,58,0.35); }
+.sc-s1-approx { flex: 0 0 auto; font-size: 104px; font-weight: 900; color: var(--text-mute); }
+.sc-s1-verdict {
+  padding: 16px 40px; border: 4px solid var(--mix); border-radius: 14px;
+  font-size: 46px; font-weight: 900; color: var(--mix); letter-spacing: 0.04em;
+  background: var(--mix-soft);
+}
+
+/* ════════════ s2 / s3 · 没交的榜（共用卡片）════════════ */
+/* 卡片上沿在 y<432，右缘须 ≤~1450 避开右上头像；非对称 padding（右 470 左 120）
+   让两张卡左偏铺开、右缘正好压在安全区边线外。kicker/title 走左上不受影响。*/
+.sc-s2 { justify-content: center; align-items: stretch; gap: 56px; padding: 0 470px 0 120px; }
+.sc-s2-title { font-size: 76px; font-weight: 900; color: var(--text); letter-spacing: -0.01em; text-align: center; }
+
+.sc-cards { display: flex; align-items: stretch; justify-content: space-between; gap: 56px; width: 100%; }
+.sc-s2 .sc-cards .sc-card { flex: 1; }
+.sc-card {
+  position: relative; width: 470px; min-height: 360px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+  padding: 52px 44px; border-radius: 22px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+}
+.sc-card-ic { width: 84px; height: 84px; color: var(--text-mute); }
+.sc-card-name { font-size: 56px; font-weight: 900; color: var(--text); letter-spacing: -0.01em; }
+.sc-card-name.sc-accent { text-shadow: 0 0 50px rgba(201,255,58,0.35); }
+.sc-card-fable { display: inline-flex; align-items: center; gap: 18px; }
+.sc-card-fable-who { font-size: 24px; color: var(--text-mute); letter-spacing: 0.06em; }
+.sc-card-fable-num {
+  font-family: var(--hero-num-font); font-weight: 900; font-size: 56px; line-height: 1;
+  color: var(--text-2); letter-spacing: -0.02em;
+}
+.sc-card-upg, .sc-card-sub { font-size: 25px; color: var(--text-mute); letter-spacing: 0.04em; text-align: center; }
+/* 缺考红章（斜贴右上角）*/
+.sc-card-seal {
+  position: absolute; top: 22px; right: -10px;
+  padding: 10px 22px; border: 4px solid var(--neg); border-radius: 12px;
+  font-size: 30px; font-weight: 900; color: var(--neg); letter-spacing: 0.06em;
+  background: var(--neg-soft); transform: rotate(-3deg);
+}
+.sc-card-seal-hero { font-size: 34px; }
+/* hero 卡：红章收进卡内右上（right 由 -10 收到 -4，整体右缘留更多余量避头像），
+   并与左偏的绿徽章在 x 上错开、不再挤同一角。 */
+.sc-s3-cards .sc-card-hero .sc-card-seal-hero { top: 18px; right: -4px; }
+
+/* s3：前两张定格（去入场动画），新卡突出 */
+/* 三张卡簇右缘被右上头像安全区（左边线 x=1488）卡死：整簇收窄 + 左移，让最右 DeepSWE 卡
+   （含右上红章）右缘 <1488。不要再加宽整簇（再宽右上角会压进头像圈）；foot 行在下半区另行铺开。*/
+.sc-s3 { justify-content: center; gap: 54px; }
+/* 覆盖 .sc-cards 的 width:100%/space-between：s3 走「内容宽 + 居中 + translateX 左移」。
+   三卡簇收窄到 W=1304（卡 416 + gap 28），居中 L=308/R=1612，再 translateX(-168)
+   → 簇 R≈1444 < 1488（含 hero 红章），右上 432×432 头像区彻底清空；左缘 ~140 留呼吸。*/
+.sc-s3-cards { width: auto; justify-content: center; gap: 28px; transform: translateX(-168px); }  /* 整簇左移 + 收窄，右侧 DeepSWE 卡（含红章）整体右缘 <1488，避开右上头像安全区 */
+.sc-s3-cards .sc-card { flex: 0 0 auto; width: 416px; min-height: 312px; }
+.sc-card-dim { opacity: 0.62; }
+.sc-card-seal-on { opacity: 1; }
+.sc-card-hero {
+  border-color: rgba(201,255,58,0.5);
+  box-shadow: var(--card-shadow), 0 0 56px rgba(201,255,58,0.14);
+}
+.sc-card-ic-hero { color: var(--accent); }
+.sc-card-badge {
+  position: absolute; top: -18px; left: 16px;
+  padding: 8px 22px; border-radius: 999px; white-space: nowrap;
+  background: var(--accent); color: #0a0c0a; font-size: 22px; font-weight: 900; letter-spacing: 0.04em;
+  box-shadow: 0 0 30px var(--accent-glow);
+}  /* 绿徽章贴卡顶「左」角（注：.sc-fade 动画会覆盖 transform，故不用 translateX 居中，
+      改 left 定位），与右上红章彻底错开 x，消除「绿+红」双徽章挤同一角 */
+
+/* foot 行在下半区（y>432），不受头像约束。宽度 1560→1440 收回，居中 L240/R1680，
+   右侧红胶囊（GPT-5.6 · 一个都没交）右缘 ~1680，距画右缘 240px，不再贴边/被裁。 */
+.sc-s3-foot { display: flex; align-items: center; justify-content: space-between; gap: 48px; width: 1440px; }
+.sc-s3-zero { font-size: 44px; font-weight: 800; color: var(--text); }
+.sc-s3-tally {
+  padding: 18px 46px; border-radius: 999px;
+  background: var(--neg); color: #fff; font-size: 46px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 44px var(--neg-glow);
+}
+
+/* ════════════ s4 · 藏榜=信号 + 埋包袱 ════════════ */
+/* 金句放大铺开；hook 横幅加宽推满，避免居中小岛。
+   gap 46→36 让居中栈整体略上提，给下方「记住·DeepSWE」胶囊腾出完整落位带。 */
+.sc-s4 { justify-content: center; gap: 36px; padding: 0 200px 0 120px; }
+.sc-s4-line {
+  margin: 0; text-align: center; font-size: 116px; font-weight: 900; line-height: 1.04;
+  letter-spacing: -0.02em; color: var(--text);
+}
+.sc-s4-line .sc-accent { text-shadow: 0 0 60px rgba(201,255,58,0.35); }
+.sc-s4-eq {
+  display: inline-flex; align-items: center; gap: 20px;
+  padding: 18px 52px; border-radius: 18px;
+  background: var(--accent); color: #0a0c0a; font-size: 64px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: 0 0 50px var(--accent-glow);
+}
+.sc-s4-eq-op { font-family: var(--hero-num-font); }
+
+.sc-s4-hook {
+  display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 40px;
+  width: 100%; padding: 40px 72px; border-radius: 22px;
+  background: var(--surface-2); border: 1px solid var(--rule); box-shadow: var(--card-shadow);
+}
+.sc-s4-hook-q { display: inline-flex; align-items: baseline; gap: 24px; font-size: 56px; font-weight: 800; color: var(--text); }
+.sc-s4-hook-cn { color: var(--accent); }
+.sc-s4-hook-late {
+  flex: 0 0 auto;
+  padding: 14px 36px; border: 3px dashed var(--text-faint); border-radius: 999px;
+  font-size: 33px; font-weight: 800; color: var(--text-mute); letter-spacing: 0.06em;
+}
+.sc-s4-pin {
+  position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 14px 30px; border-radius: 14px;
+  background: var(--mix-soft); border: 2px solid var(--mix);
+  font-size: 32px; font-weight: 900; color: var(--mix); letter-spacing: 0.04em;
+}  /* bottom 96→30：胶囊整体落到暗色 hook 框「下方」，与框底留 ~24px 间隙，不再压边 */
+.sc-s4-pin-ic { width: 32px; height: 32px; display: inline-block; }

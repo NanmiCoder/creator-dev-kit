@@ -1,0 +1,246 @@
+/* ───────────────────────────────────────────────────────────────────────
+ * 章 8 · outro —— 结尾 + CTA。creator-dark：近黑底 + 电光绿 accent + 暖白。
+ * 颜色/字体走 token；字号/间距固定 px。主内容避开右上角 432×432 头像安全区。
+ * 动画：光束扫过收尾 / 遮罩升起 / overshoot 砸入 / 雷达脉冲 / 关注按钮脉冲 / 落版。
+ * ─────────────────────────────────────────────────────────────────────── */
+
+.ou-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-display-cn);
+}
+.ou-accent { color: var(--accent); }
+
+/* ── 眉标（左上，避开右上头像区）── */
+.ou-kicker {
+  position: absolute;
+  top: 60px;
+  left: 76px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  z-index: 4;
+}
+.ou-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+  animation: ouBlink 1.6s ease-in-out infinite;
+}
+@keyframes ouBlink { 0%,100%{opacity:1;} 50%{opacity:0.45;} }
+
+/* ── 共享动画原语 ── */
+.ou-down { opacity: 0; animation: ouDown 0.66s var(--ease-quart) both; }
+@keyframes ouDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+
+.ou-fade { opacity: 0; animation: ouFade 0.74s var(--ease-quart) both; }
+@keyframes ouFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.ou-up { opacity: 0; animation: ouUp 0.8s var(--ease-expo) both; }
+@keyframes ouUp { from { opacity: 0; transform: translateY(34px); } to { opacity: 1; transform: none; } }
+
+.ou-rise-wrap { display: block; overflow: hidden; padding: 0.04em 0.04em 0.12em; }
+.ou-rise { display: inline-block; transform: translateY(112%); filter: blur(10px); animation: ouRise 0.92s var(--ease-expo) both; }
+@keyframes ouRise { 0% { transform: translateY(112%); filter: blur(10px); } 100% { transform: translateY(0); filter: blur(0); } }
+
+.ou-slam { opacity: 0; animation: ouSlam 0.72s var(--ease-overshoot) both; }
+@keyframes ouSlam { 0% { opacity: 0; transform: scale(1.7); filter: blur(12px); } 55% { opacity: 1; } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+
+.ou-pop { opacity: 0; animation: ouPop 0.6s var(--ease-overshoot) both; }
+@keyframes ouPop { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
+
+/* 光束扫过（收尾 / 落版） */
+.ou-beam {
+  position: absolute; top: 0; left: -45%; width: 45%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(201,255,58,0.12), transparent);
+  transform: skewX(-12deg); pointer-events: none;
+  animation: ouBeam 1.5s var(--ease-quart) 0.1s both;
+}
+.ou-beam-end {
+  background: linear-gradient(100deg, transparent, rgba(201,255,58,0.18), transparent);
+  animation-duration: 1.3s; animation-delay: 0s;
+}
+@keyframes ouBeam { from { left: -45%; } to { left: 135%; } }
+
+/* ════════════ s0 · 持续跟进的承诺 ════════════ */
+/* 片尾：大尺度雷达扫描场作背景意象 + 三段文字纵向铺满 1080 高度 */
+.ou-s0 { justify-content: center; padding: 96px 72px 92px; gap: 0; }
+
+/* ── 大尺度雷达扫描场（居中背景层，直径 ~960，撑住下半屏）── */
+.ou-s0-radarfield {
+  position: absolute; left: 50%; top: 50%;
+  width: 1020px; height: 1020px; transform: translate(-50%, -50%);
+  z-index: 0; pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  /* 雷达边缘柔化淡出，避免硬切到屏幕边 */
+  -webkit-mask-image: radial-gradient(circle, #000 60%, transparent 78%);
+          mask-image: radial-gradient(circle, #000 60%, transparent 78%);
+}
+/* 极坐标网格底纹 */
+.ou-s0-rf-grid {
+  position: absolute; inset: 0; border-radius: 50%; opacity: 0.5;
+  background:
+    repeating-radial-gradient(circle at center,
+      transparent 0 84px,
+      rgba(201,255,58,0.07) 84px 85px),
+    repeating-conic-gradient(from 0deg at center,
+      rgba(201,255,58,0.06) 0 0.6deg, transparent 0.6deg 30deg);
+}
+/* 同心圆环 */
+.ou-s0-rf-ring {
+  position: absolute; border-radius: 50%;
+  border: 1.5px solid rgba(201,255,58,0.20);
+}
+.ou-s0-rf-ring-a { inset: 0; border-color: rgba(201,255,58,0.16); }
+.ou-s0-rf-ring-b { inset: 23%; border-color: rgba(201,255,58,0.26); }
+.ou-s0-rf-ring-c { inset: 40%; border-width: 2px; border-color: rgba(201,255,58,0.40); box-shadow: 0 0 40px rgba(201,255,58,0.16) inset; }
+/* 十字准线 */
+.ou-s0-rf-cross {
+  position: absolute; background: rgba(201,255,58,0.16);
+}
+.ou-s0-rf-cross-h { left: 4%; right: 4%; height: 1.5px; top: calc(50% - 0.75px); }
+.ou-s0-rf-cross-v { top: 4%; bottom: 4%; width: 1.5px; left: calc(50% - 0.75px); }
+/* 旋转扫描扇区 */
+.ou-s0-rf-sweep {
+  position: absolute; inset: 0; border-radius: 50%; z-index: 1;
+  background: conic-gradient(from 0deg,
+    rgba(201,255,58,0.42) 0deg,
+    rgba(201,255,58,0.14) 26deg,
+    transparent 64deg,
+    transparent 360deg);
+  -webkit-mask-image: radial-gradient(circle, transparent 7%, #000 9%);
+          mask-image: radial-gradient(circle, transparent 7%, #000 9%);
+  animation: ouRfSweep 5.2s linear infinite;
+}
+@keyframes ouRfSweep { to { transform: rotate(360deg); } }
+/* 扩散脉冲环 */
+.ou-s0-rf-ping {
+  position: absolute; width: 40%; height: 40%; border-radius: 50%;
+  border: 2px solid var(--accent); opacity: 0;
+  animation: ouRfPing 3.4s var(--ease-quart) infinite;
+}
+.ou-s0-rf-ping2 { animation-delay: 1.7s; }
+@keyframes ouRfPing {
+  0% { transform: scale(0.5); opacity: 0.7; }
+  78% { opacity: 0; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+/* 中央雷达图标 */
+.ou-s0-rf-core {
+  position: relative; z-index: 3; width: 132px; height: 132px;
+  color: var(--accent); filter: drop-shadow(0 0 26px rgba(201,255,58,0.45));
+}
+/* 扫描捕获到的光点 */
+.ou-s0-rf-blip {
+  position: absolute; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 18px var(--accent-glow);
+  opacity: 0;
+}
+.ou-s0-rf-blip1 { left: 31%; top: 30%; animation: ouRfBlip 5.2s ease-in-out 0.7s infinite; }
+.ou-s0-rf-blip2 { right: 27%; top: 44%; animation: ouRfBlip 5.2s ease-in-out 2.0s infinite; }
+.ou-s0-rf-blip3 { left: 41%; bottom: 28%; animation: ouRfBlip 5.2s ease-in-out 3.6s infinite; }
+@keyframes ouRfBlip {
+  0%, 100% { opacity: 0; transform: scale(0.6); }
+  6% { opacity: 1; transform: scale(1.2); }
+  26% { opacity: 0.18; transform: scale(1); }
+  40% { opacity: 0; transform: scale(0.6); }
+}
+
+/* ── 文字层（盖在雷达场之上）── */
+.ou-s0-hero {
+  position: relative; z-index: 2;
+  margin: 0; text-align: center;
+  font-family: var(--font-display-cn); font-weight: 900;
+  font-size: 160px; line-height: 1.04; letter-spacing: -0.02em;
+  color: var(--text);
+  text-shadow: 0 6px 60px rgba(5,5,5,0.85), 0 0 40px rgba(5,5,5,0.7);
+}
+.ou-s0-hero .ou-rise-wrap { display: inline-block; vertical-align: top; }
+.ou-s0-hero .ou-accent { color: var(--accent); text-shadow: 0 0 60px rgba(201,255,58,0.45); }
+
+.ou-s0-or { position: relative; z-index: 2; margin-top: 64px; }
+.ou-s0-or-tag {
+  display: inline-flex; align-items: center; gap: 22px;
+  padding: 24px 50px; border-radius: 22px;
+  background: color-mix(in srgb, var(--surface-2) 86%, transparent);
+  border: 1px solid var(--rule); backdrop-filter: blur(3px);
+  font-size: 54px; font-weight: 800; color: var(--text-2);
+  box-shadow: var(--card-shadow);
+}
+.ou-s0-or-ic { width: 58px; height: 58px; display: inline-block; color: var(--accent); }
+
+.ou-s0-promise {
+  position: relative; z-index: 2;
+  margin-top: 78px;
+  font-size: 132px; font-weight: 900; letter-spacing: -0.01em; color: var(--text);
+  text-align: center; text-shadow: 0 6px 60px rgba(5,5,5,0.85);
+}
+.ou-s0-underline {
+  position: relative; z-index: 2;
+  display: block; height: 14px; width: 0; margin-top: 34px; border-radius: 7px;
+  background: var(--accent); box-shadow: 0 0 30px var(--accent-glow);
+  animation: ouLine 0.7s var(--ease-expo) both; animation-delay: 3267ms;
+}
+@keyframes ouLine { from { width: 0; } to { width: 760px; } }
+
+/* ════════════ s1 · CTA 落版 ════════════ */
+/* 片尾落版：放大按钮/署名 + 纵向铺开，撑满 1080 高度、收掉左右空白 */
+.ou-s1 { justify-content: center; gap: 0; }
+
+/* 关注按钮（脉冲 / 高亮） */
+.ou-s1-follow {
+  position: relative; appearance: none; cursor: default;
+  display: inline-flex; align-items: center; gap: 30px;
+  padding: 40px 92px; border: none; border-radius: 999px;
+  background: var(--accent); color: #0a0c0a;
+  font-family: var(--font-display-cn); font-size: 86px; font-weight: 900; letter-spacing: 0.01em;
+  box-shadow: 0 0 70px var(--accent-glow);
+}
+.ou-s1-follow-ic { width: 80px; height: 80px; display: inline-flex; }
+.ou-s1-follow-t { display: inline-block; }
+.ou-s1-follow-pulse {
+  position: absolute; inset: 0; border-radius: 999px;
+  border: 3px solid var(--accent); pointer-events: none;
+  animation: ouFollowPulse 1.8s var(--ease-quart) 0.9s infinite;
+}
+@keyframes ouFollowPulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  70% { opacity: 0; }
+  100% { transform: scale(1.22); opacity: 0; }
+}
+
+/* 署名落版 */
+.ou-s1-sign {
+  display: flex; align-items: baseline; gap: 36px; margin-top: 104px;
+}
+.ou-s1-sign-pre { font-size: 68px; font-weight: 700; color: var(--text-mute); }
+.ou-s1-sign-name { display: inline-block; }
+.ou-s1-sign-name .ou-rise {
+  font-size: 216px; font-weight: 900; line-height: 1; letter-spacing: -0.02em;
+  color: var(--text);
+}
+.ou-s1-namebar {
+  display: block; height: 15px; width: 0; margin-top: 12px; border-radius: 8px;
+  background: var(--accent); box-shadow: 0 0 28px var(--accent-glow);
+  animation: ouNameBar 0.6s var(--ease-expo) both; animation-delay: 733ms;
+}
+@keyframes ouNameBar { from { width: 0; } to { width: 520px; } }
+
+.ou-s1-bye {
+  margin-top: 64px;
+  font-size: 108px; font-weight: 900; letter-spacing: -0.01em; color: var(--text);
+}
+
+.ou-s1-foot {
+  position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%);
+  font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-faint);
+}
