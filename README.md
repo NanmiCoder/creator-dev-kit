@@ -55,6 +55,13 @@ npm run build
 | [ai-vibe-working-slides/](./ai-vibe-working-slides/) | AI 效率工具推荐视频配套 · 10 页 | React + Framer Motion | `npm i && npm run dev` |
 | [openclaw-lobster-presentation/](./openclaw-lobster-presentation/) | OpenClaw 龙虾玩法视频配套 | React + Framer Motion | `npm i && npm run dev` |
 
+## 可复用 Skills
+
+| Skill | 说明 |
+| --- | --- |
+| [web-video-presentation](./skills/web-video-presentation/) | 把口播稿或文章制作成可录屏的 16:9 网页演示，包含脚手架、主题、时间轴生成和校验工具 |
+| [voice-clone-tts](./skills/voice-clone-tts/) | 把口播文案分段合成为配音音频，可选输出与音频精确对齐的 SRT 字幕 |
+
 ## 提示词、配置与数据
 
 | 项目 | 说明 |

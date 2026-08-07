@@ -1,0 +1,16 @@
+{
+  "voice": "nanmiVoice2026a",
+  "voice_note": "从个人素材复刻的专属音色。若失效（7 天未调用会被自动删除），回退到 fallback_voice 或用 clone_voice.sh 重建。",
+  "fallback_voice": "Chinese (Mandarin)_Radio_Host",
+  "model": "speech-2.8-hd",
+  "sample_rate": 32000,
+  "max_chars": 20,
+  "min_chars": 8,
+  "silence_ms": {
+    "clause": 80,
+    "sentence": 180,
+    "para": 400,
+    "chapter": 700,
+    "end": 0
+  }
+}

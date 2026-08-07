@@ -1,0 +1,15 @@
+{
+  "name": "web-video-presentation",
+  "version": "2.0.0",
+  "category": "Web Video / Presentation",
+  "description": "Turn scripts, articles, lessons, product demos, and talks into click-driven 16:9 web presentations that can be screen-recorded as cinematic videos. Ships a Vite + React + TypeScript scaffold, a (chapter, step) cursor model, a plan.md-driven codegen pipeline (npm run gen / npm run check), VO-First absolute-timeline alignment, and a theme-token architecture.",
+  "homepage": "https://github.com/ConardLi/garden-skills/tree/main/skills/web-video-presentation",
+  "compat": [
+    "claude-code",
+    "claude-ai",
+    "cursor",
+    "codex-cli",
+    "gemini-cli",
+    "opencode"
+  ]
+}
