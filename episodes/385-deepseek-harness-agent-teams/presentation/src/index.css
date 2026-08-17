@@ -1,0 +1,151 @@
+@import 'tailwindcss';
+
+@import '@fontsource/geist-sans/300.css';
+@import '@fontsource/geist-sans/400.css';
+@import '@fontsource/geist-sans/500.css';
+@import '@fontsource/geist-sans/600.css';
+@import '@fontsource/geist-mono/400.css';
+@import '@fontsource/geist-mono/500.css';
+
+@theme {
+  --font-sans: 'Geist Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, 'PingFang SC', monospace;
+
+  /* 参考主题：白底 + 橙色主色 */
+  --color-ink-950: #ffffff; /* page ground — bg-100 */
+  --color-ink-925: #fcfcfd;
+  --color-ink-900: #f5f5f5; /* recessed panel — bg-200 */
+  --color-ink-875: #f8f9fa;
+  --color-ink-850: #ffffff; /* card */
+  --color-ink-800: #ffffff;
+  --color-ink-750: #f0f1f3; /* inset well */
+  --color-ink-700: #e7e9ec;
+  --color-ink-600: #cccccc; /* bg-300 */
+
+  /* Type — text-100 / text-200 */
+  --color-fg: #1d1f21;
+  --color-fg-dim: #444648;
+  --color-fg-faint: #929292; /* accent-200 */
+
+  /* Single accent — primary-100 orange */
+  --color-accent: #ff6600;
+  --color-accent-soft: #d14e00; /* deepened for text on white */
+  --color-accent-deep: #a53d00;
+
+  /* Functional status encoding (deepened to hold on light) */
+  --color-done: #1e8a6a;
+  --color-wait: #b07d28;
+  --color-fail: #cc3b2b;
+  --color-idle: #929292;
+
+  /* Hairlines (replace the old white/N borders) */
+  --color-line: #e6e7ea;
+  --color-line-soft: #eef0f2;
+  --color-line-strong: #cccccc;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'cv01';
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-accent) 24%, transparent);
+    color: var(--color-fg);
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-600);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b5b5b5;
+  }
+}
+
+@layer utilities {
+  /* Physical edge refraction, not a drop shadow stack */
+  .glass {
+    background: color-mix(in oklab, #ffffff 82%, transparent);
+    backdrop-filter: blur(14px) saturate(1.05);
+    border: 1px solid var(--color-line);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.8),
+      0 16px 36px -26px rgb(29 31 33 / 0.2);
+  }
+
+  .hairline {
+    border: 1px solid var(--color-line);
+  }
+
+  .grain::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  .dash-flow {
+    stroke-dasharray: 5 7;
+    animation: dash-march 1.1s linear infinite;
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@keyframes dash-march {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

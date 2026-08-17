@@ -14,6 +14,7 @@
 | 369 | [cc-haha 开源项目被误会](./episodes/369-cc-haha-misunderstanding/) | 6 章、102 步 React 演示 | 连续音轨 + SRT 绝对时间轴 |
 | 370 | [Grok 4.5 实测](./episodes/370-grok-4-5-review/) | 8 章、64 个视觉节点 React 演示 | 连续音轨 + SRT 绝对时间轴 |
 | 371 | [Kimi K3 实测](./episodes/371-kimi-k3-review/) | 8 章、48 个视觉节点 React 演示 | 连续音轨 + SRT 绝对时间轴 |
+| 385 | [DeepSeek Harness Agent Teams 协作原理](./episodes/385-deepseek-harness-agent-teams/) | 交互式讲解页：13 步可播放全过程 + 流程图 / 时序图 / 数据结构 | 无音轨（手动 + 快捷键推进，供录屏口播） |
 
 点进每一期可以看到：
 
