@@ -1,0 +1,65 @@
+diff --git a/eval/eval.py b/eval/eval.py
+index a135748..d71bf12 100644
+--- a/eval/eval.py
++++ b/eval/eval.py
+@@ -135,13 +135,43 @@ def main():
+     data = [json.loads(l) for l in open(dataset, encoding="utf-8")]
+ 
+     os.makedirs("results", exist_ok=True)
+-    results = []
++    out = f"results/PerceptionBench_{model.replace('/', '_')}"
++
++    # A full run makes 6,000 API calls. Persist every completed item so an
++    # interrupted or rate-limited run can continue without paying for it again.
++    results_by_index = {}
++    if os.path.exists(out + ".jsonl"):
++        with open(out + ".jsonl", encoding="utf-8") as fh:
++            for line in fh:
++                try:
++                    item = json.loads(line)
++                    results_by_index[str(item.get("index"))] = item
++                except (json.JSONDecodeError, AttributeError):
++                    pass
++    pending = [r for r in data if str(r.get("index")) not in results_by_index]
++    if results_by_index:
++        print(f"resuming with {len(results_by_index)} completed, {len(pending)} pending")
++
+     with cf.ThreadPoolExecutor(max_workers=concurrency) as ex:
+-        futs = [ex.submit(run_one, r, client, model, judge, max_tokens) for r in data]
+-        for i, f in enumerate(cf.as_completed(futs), 1):
+-            results.append(f.result())
+-            if i % 50 == 0:
+-                print(f"  {i}/{len(data)}")
++        futs = [ex.submit(run_one, r, client, model, judge, max_tokens) for r in pending]
++        with open(out + ".jsonl", "a", encoding="utf-8") as checkpoint:
++            for i, f in enumerate(cf.as_completed(futs), 1):
++                item = f.result()
++                results_by_index[str(item.get("index"))] = item
++                checkpoint.write(json.dumps(item, ensure_ascii=False) + "\n")
++                checkpoint.flush()
++                if i % 50 == 0:
++                    print(f"  {len(results_by_index)}/{len(data)}")
++
++    # Restore dataset order and atomically compact any duplicate checkpoint
++    # lines left by a previous interrupted run.
++    results = [results_by_index[str(r.get("index"))] for r in data
++               if str(r.get("index")) in results_by_index]
++    tmp = out + ".jsonl.tmp"
++    with open(tmp, "w", encoding="utf-8") as fh:
++        for r in results:
++            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
++    os.replace(tmp, out + ".jsonl")
+ 
+     from collections import Counter
+     tot, cor = Counter(), Counter()
+@@ -153,10 +183,6 @@ def main():
+     for c in sorted(tot, key=lambda x: -tot[x]):
+         print(f"  {c:32s} {cor[c]/tot[c]*100:5.1f}%  ({cor[c]}/{tot[c]})")
+ 
+-    out = f"results/PerceptionBench_{model.replace('/', '_')}"
+-    with open(out + ".jsonl", "w", encoding="utf-8") as fh:
+-        for r in results:
+-            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+     json.dump({"overall": overall, "per_category": {c: cor[c] / tot[c] for c in tot}},
+               open(out + "_scores.json", "w"), indent=2, ensure_ascii=False)
+     print("saved to", out + ".jsonl")

@@ -230,6 +230,9 @@ qa-*.png
 *.tsbuildinfo
 .vite/
 
+# 公开归档的评测运行日志（需要放在 *.log 规则之后才能重新收录）
+!episodes/**/results/*.log
+
 # OS files
 .DS_Store
 Thumbs.db

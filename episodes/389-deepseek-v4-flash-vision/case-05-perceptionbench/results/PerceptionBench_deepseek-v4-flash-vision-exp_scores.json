@@ -1,0 +1,15 @@
+{
+  "overall": 0.34933333333333333,
+  "per_category": {
+    "ocr_error": 0.4,
+    "visual_counting_error": 0.296969696969697,
+    "fine_grained_recognition_error": 0.2620689655172414,
+    "visual_relation_error": 0.43636363636363634,
+    "hallucination": 0.35793357933579334,
+    "depth_3d_perception_error": 0.3393939393939394,
+    "visual_localization_error": 0.31212121212121213,
+    "visual_attribute_error": 0.4,
+    "context_integration_error": 0.34509803921568627,
+    "visual_comparison_error": 0.34408602150537637
+  }
+}

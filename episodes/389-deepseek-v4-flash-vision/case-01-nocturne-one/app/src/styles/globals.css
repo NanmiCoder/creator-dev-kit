@@ -1,0 +1,483 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Geist Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC",
+    "Microsoft YaHei", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --color-graphite: #0c0d0f;
+  --color-graphite-2: #101216;
+  --color-ink: #e9ebee;
+  --color-ink-2: #a8adb4;
+  --color-ink-3: #7c828c;
+  --color-accent: #cf9a55;
+  --color-accent-soft: #d9ab6c;
+  --color-line: rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================================
+   Design tokens
+   Palette: deep graphite + ice silver + one low-saturation amber.
+   ============================================================ */
+:root {
+  --bg-0: #0c0d0f;
+  --bg-1: #101216;
+  --bg-2: #15181d;
+
+  --ink: #e9ebee;
+  --ink-2: #a8adb4;
+  --ink-3: #7c828c;
+
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+
+  --accent: #cf9a55;
+  --accent-soft: #d9ab6c;
+  --accent-deep: #b07c38;
+  --accent-ink: #221507;
+
+  /* Finish variables: product art + environment light resolve through these. */
+  --fin-1: #3a3d42; /* lightest face */
+  --fin-2: #232529; /* mid face */
+  --fin-3: #15161a; /* deep face */
+  --fin-rim: #4a4e55; /* machined rim */
+  --fin-glow: rgba(120, 128, 140, 0.16);
+  --fin-sheen: rgba(255, 255, 255, 0.34);
+
+  --glass-hi: rgba(255, 255, 255, 0.3);
+  --glass-lo: rgba(255, 255, 255, 0.05);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-finish="obsidian"] {
+  --fin-1: #3a3d42;
+  --fin-2: #232529;
+  --fin-3: #15161a;
+  --fin-rim: #565b64;
+  --fin-glow: rgba(118, 126, 138, 0.15);
+  --fin-sheen: rgba(255, 255, 255, 0.3);
+}
+
+[data-finish="mist"] {
+  --fin-1: #cdd1d7;
+  --fin-2: #9aa0a9;
+  --fin-3: #63686f;
+  --fin-rim: #e2e6ea;
+  --fin-glow: rgba(190, 200, 214, 0.2);
+  --fin-sheen: rgba(255, 255, 255, 0.5);
+}
+
+[data-finish="amber"] {
+  --fin-1: #a5764a;
+  --fin-2: #7b5334;
+  --fin-3: #46301f;
+  --fin-rim: #c08a58;
+  --fin-glow: rgba(199, 138, 74, 0.22);
+  --fin-sheen: rgba(255, 224, 186, 0.42);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-0);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: rgba(207, 154, 85, 0.85);
+  color: #17110a;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+/* Thin dark scrollbar, precision-instrument style */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 99px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Fine film grain over the whole page */
+.noise-layer {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: screen;
+  opacity: 0.045;
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 200;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #1c1e23;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  transform: translateY(-200%);
+  transition: transform 0.2s var(--ease-out);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   Liquid glass (web approximation of layered refractive material:
+   backdrop blur + gradient sheen + 1px inner highlight +
+   masked gradient edge + inner shadow depth)
+   ============================================================ */
+.glass {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.13),
+      rgba(255, 255, 255, 0.035)
+    ),
+    rgba(20, 23, 28, 0.4);
+  backdrop-filter: blur(22px) saturate(1.55);
+  -webkit-backdrop-filter: blur(22px) saturate(1.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 24px rgba(255, 255, 255, 0.02),
+    0 30px 80px -28px rgba(0, 0, 0, 0.6);
+}
+
+/* top-left specular sheen */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      circle at 18% -12%,
+      rgba(255, 255, 255, 0.4),
+      transparent 38%
+    ),
+    linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.1),
+      transparent 34%,
+      transparent 70%,
+      rgba(255, 255, 255, 0.05)
+    );
+  pointer-events: none;
+}
+
+/* variable-brightness edge: 1px ring, brighter at top-left */
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.42),
+    rgba(255, 255, 255, 0.06) 38%,
+    rgba(255, 255, 255, 0.02) 62%,
+    rgba(255, 255, 255, 0.12)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Compact instrument-readout chip */
+.glass-chip {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  background: linear-gradient(
+      150deg,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0.03)
+    ),
+    rgba(16, 19, 24, 0.44);
+  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    0 18px 44px -20px rgba(0, 0, 0, 0.55);
+}
+
+.glass-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 20% -20%,
+    rgba(255, 255, 255, 0.35),
+    transparent 44%
+  );
+  pointer-events: none;
+}
+
+/* ============================================================
+   Buttons: pill = interactive radius system.
+   ============================================================ */
+.btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 30px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  user-select: none;
+  transition:
+    transform 0.18s var(--ease-out),
+    box-shadow 0.25s var(--ease-out),
+    background-color 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out),
+    opacity 0.2s ease,
+    filter 0.25s ease;
+}
+.btn:active {
+  transform: translateY(1px) scale(0.985);
+}
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #e2ad64 0%, #c98a3d 100%);
+  color: var(--accent-ink);
+  border: 1px solid rgba(255, 226, 178, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 214, 0.55),
+    inset 0 -6px 12px rgba(122, 76, 22, 0.35),
+    0 14px 40px -14px rgba(201, 138, 61, 0.55);
+}
+.btn-primary:hover {
+  filter: brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 214, 0.6),
+    inset 0 -6px 12px rgba(122, 76, 22, 0.32),
+    0 18px 52px -16px rgba(207, 154, 85, 0.65);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 10px 30px -18px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+.btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+/* directional sheen sweep */
+.btn-ghost::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.14) 50%,
+    transparent 80%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.75s var(--ease-out);
+}
+.btn-ghost:hover::before {
+  transform: translateX(130%);
+}
+
+.btn-sm {
+  height: 44px;
+  padding: 0 22px;
+  font-size: 14px;
+}
+
+/* ============================================================
+   Motion keyframes (all disabled under reduced motion below)
+   ============================================================ */
+@keyframes float-a {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes float-b {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.72);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.anim-float-a {
+  animation: float-a 7s ease-in-out infinite;
+}
+.anim-float-b {
+  animation: float-b 5.2s ease-in-out infinite;
+  animation-delay: 0.9s;
+}
+.anim-breathe {
+  animation: breathe 4.5s ease-in-out infinite;
+}
+
+/* Light sweep across the product silhouette */
+@keyframes sweep-x {
+  0% {
+    transform: translateX(-180%);
+  }
+  55%,
+  100% {
+    transform: translateX(560%);
+  }
+}
+.anim-sweep {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sweep-x 7.5s cubic-bezier(0.45, 0.05, 0.25, 1) infinite;
+  animation-delay: 1.6s;
+}
+
+/* Spatial Engine equalizer bars inside the HUD chip */
+@keyframes eq-bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.eq-bar {
+  transform-origin: bottom;
+  animation: eq-bar 1.15s ease-in-out infinite;
+}
+
+/* Finish material transition: fills, strokes and gradient stops all
+   crossfade when the data-finish attribute changes on the root. */
+.product-art svg * {
+  transition:
+    fill 0.9s var(--ease-out),
+    stroke 0.9s var(--ease-out),
+    stop-color 0.9s var(--ease-out);
+}
+
+/* ============================================================
+   Accessibility: reduced motion + reduced transparency
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-chip {
+    background: rgba(22, 25, 30, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

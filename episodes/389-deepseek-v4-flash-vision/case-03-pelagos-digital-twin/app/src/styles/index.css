@@ -1,0 +1,353 @@
+/* ============================================================
+   PELAGOS · FIELD 07 数字孪生控制台
+   设计令牌 + Liquid Glass Web 近似层（非 Apple 官方实现）
+   石墨灰 / 雾银基底，唯一强调色：低饱和安全橙 #DE804A
+   ============================================================ */
+
+:root {
+  /* 基底色板 */
+  --bg-0: #0b1016;
+  --ink: #e7edf3;
+  --ink-2: #a8b5c2;
+  --ink-3: #6d7b89;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-soft: rgba(255, 255, 255, 0.06);
+
+  /* 唯一强调色：安全橙（低饱和） */
+  --accent: #de804a;
+  --accent-strong: #e8915c;
+  --accent-deep: #c96f3d;
+  --accent-ink: #20130b;
+
+  /* 语义色（同族：灰 + 琥珀 + 橙，无紫色） */
+  --amber: #d9a35b;
+  --danger: #e06a55;
+  --ok: #79b39b;
+  --warn: #d9a35b;
+
+  /* 风机状态 */
+  --st-normal: #a9b6c2;
+  --st-derated: #d9a35b;
+  --st-offline: #5f6c7a;
+  --st-maintenance: #de804a;
+
+  /* 圆角系统：面板 18 / 控件 12 / 状态胶囊 pill */
+  --r-lg: 18px;
+  --r-md: 12px;
+
+  /* 字体 */
+  --font-sans: 'Geist Variable', 'Geist', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  --ease-spring: cubic-bezier(0.22, 1.2, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+html { background: var(--bg-0); }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--bg-0);
+  overflow: hidden;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-size: 14px;
+  line-height: 1.5;
+  user-select: none;
+}
+
+#root { min-height: 100dvh; }
+
+::selection { background: rgba(222, 128, 74, 0.35); }
+
+/* ---------- 滚动条 ---------- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.24); background-clip: padding-box; }
+
+/* ---------- 排版工具 ---------- */
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.num { font-variant-numeric: tabular-nums; }
+.tnum { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   Liquid Glass 近似层（Web 版玻璃材质）
+   说明：Apple Liquid Glass 仅存在于 Apple 平台。
+   此处为自研 Web 近似：背景折射 + 1px 内高光 + 边缘明暗 + 内阴影。
+   ============================================================ */
+.glass {
+  position: relative;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.02) 42%, rgba(255, 255, 255, 0.05)),
+    rgba(13, 19, 26, 0.42);
+  backdrop-filter: blur(22px) saturate(150%) contrast(1.05);
+  -webkit-backdrop-filter: blur(22px) saturate(150%) contrast(1.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 0 40px rgba(255, 255, 255, 0.015),
+    0 26px 80px rgba(3, 7, 12, 0.5);
+}
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(130% 55% at 18% -12%, rgba(255, 255, 255, 0.1), transparent 46%),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.05), transparent 28%, transparent 66%, rgba(255, 255, 255, 0.045));
+}
+.glass-deep {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015) 42%, rgba(255, 255, 255, 0.035)),
+    rgba(10, 15, 21, 0.62);
+}
+.glass-soft {
+  border-radius: var(--r-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.glass-hover { transition: border-color 0.25s, background 0.25s, box-shadow 0.25s; }
+.glass-hover:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0.07)),
+    rgba(13, 19, 26, 0.45);
+}
+
+/* 面板结构 */
+.panel { overflow: hidden; }
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--line-soft);
+  min-height: 42px;
+}
+.panel-body { padding: 12px 16px 16px; overflow-y: auto; overscroll-behavior: contain; }
+
+/* ---------- 按钮 ---------- */
+.btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--r-md);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+  color: var(--ink);
+  font: 500 13px/1 var(--font-sans);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.22s, background 0.22s, transform 0.22s var(--ease-spring), box-shadow 0.22s;
+  transform: translateZ(0);
+}
+.btn:hover { border-color: rgba(255, 255, 255, 0.24); background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.07)); }
+.btn:active { transform: translateY(1px) scale(0.97); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn:disabled { opacity: 0.45; pointer-events: none; }
+.btn .sheen {
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.16) 50%, transparent 70%);
+  transform: translateX(-110%);
+  transition: transform 0.7s var(--ease-out);
+}
+.btn:hover .sheen { transform: translateX(110%); }
+
+.btn-accent {
+  border-color: rgba(255, 170, 120, 0.4);
+  background: linear-gradient(180deg, var(--accent-strong), var(--accent-deep));
+  color: var(--accent-ink);
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+    0 10px 30px rgba(222, 128, 74, 0.28);
+}
+.btn-accent:hover {
+  background: linear-gradient(180deg, #f09c68, #d5743f);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 12px 36px rgba(222, 128, 74, 0.38);
+}
+.btn-accent:focus-visible { outline-color: var(--accent-strong); }
+
+.btn-ghost { background: transparent; border-color: var(--line-soft); }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.06); }
+
+.btn-danger { border-color: rgba(224, 106, 85, 0.45); color: #f0a795; background: rgba(224, 106, 85, 0.12); }
+.btn-danger:hover { background: rgba(224, 106, 85, 0.2); }
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: var(--r-md);
+}
+.icon-btn svg { flex: none; }
+
+/* ---------- 状态胶囊 ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.dot { width: 6px; height: 6px; border-radius: 999px; flex: none; }
+.dot-st-normal { background: var(--st-normal); box-shadow: 0 0 8px rgba(169, 182, 194, 0.5); }
+.dot-st-derated { background: var(--st-derated); box-shadow: 0 0 8px rgba(217, 163, 91, 0.55); }
+.dot-st-offline { background: var(--st-offline); }
+.dot-st-maintenance { background: var(--st-maintenance); box-shadow: 0 0 8px rgba(222, 128, 74, 0.6); }
+
+/* ---------- 输入 ---------- */
+.input {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(6, 10, 15, 0.5);
+  color: var(--ink);
+  font: 400 13px/1 var(--font-sans);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input::placeholder { color: var(--ink-3); }
+.input:focus { border-color: rgba(222, 128, 74, 0.55); box-shadow: 0 0 0 3px rgba(222, 128, 74, 0.15); }
+.field-label { display: block; font-size: 12px; color: var(--ink-2); margin-bottom: 6px; }
+.field-hint { font-size: 11px; color: var(--ink-3); margin-top: 5px; }
+.field-error { font-size: 11px; color: #f0a795; margin-top: 5px; }
+
+select.input { appearance: none; padding-right: 30px; background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%); background-position: calc(100% - 16px) 15px, calc(100% - 12px) 15px; background-size: 4px 4px; background-repeat: no-repeat; }
+select.input option { background: #141b23; color: var(--ink); }
+
+/* ---------- 时间轴滑杆 ---------- */
+.scrub {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+.scrub::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.1));
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+.scrub::-moz-range-track {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  margin-top: -6px;
+  border-radius: 999px;
+  background: var(--accent-strong);
+  border: 2.5px solid #1a110b;
+  box-shadow: 0 0 0 1.5px rgba(255, 170, 120, 0.5), 0 4px 14px rgba(222, 128, 74, 0.5);
+  transition: transform 0.15s var(--ease-spring);
+}
+.scrub::-moz-range-thumb {
+  width: 10px; height: 10px; border-radius: 999px;
+  background: var(--accent-strong); border: 2.5px solid #1a110b;
+  box-shadow: 0 0 0 1.5px rgba(255, 170, 120, 0.5);
+}
+.scrub:hover::-webkit-slider-thumb, .scrub:focus-visible::-webkit-slider-thumb { transform: scale(1.25); }
+.scrub:focus-visible { outline: none; }
+.scrub:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(222, 128, 74, 0.25); }
+
+/* ---------- 呼吸点 ---------- */
+@keyframes breathe {
+  0%, 100% { opacity: 0.45; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+.breath { animation: breathe 2.6s ease-in-out infinite; }
+
+/* ---------- 磁吸微物理（transform 由 JS 驱动，无 state） ---------- */
+.magnetic { will-change: transform; display: inline-flex; }
+
+/* ---------- 骨架 ---------- */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  border-radius: 8px;
+  background: linear-gradient(100deg, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* ---------- 焦点可见性 ---------- */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+/* ---------- 降级透明度 ---------- */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(13, 19, 26, 0.94);
+  }
+  .glass-deep { background: rgba(10, 15, 21, 0.97); }
+  .glass-soft { background: rgba(30, 38, 47, 0.9); }
+}
+
+/* ---------- 降低动态 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .breath { animation: none; }
+}

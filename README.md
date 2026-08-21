@@ -1,6 +1,6 @@
 # creator-dev-kit
 
-这里公开归档视频中实际使用过的网页演示、口播脚本、音频和 SRT 字幕。除第 368 期只保留视频中的 Three.js demo 外，其余期数都是独立网页 PPT：进入对应目录安装依赖，就能查看手动模式或音频驱动模式。
+这里公开归档视频中实际使用过的网页演示、口播脚本、音频和 SRT 字幕，以及模型实测用的完整提示词与产出代码。大多数期数是独立网页 PPT：进入对应目录安装依赖，就能查看手动模式或音频驱动模式；第 368 期只保留视频中的 Three.js demo，第 389 期是模型实测归档（提示词 + 产出代码 + 原始评测数据）。
 
 ## 近期视频制作素材
 
@@ -15,6 +15,7 @@
 | 370 | [Grok 4.5 实测](./episodes/370-grok-4-5-review/) | 8 章、64 个视觉节点 React 演示 | 连续音轨 + SRT 绝对时间轴 |
 | 371 | [Kimi K3 实测](./episodes/371-kimi-k3-review/) | 8 章、48 个视觉节点 React 演示 | 连续音轨 + SRT 绝对时间轴 |
 | 385 | [DeepSeek Harness Agent Teams 协作原理](./episodes/385-deepseek-harness-agent-teams/) | 交互式讲解页：13 步可播放全过程 + 流程图 / 时序图 / 数据结构 | 无音轨（手动 + 快捷键推进，供录屏口播） |
+| 389 | [DeepSeek 首个多模态模型实测](./episodes/389-deepseek-v4-flash-vision/) | 4 个 case 的完整提示词与可运行代码 + PerceptionBench 3000 题原始数据 | 无音轨（实测归档，非网页 PPT） |
 
 点进每一期可以看到：
 
@@ -24,6 +25,8 @@
 - `audio.mp3`：从该期制作目录抽出的完整音频。
 - `subtitles.srt`：与完整音频匹配的字幕。
 - `README.md`：该期的来源映射、差异说明和精确运行方式。
+
+第 389 期是实测归档而非网页 PPT，目录按 case 拆分：每个 case 一份 `prompt.md`（原封不动的提示词）加一份可运行的 `app/`，另有 PerceptionBench 3,000 题的原始逐题数据。
 
 ## 快速运行
 
