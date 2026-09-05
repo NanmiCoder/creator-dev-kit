@@ -1,0 +1,33 @@
+# Dependencies, generated bundles and local test output
+node_modules/
+dist/
+dist-server/
+.vite/
+.cache/
+coverage/
+artifacts/
+test-results/
+playwright-report/
+*.tsbuildinfo
+*.log
+
+# Runtime workbooks / simulation snapshots are regenerated from source defaults.
+data/
+*.tmp
+
+# Credentials and machine-specific agent / browser state
+.env
+.env.*
+!.env.example
+.envrc
+.npmrc
+*.pem
+*.key
+*.auth-state.json
+.codex/
+.claude/
+.ego/
+.ego-browser/
+.idea/
+.vscode/
+.DS_Store
