@@ -1,9 +1,9 @@
 {
   "name": "web-video-presentation",
-  "version": "2.0.0",
+  "version": "2.6.1",
   "category": "Web Video / Presentation",
-  "description": "Turn scripts, articles, lessons, product demos, and talks into click-driven 16:9 web presentations that can be screen-recorded as cinematic videos. Ships a Vite + React + TypeScript scaffold, a (chapter, step) cursor model, a plan.md-driven codegen pipeline (npm run gen / npm run check), VO-First absolute-timeline alignment, and a theme-token architecture.",
-  "homepage": "https://github.com/ConardLi/garden-skills/tree/main/skills/web-video-presentation",
+  "description": "SRT-driven 16:9 web video presentations with persistent visual scenes, a shared motion clock, deterministic frame review, in-page 1K/2K/4K MP4 export, locked scaffolding and real-case evaluation.",
+  "homepage": "https://github.com/NanmiCoder/creator-pipeline",
   "compat": [
     "claude-code",
     "claude-ai",

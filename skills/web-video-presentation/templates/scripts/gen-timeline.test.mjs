@@ -12,6 +12,7 @@ import {
   buildModel,
   countNarrationStrings,
   emitBrief,
+  extractSection,
   emitNarrations,
   emitTimelineTs,
   extractChapterNotes,
@@ -382,7 +383,16 @@ t("emit：BRIEF 尾部附画面备注；无备注不加空节", () => {
   assert.match(withNote, /- 信息池：X —— 来源：Y/);
   const without = emitBrief(m, m.chapters[0], px);
   assert.ok(!without.includes("## 画面备注"));
-  assert.match(without, /npm run check 全绿 \+ 自截 2-3 张关键帧核对布局 → 汇报\n$/);
+  assert.match(without, /npm run check 全绿 \+ 真实浏览器 .*连续播放 → 汇报\n$/);
+});
+
+
+t("sections: evidence/terms survive H2 extraction and are linked from brief", () => {
+ const md = "## 术语锁定表\n| A | B |\n\n## 事实核实记录\n未核实数据\n## 后续\nexclude";
+ assert.equal(extractSection(md, "事实核实记录"), "## 事实核实记录\n未核实数据");
+ assert.equal(extractSection(md, "missing"), "");
+ const m = modelOf(GOOD_BLOCK);
+ assert.match(emitBrief(m, m.chapters[0], allocPrefixes(m.chapters.map(c=>c.id))), /registry\/FACTS.md/);
 });
 
 console.log(`\nok · ${n} 个测试全过`);

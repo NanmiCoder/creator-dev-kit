@@ -1,6 +1,16 @@
 # EXAMPLES —— 完整章节 / 题材 anchor
 
+优先参考 [continuous-scene](continuous-scene/)：真实 SRT → 连续对象与可寻址 MG。下面的旧案例只作局部结构参考，不要求每个 step 换屏。
+
 > ## ⚠️ 这是**结构示意**，不是抄袭模板
+>
+> **范围仅限本目录里的旧案例**（`hook-chapter` / `list-reveal` / `case-*`）：
+> 它们题材各异、结构偏旧，照搬会让每条视频长得像同一个模板的变奏。
+>
+> **不要把这条推广到脚手架的默认模板 `templates/src/chapters/01-pipeline/`。**
+> 那是本技能自己的视觉语言基准，新章节**必须继承**它的对象交接、卡片质感、
+> 动作节奏与转场质量（见 [`../../SKILL.md`](../../SKILL.md) 第 2 节「分清两层」）。
+> 「旧案例不要照搬」和「01-pipeline 必须继承」是两件事，不冲突。
 >
 > 这些 example **不是给你照抄的**。它们的角色是"看一个完整章节大概
 > 什么形状、动画怎么分层、CSS 用了哪些 token、outline 长什么样"。
@@ -105,3 +115,7 @@ CRAFT.md ③ 节制使用）、真素材（不是占位卡）、字号狠对比�
 这些场景的视觉原语已经在 [`../CRAFT.md`](../CRAFT.md)
 ③ 视觉工具箱里覆盖了；按 anchor
 的"形"组合即可。
+
+## Creator Pipeline 完整样片
+
+[公开的 first-video 源码与组装方法](https://github.com/NanmiCoder/creator-pipeline/tree/main/examples/first-video) 展示文案卡、声音振幅、SRT 时间轴到网页画面的连续交接。示例依赖真实六句配音与生成的 timing/waveform 数据；迁移时先对应自己的 cue，不把示例时间直接抄入新项目。

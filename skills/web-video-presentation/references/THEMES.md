@@ -109,10 +109,8 @@ cp <path-to-web-video-presentation>/themes/newsroom/tokens.css \
    presentation/src/styles/tokens.css
 ```
 
-刷新 dev server。完成。章节代码一行没动。
-
-如果切换后某章节看起来有问题，那是该章节在某处硬编码了颜色 / 字体 /
-尺寸，而不是用语义 token。去找出来 —— bug 在章节里，不在主题里。
+刷新后复查代表性样片。字体字宽、主题对比度、装饰与动作时长都可能改变可读性，
+即使用了 token 也可能需要微调布局；不要把换主题当成免验收的一次复制。
 
 ---
 

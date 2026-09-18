@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Options {
   /** 是否启用（mode === "auto" 且项目已生成 timeline）。 */
@@ -37,8 +37,8 @@ interface Options {
  * 而是播放**一条完整口播音频**，用 requestAnimationFrame 读 `audio.currentTime`，
  * 跨过 `timeline` 里某个 step 的绝对起始时刻就翻到那一页。
  *
- * 好处：音频 100% 连贯（零割裂/零夹断）；翻页死锁在 SRT 绝对时间点上、零漂移；
- * 画面翻页 / 音频 / 后期叠的真人头像逐帧对齐。
+ * 避免每段 ended→next→play 的累计延迟，画面采样同一音频时钟。
+ * 浏览器后台节流、帧率与录屏起点仍可能影响结果，实际录制需验收。
  *
  * ── 区间模式（startAt / endAt）──
  * 补拍场景：成片里只有若干区间由网页 PPT 出画面，中间是已剪好的实拍/录屏。
@@ -59,6 +59,7 @@ export function useTimelineAuto({
   onReachEnd,
   muted = false,
 }: Options) {
+  const [time, setTime] = useState(startAt);
   // 用 ref 持最新回调 / 时间轴，避免它们的引用变化重启音频。
   const jumpRef = useRef(jumpToGlobal);
   jumpRef.current = jumpToGlobal;
@@ -94,9 +95,12 @@ export function useTimelineAuto({
       if (endAt !== undefined && audio.currentTime >= endAt) {
         stopped = true;
         audio.pause();
+        setTime(endAt);
+        jumpRef.current(idxAt(Math.max(startAt, endAt - 0.001)));
         endRef.current?.();
         return;
       }
+      setTime(audio.currentTime);
       const idx = idxAt(audio.currentTime);
       if (idx !== lastIdx) {
         lastIdx = idx;
@@ -109,13 +113,15 @@ export function useTimelineAuto({
       // 先 seek 到区间绝对起点，再起播。metadata 就绪后 seek 才可靠。
       try {
         audio.currentTime = startAt;
-      } catch {
-        /* 极少数浏览器在 metadata 前 seek 会抛 —— 忽略，播放仍会从 0 开始，
-           下一帧 idxAt 会把画面拉到正确位置 */
+      } catch (err) {
+        stopped = true;
+        console.error("timeline seek failed; playback stopped:", err);
+        return;
       }
       audio
         .play()
         .then(() => {
+          setTime(startAt);
           lastIdx = idxAt(startAt);
           jumpRef.current(lastIdx); // 起播即对齐到本区间第一步
           raf = requestAnimationFrame(tick);
@@ -126,6 +132,14 @@ export function useTimelineAuto({
         });
     };
 
+    const onEnded = () => {
+      stopped = true;
+      cancelAnimationFrame(raf);
+      setTime(audio.currentTime);
+      jumpRef.current(idxAt(Math.max(startAt, audio.currentTime - 0.001)));
+      endRef.current?.();
+    };
+    audio.addEventListener("ended", onEnded);
     if (audio.readyState >= 1 /* HAVE_METADATA */) begin();
     else audio.addEventListener("loadedmetadata", begin, { once: true });
 
@@ -133,9 +147,11 @@ export function useTimelineAuto({
       stopped = true;
       cancelAnimationFrame(raf);
       audio.removeEventListener("loadedmetadata", begin);
+      audio.removeEventListener("ended", onEnded);
       audio.pause();
       audio.removeAttribute("src");
       audio.load();
     };
   }, [enabled, autoStarted, src, startAt, endAt, muted]);
+  return time;
 }

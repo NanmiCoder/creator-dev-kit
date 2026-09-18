@@ -3,13 +3,13 @@
  * check.mjs —— 红线 + 一致性，一条命令（`npm run check`）。任何 FAIL → 退出码 1。
  *
  * 逐项：
- *   1. npx tsc --noEmit
+ *   1. npx tsc -b
  *   2. TIMELINE 严格升序；Σ narrations.length === TIMELINE.length（timeline 已生成时）
  *   3. 每章 narrations.length === 该章 .tsx 里 `step === N` / `step >= N` 的最大 N+1
  *   4. 章节 .css/.tsx 红线（逐行、剔除注释）：硬编码颜色 / font-family 不走 var() /
  *      vw/vh / setTimeout/setInterval / emoji / 跨章 import
  *   5. CSS 类前缀：每章与 BRIEF.md 分配一致（无 BRIEF 则按多数推断）、章间不冲突
- *   6. 提醒（不算 FAIL）：安全区无法静态检查 → agent-browser 截关键帧确认
+ *   6. 提醒（不算 FAIL）：安全区无法静态检查 → 可用浏览器工具截关键帧确认
  *
  * Node ≥ 18，零第三方依赖。
  */
@@ -110,7 +110,7 @@ function stripCss(src) {
 /** 数 narrations.ts 数组顶层字符串字面量个数。 */
 function countNarrationStrings(src) {
   // 定位 `narrations … = [` 里赋值号后的那个 `[`（跳过类型注解 Narration[] 的方括号）
-  const m = /\bnarrations\b[^=]*=/.exec(src);
+  const m = /\bconst\s+narrations\b[^=]*=/.exec(src);
   if (!m) return -1;
   const start = src.indexOf("[", m.index + m[0].length);
   if (start === -1) return -1;
@@ -208,16 +208,16 @@ const chapterDirs = listDirs(chaptersRoot).filter((d) =>
 
 /* ══════════ 1. tsc ══════════ */
 {
-  const r = spawnSync("npx", ["tsc", "--noEmit"], {
+  const r = spawnSync("npx", ["tsc", "-b"], {
     cwd: root,
     encoding: "utf8",
   });
-  if (r.status === 0) add("tsc", "PASS", "npx tsc --noEmit");
+  if (r.status === 0) add("tsc", "PASS", "npx tsc -b");
   else
     add(
       "tsc",
       "FAIL",
-      "npx tsc --noEmit 报错",
+      "npx tsc -b 报错",
       `${r.stdout ?? ""}${r.stderr ?? ""}`.trim().split("\n").slice(0, 30),
     );
 }
@@ -242,7 +242,7 @@ for (const d of chapterDirs) {
       add(
         "timeline",
         "SKIP",
-        "timeline.ts 还是模板占位（TIMELINE_GENERATED=false）—— VO-First 请先 npm run gen；TTS 路径忽略",
+        "尚未生成真实音频时间轴（TIMELINE_GENERATED=false）—— 默认模板可无声演示；VO-First 请先 npm run gen；TTS 路径忽略",
       );
     } else {
       const am = /TIMELINE\s*:\s*number\[\]\s*=\s*\[([^\]]*)\]/.exec(src);
@@ -435,6 +435,6 @@ console.log(
   `\n${fails === 0 ? "✓ 全绿" : `✗ ${fails} 项 FAIL`} · ${results.filter((r) => r.status === "PASS").length} PASS / ${results.filter((r) => r.status === "SKIP").length} SKIP`,
 );
 console.log(
-  "ℹ 安全区（头像圆 / 底部字幕带）无法静态检查 —— 用 agent-browser 1920×1080 截 2-3 张关键帧逐章确认（几何判据见 references/CRAFT.md）。",
+  "ℹ 安全区（头像圆 / 底部字幕带）无法静态检查 —— 用可用浏览器工具按 1920×1080 舞台 截 2-3 张关键帧逐章确认（几何判据见 references/CRAFT.md）。",
 );
 process.exit(fails === 0 ? 0 : 1);

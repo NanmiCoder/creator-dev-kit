@@ -4,7 +4,7 @@
  *
  * 产出：
  *   1. src/registry/timeline.ts               （VO-First：整文件覆写）
- *   2. src/chapters/<NN>-<id>/narrations.ts   （已存在则跳过 —— 保留手工微调）
+ *   2. src/chapters/<NN>-<id>/narrations.ts   （已存在则跳过 —— 保留现有内容；VO 须核对原稿）
  *   3. src/chapters/<NN>-<id>/BRIEF.md        （每次覆写 —— 并行章节 agent 的任务卡）
  *   4. src/registry/chapters.ts 未注册的章节 → 打印提醒（不自动改，避免覆盖手工代码）
  *
@@ -24,6 +24,7 @@
  */
 
 import fs from "node:fs";
+import { parseSrt, attachCues, emitTiming } from "./srt-cues.mjs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -97,6 +98,16 @@ export function extractChapterNotes(md) {
   }
   flush();
   return notes;
+}
+
+/** Extract a named H2 section without interpreting its Markdown content. */
+export function extractSection(md, title) {
+  const lines = md.split("\n");
+  const start = lines.findIndex(l => l.startsWith(`## ${title}`));
+  if (start < 0) return "";
+  let end = start + 1;
+  while (end < lines.length && !/^## /.test(lines[end])) end++;
+  return lines.slice(start, end).join("\n").trim();
 }
 
 /* ─────────────────────── 2. YAML 子集解析器（手写） ─────────────────────── */
@@ -263,10 +274,10 @@ export function allocPrefixes(ids) {
 /* ─────────────────────── 4. 语义校验 + 建模 ─────────────────────── */
 
 const EPS = 1e-6;
-const TOP_KEYS = new Set(["audio", "duration", "parts", "chapters"]);
+const TOP_KEYS = new Set(["audio", "duration", "parts", "chapters", "srt"]);
 const PART_KEYS = new Set(["id", "label", "start", "end"]);
 const CH_KEYS = new Set(["id", "title", "steps"]);
-const STEP_KEYS = new Set(["at", "vo", "do"]);
+const STEP_KEYS = new Set(["at", "vo", "do", "scene", "screen"]);
 
 function pascal(id) {
   return id
@@ -289,7 +300,7 @@ export function buildModel(raw) {
   const err = (msg) => errors.push(msg);
 
   for (const k of Object.keys(raw))
-    if (!TOP_KEYS.has(k)) err(`未知的顶层字段 \`${k}\`${lineOf(raw, k)}（只认 audio/duration/parts/chapters）`);
+    if (!TOP_KEYS.has(k)) err(`未知的顶层字段 \`${k}\`${lineOf(raw, k)}（只认 audio/duration/parts/chapters/srt）`);
   if ("parts" in raw && !Array.isArray(raw.parts))
     err(`parts 必须是列表（\`- id: …\` 项）${lineOf(raw, "parts")}`);
 
@@ -331,7 +342,7 @@ export function buildModel(raw) {
     } else {
       stepsRaw.forEach((sRaw, si) => {
         for (const k of Object.keys(sRaw))
-          if (!STEP_KEYS.has(k)) err(`章 \`${id}\` step[${si}] 未知字段 \`${k}\`${lineOf(sRaw, k)}（只认 at/vo/do）`);
+          if (!STEP_KEYS.has(k)) err(`章 \`${id}\` step[${si}] 未知字段 \`${k}\`${lineOf(sRaw, k)}（只认 at/vo/do/scene/screen）`);
         if (!("vo" in sRaw)) err(`章 \`${id}\` step[${si}] 缺 vo（静默步请写 vo: ""）`);
         let at;
         if ("at" in sRaw) {
@@ -342,6 +353,8 @@ export function buildModel(raw) {
           at,
           vo: typeof sRaw.vo === "string" ? sRaw.vo : "",
           do: typeof sRaw.do === "string" ? sRaw.do : "",
+          scene: typeof sRaw.scene === "string" ? sRaw.scene : "",
+          screen: typeof sRaw.screen === "string" ? sRaw.screen : "",
           globalIndex: globalIdx++,
         });
         stepCount++;
@@ -352,6 +365,8 @@ export function buildModel(raw) {
   });
 
   // ── 模式判定 ──
+  const srt = typeof raw.srt === "string" ? raw.srt.trim() : "";
+  if ("srt" in raw && !srt) err("srt 路径不能为空");
   const hasAudio = "audio" in raw;
   const hasDuration = "duration" in raw;
   let mode;
@@ -363,6 +378,7 @@ export function buildModel(raw) {
       err(`VO-First 模式下每步都要有 at（现在 ${stepCount} 步只有 ${atCount} 个 at）；纯 TTS 请去掉 audio/duration 和所有 at`);
   } else {
     mode = "tts";
+    if ("srt" in raw) err("srt 需要 VO-First 的 audio/duration/at");
     if (Array.isArray(raw.parts) && raw.parts.length > 0)
       err("TTS 路径（无 at / 无 audio）不支持 parts —— parts 需要绝对时间");
   }
@@ -379,6 +395,7 @@ export function buildModel(raw) {
   // ── VO：at 升序 + parts 几何 ──
   const flat = chapters.flatMap((c) => c.steps);
   const timeline = flat.map((s) => s.at);
+  if (timeline.some(t => t < 0)) err("at 不得为负数");
   for (let g = 1; g < timeline.length; g++) {
     if (!(timeline[g] > timeline[g - 1] + EPS))
       err(`at 必须全局严格升序：第 ${g} 个 step 的 at=${timeline[g]} ≤ 前一个的 ${timeline[g - 1]}`);
@@ -464,7 +481,7 @@ export function buildModel(raw) {
     ch.endAbs = ch.steps[ch.steps.length - 1].end;
   }
 
-  return { errors, mode, audio, duration, parts, chapters, timeline };
+  return { errors, mode, audio, duration, parts, chapters, timeline, srt };
 }
 
 /* ─────────────────────── 5. 代码/文档 生成 ─────────────────────── */
@@ -582,8 +599,8 @@ export function emitNarrations(model, ch) {
   return `import type { Narration } from "../../registry/types";
 
 /**
- * 章 ${ch.nn} ${ch.id} 每步口播 —— 由 gen-timeline.mjs 从 plan.md 生成一次，之后归你。
- * 长度 === 本章 step 数（\`npm run check\` 会校验）。微调文字可以；
+ * 章 ${ch.nn} ${ch.id} 每步口播 —— 由 gen-timeline.mjs 从 plan.md 生成一次。
+ * 长度 === 本章 step 数（\`npm run check\` 会校验）。VO 原文锁定；TTS 可改稿；
  * 增删条目必须回 plan.md 改，再 \`npm run gen\`（本文件已存在时 gen 不覆盖）。
  */
 export const narrations: Narration[] = [
@@ -619,8 +636,8 @@ export function emitBrief(model, ch, prefixes, note = "") {
     .join("\n");
 
   const delayRule = vo
-    ? "- 颜色/字体家族只用 token；固定 px 禁 vw；无定时器；动画 delay = (cue−step.start)×1000，最后一拍落步长 75–90%"
-    : "- 颜色/字体家族只用 token；固定 px 禁 vw；无定时器；动画总时长 ≤ 口播时长，最后一拍落步长 75–90%";
+    ? "- 颜色/字体家族只用 token；固定 px 禁 vw；无定时器；重要 MG 用 timing.ts + 音频时钟采样；CSS 入场只作局部补充。信息落点跟 cue，留阅读停顿"
+    : "- 颜色/字体家族只用 token；固定 px 禁 vw；无定时器；先合成样段定节奏；无 SRT 的 time 只作预览估时，动画不可越过真实音频边界";
 
   return `# 章 ${ch.nn} · ${ch.id} —— ${ch.title}
 
@@ -637,12 +654,24 @@ ${tableRows}
 |---|---|
 ${prefixRows}
 
+## 事实与术语
+
+先读 [全片核实记录](../../registry/FACTS.md)，核对本章相关条目。未核实/推断状态必须保留；不得只看画面创意猜数据。
+
+## 镜头契约
+
+| step | 连续场景 | 上屏短语 |
+|---|---|---|
+${ch.steps.map((s, i) => `| ${i} | ${esc(s.scene || ch.id)} | ${esc(s.screen || "见画面备注；先提炼，不复制口播")} |`).join("\n")}
+
 ## 铁律（全文见 skill references/CRAFT.md，先读它再动工）
 
-- 文件只写 ${ch.dir}/ 下三件：${ch.comp}.tsx / ${ch.comp}.css / narrations.ts（已生成，微调可以，长度不许变）
+- 文件只写 ${ch.dir}/ 下三件：${ch.comp}.tsx / ${ch.comp}.css / narrations.ts（已生成；VO 原文锁定，TTS 可改稿；长度不许变）
 ${delayRule}
 - 安全区（若 App 配置了）：右上头像圆 + 底部字幕带几何判据见 CRAFT.md
-- 完工 = npm run check 全绿 + 自截 2-3 张关键帧核对布局 → 汇报
+- 同一 scene 跨 step 保留主体；do 写起态→动作→终态；屏幕短语见下表，不复述 vo
+- timing.ts 时间均为章内秒；cue 原文来自 SRT（若提供），不要按字数估时
+- 完工 = npm run check 全绿 + 真实浏览器 起/中/末帧与相邻转场 + 连续播放 → 汇报
 ${note ? `
 ## 画面备注（plan.md「章节画面备注 · ${ch.id}」原文，改备注请回 plan.md 再重 gen）
 
@@ -655,7 +684,7 @@ ${note}
 /** 数 narrations.ts 里数组顶层的字符串字面量个数（跳过注释）。 */
 export function countNarrationStrings(src) {
   // 定位 `narrations … = [` 里赋值号后的那个 `[`（跳过类型注解 Narration[] 的方括号）
-  const m = /\bnarrations\b[^=]*=/.exec(src);
+  const m = /\bconst\s+narrations\b[^=]*=/.exec(src);
   if (!m) return -1;
   const start = src.indexOf("[", m.index + m[0].length);
   if (start === -1) return -1;
@@ -705,12 +734,16 @@ function main() {
 
   let model;
   let notes = new Map();
+  let facts = "";
   try {
     const md = fs.readFileSync(planPath, "utf8");
     const block = extractTimelineBlock(md);
     const raw = parseTimelineYaml(block.text, block.startLine);
     model = buildModel(raw);
     notes = extractChapterNotes(md);
+    const shared = extractSection(md, "全片视觉约定");
+    facts = [extractSection(md, "术语锁定表"), extractSection(md, "事实核实记录")].filter(Boolean).join("\n\n");
+    if (shared) for (const ch of model.chapters || []) notes.set(ch.id, `${shared}\n\n${notes.get(ch.id) || ""}`);
   } catch (e) {
     if (e instanceof PlanError) {
       console.error(`✗ plan 解析失败（${planPath}）：`);
@@ -725,12 +758,22 @@ function main() {
     process.exit(1);
   }
 
+  const cueWarnings = [];
+  if (model.mode === "vo" && model.srt) {
+    try {
+      const cues = parseSrt(fs.readFileSync(path.resolve(path.dirname(planPath), model.srt), "utf8"));
+      cueWarnings.push(...attachCues(model, cues));
+    } catch (e) {
+      console.error(`✗ SRT 读取失败，一个文件都没写：${e.message}`);
+      process.exit(1);
+    }
+  }
   const prefixes = allocPrefixes(model.chapters.map((c) => c.id));
 
   // 先全部构造，再落盘（构造期任何异常都不会留半成品）
-  const writes = [];
+  const writes = [{file: path.join(projectRoot, "src/registry/FACTS.md"), content: `# 全片事实与术语\n\n来源：${path.relative(projectRoot, planPath).split(path.sep).join("/")}。由 gen 生成，不在这里手改。\n\n${facts || "计划未提供事实/术语记录。不能据此宣称已核实；开发时回查用户素材并补充 plan。"}\n`}];
   const skips = [];
-  const warns = [];
+  const warns = [...cueWarnings];
   if (model.mode === "vo") {
     writes.push({
       file: path.join(projectRoot, "src/registry/timeline.ts"),
@@ -740,6 +783,7 @@ function main() {
   for (const ch of model.chapters) {
     const dir = path.join(projectRoot, "src/chapters", ch.dir);
     const narrPath = path.join(dir, "narrations.ts");
+    if (model.mode === "vo") writes.push({file: path.join(dir, "timing.ts"), content: emitTiming(ch)});
     if (fs.existsSync(narrPath)) {
       skips.push(narrPath);
       const n = countNarrationStrings(fs.readFileSync(narrPath, "utf8"));
@@ -772,7 +816,7 @@ function main() {
   const rel = (p) => path.relative(projectRoot, p);
   console.log(`✓ ${model.mode === "vo" ? "VO-First" : "TTS"} · ${model.chapters.length} 章 / ${model.chapters.reduce((s, c) => s + c.steps.length, 0)} 步${model.mode === "vo" ? ` · ${model.parts.length} 个录制区间` : "（无 at/audio → 跳过 timeline.ts，音频走 extract-narrations 流程）"}`);
   for (const w of writes) console.log(`  写入 ${rel(w.file)}`);
-  for (const s of skips) console.log(`  跳过 ${rel(s)}（已存在，保留手工微调）`);
+  for (const s of skips) console.log(`  跳过 ${rel(s)}（已存在，保留现有内容；VO 须核对原稿）`);
   for (const w of warns) console.log(`  ⚠ ${w}`);
 
   console.log("\nCSS 前缀分配（已写进各章 BRIEF.md）：");

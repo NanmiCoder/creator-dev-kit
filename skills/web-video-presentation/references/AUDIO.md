@@ -1,3 +1,9 @@
+# 音频路线选择
+
+组合流水线优先使用 `voice-clone-tts`：文案与参考录音 → 最终 WAV/MP3/SRT/voiceover.json → 本技能的 VO-First 流程。参考本文后面的逐步 TTS 适配器，仅用于用户明确选择的旧项目 TTS 工作方式。
+
+不要因这里存在 MiniMax 默认适配器，就覆盖已选的免费本地后端。不要在精确 MG 完成后才改变声音节奏。
+
 # 音频合成
 
 把每个章节 `narrations.ts` 里的口播文字按 **step 颗粒度**合成 mp3，
@@ -65,7 +71,7 @@ npm run extract-narrations
 ]
 ```
 
-让用户**先扫一眼这个 json**，确认文本和切分都对，再开始烧 token 合成。
+合成前核对这个 JSON 的文本和切分；已有合成授权就继续，声音或费用范围未明确时再澄清。先合成代表性样段定节奏。
 
 > 空字符串的 narration 会被自动跳过（不烧 TTS token）——运行时 Auto 模式
 > 按字数估时撑过这种"无声过场"step。
